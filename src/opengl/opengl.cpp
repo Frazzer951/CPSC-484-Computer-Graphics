@@ -1,10 +1,10 @@
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <cstdlib>
 #include <cmath>
-#include <thread>
 #include <chrono>
+#include <cstdlib>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <thread>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -25,7 +25,8 @@ int glfw_open_window()
   glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
   glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
   GLFWwindow * window = glfwCreateWindow( WIDTH, HEIGHT, "Learn OpenGL using GLFW window", nullptr, nullptr );
-  int          screenWidth, screenHeight;
+  int          screenWidth  = 0;
+  int          screenHeight = 0;
   glfwGetFramebufferSize( window, &screenWidth, &screenHeight );
   if( window == nullptr )
   {
@@ -42,10 +43,10 @@ int glfw_open_window()
   }
 
   glViewport( 0, 0, screenWidth, screenHeight );
-  while( !glfwWindowShouldClose( window ) )
+  while( glfwWindowShouldClose( window ) == 0 )
   {
     glfwPollEvents();
-    glClearColor( 0.8f, 0.3f, 0.3f, 1.0f );
+    glClearColor( 0.8F, 0.3F, 0.3F, 1.0F );
     glClear( GL_COLOR_BUFFER_BIT );
     glfwSwapBuffers( window );
   }
@@ -68,7 +69,7 @@ int glut_open_window( int argc, char * argv[] )
   glutInitWindowPosition( 100, 100 );
   glutCreateWindow( "Learn OpenGL using GLUT window" );
   InitializeGlutCallbacks();
-  glClearColor( 0.0f, 0.0f, 1.0f, 1.0f );
+  glClearColor( 0.0F, 0.0F, 1.0F, 1.0F );
   glutMainLoop();
   return 0;
 }
@@ -158,7 +159,7 @@ void glut_sphere( int argc, char * argv[] )
   glutCreateWindow( "pendulum" );
   glutDisplayFunc( display_sphere );
   myInit();
-  glClearColor( 0.0f, 0.0f, 1.0f, 1.0f );
+  glClearColor( 0.0F, 0.0F, 1.0F, 1.0F );
   glutMainLoop();
 }
 
@@ -202,14 +203,14 @@ void display_shapes()
   glutSwapBuffers();
 }
 
-const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
-const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
-const GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
-const GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
-const GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat high_shininess[] = { 100.0f };
+const GLfloat light_ambient[]  = { 0.0F, 0.0F, 0.0F, 1.0F };
+const GLfloat light_diffuse[]  = { 1.0F, 1.0F, 1.0F, 1.0F };
+const GLfloat light_specular[] = { 1.0F, 1.0F, 1.0F, 1.0F };
+const GLfloat light_position[] = { 2.0F, 5.0F, 5.0F, 0.0F };
+const GLfloat mat_ambient[]    = { 0.7F, 0.7F, 0.7F, 1.0F };
+const GLfloat mat_diffuse[]    = { 0.8F, 0.8F, 0.8F, 1.0F };
+const GLfloat mat_specular[]   = { 1.0F, 1.0F, 1.0F, 1.0F };
+const GLfloat high_shininess[] = { 100.0F };
 
 void glut_sphere_shaded( int argc, char * argv[] )
 {
@@ -318,7 +319,7 @@ void display()
 //****************************************************************************80
 //    MOUSE determines the response to mouse input.
 //
-void mouse( int btn, int state, int x, int y )
+void mouse( int btn, int state, int /*x*/, int /*y*/ )
 {
   std::cout << "Mouse function entered -- axis value is: " << axis << "\n";
   if( btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN )
@@ -406,27 +407,30 @@ void rotating_cube( int argc, char * argv[] )
 #define WIDTH  400
 #define HEIGHT 400
 
-GLfloat angle = 0.0f;
+GLfloat angle = 0.0F;
 
-float square_root( float x ) { return (float) sqrt( x ); }
+float square_root( float x ) { return (float) std::sqrt( x ); }
 //****************************************************************************80
 //    This program constructs a cube, each of whose vertices is given a
 //    different color, and displays the cube.  The cube rotates slowly
 //    about the X, Y or Z axis.  Each time the user clicks the mouse, the
 //    "next" axis is used for rotation.
 //
-void display_tetra( void )
+void display_tetra()
 {
   static int list = 0;
   if( list == 0 )
   {
     // If the display list does not exist, create
-    GLfloat PointA[] = { 0.5f, -square_root( 6.0f ) / 12, -square_root( 3.0f ) / 6 },
-            PointB[] = { -0.5f, -square_root( 6.0f ) / 12, -square_root( 3.0f ) / 6 },
-            PointC[] = { 0.0f, -square_root( 6.0f ) / 12, square_root( 3.0f ) / 3 },
-            PointD[] = { 0.0f, square_root( 6.0f ) / 4, 0 };
-    GLfloat ColorR[] = { 1, 0, 0 }, ColorG[] = { 0, 1, 0 }, ColorB[] = { 0, 0, 1 }, ColorY[] = { 1, 1, 0 };
-    list = glGenLists( 1 );
+    GLfloat PointA[] = { 0.5F, -square_root( 6.0F ) / 12, -square_root( 3.0F ) / 6 };
+    GLfloat PointB[] = { -0.5F, -square_root( 6.0F ) / 12, -square_root( 3.0F ) / 6 };
+    GLfloat PointC[] = { 0.0F, -square_root( 6.0F ) / 12, square_root( 3.0F ) / 3 };
+    GLfloat PointD[] = { 0.0F, square_root( 6.0F ) / 4, 0 };
+    GLfloat ColorR[] = { 1, 0, 0 };
+    GLfloat ColorG[] = { 0, 1, 0 };
+    GLfloat ColorB[] = { 0, 0, 1 };
+    GLfloat ColorY[] = { 1, 1, 0 };
+    list             = glGenLists( 1 );
     glNewList( list, GL_COMPILE );
     glBegin( GL_TRIANGLES );
     // plane ABC
@@ -458,12 +462,12 @@ void display_tetra( void )
   glutSwapBuffers();
 }
 
-void idle( void )
+void idle()
 {
   ++angle;
-  if( angle >= 360.0f )
+  if( angle >= 360.0F )
   {
-    angle = 0.0f;
+    angle = 0.0F;
   }
   std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
   display_tetra();
