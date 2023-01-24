@@ -517,12 +517,12 @@ void rotate_tetra(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
   std::cout << "Starting program\n";
-  //  glut_sphere(argc, argv);
-  //  glut_sphere_cool(argc, argv);
-  //  glut_sphere_shaded(argc, argv);
-  //  rotating_cube(argc, argv);
-  //  glfw_open_window();
-  //  glut_open_window(argc, argv);
+  // glut_sphere(argc, argv);
+  // glut_sphere_cool(argc, argv);
+  // glut_sphere_shaded(argc, argv);
+  // rotating_cube(argc, argv);
+  // glfw_open_window();
+  // glut_open_window(argc, argv);
   rotate_tetra(argc, argv);
 
   return 0;
