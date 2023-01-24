@@ -156,7 +156,7 @@ PenaltyReturnTypeOnItsOwnLine: 					        60
 PointerAlignment:								                Middle
 ReflowComments:									                true
 #ShortNamespaceLines:							              1
-SortIncludes:									                  true
+SortIncludes:									                  false
 #SortJavaStaticImport:							            Before
 SortUsingDeclarations:							            true
 SpaceAfterCStyleCast:							              true

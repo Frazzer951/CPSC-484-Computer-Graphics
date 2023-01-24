@@ -1,14 +1,15 @@
-#include <GL/gl.h>
-#include <GL/glew.h>
-#include <GL/glut.h>
-#include <GLFW/glfw3.h>
-#include <chrono>
-#include <cmath>
-#include <cstdlib>
-#include <fstream>
-#include <iomanip>
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <cstdlib>
+#include <cmath>
 #include <thread>
+#include <chrono>
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <GL/glut.h>
+#include <GL/gl.h>
 
 //------------------------------------------------------------------------------------------------------------------------
 // GLFW and GLUT windows
