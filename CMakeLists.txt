@@ -10,20 +10,10 @@ include(ClangFormat)
 
 add_subdirectory(src/opengl)
 
-file(GLOB_RECURSE src_files
-    "src/*.cpp"
-    "src/*.c"
-)
+file(GLOB_RECURSE src_files "src/*.cpp" "src/*.c")
 
-add_custom_target(clangtidy
-    COMMAND
-        clang-tidy
-        -p ./build
-        --fix-notes
-        --fix-errors
-        ${src_files}
-    WORKING_DIRECTORY
-        ${CMAKE_SOURCE_DIR}
-    COMMENT
-        "Running Clang Tidy..."
-)
+add_custom_target(
+  clangtidy
+  COMMAND clang-tidy -p ./build --fix-notes --fix-errors ${src_files}
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMENT "Running Clang Tidy...")

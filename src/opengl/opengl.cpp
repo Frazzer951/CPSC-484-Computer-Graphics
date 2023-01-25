@@ -24,7 +24,7 @@ int glfw_open_window()
   glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
   glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
   glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
-  GLFWwindow * window = glfwCreateWindow( WIDTH, HEIGHT, "Learn OpenGL using GLFW window", nullptr, nullptr );
+  GLFWwindow * window       = glfwCreateWindow( WIDTH, HEIGHT, "Learn OpenGL using GLFW window", nullptr, nullptr );
   int          screenWidth  = 0;
   int          screenHeight = 0;
   glfwGetFramebufferSize( window, &screenWidth, &screenHeight );
@@ -494,8 +494,8 @@ int main( int argc, char * argv[] )
   // glut_sphere_shaded( argc, argv );
   // rotating_cube( argc, argv );
   // glfw_open_window();
-  // glut_open_window( argc, argv );
-  rotate_tetra( argc, argv );
+  glut_open_window( argc, argv );
+  // rotate_tetra( argc, argv );
 
   return 0;
 }
