@@ -125,20 +125,23 @@ void glut_sphere_cool( int argc, char * argv[] )
 //
 void display_sphere()
 {
+  // clear the buffer
   glClear( GL_COLOR_BUFFER_BIT );
-  glColor3f( 1.0, 0.0, 0.0 );
+  // set the current color to cyan
+  glColor3f( 0.0, 1.0, 1.0 );
+  // load the identity matrix
   glLoadIdentity();
-  //  glutSolidSphere(5.0, 20.0, 20.0);
-  //  glutSolidSphere(5.0, 20, 20);
-  glutSolidSphere( 1.1, 20, 20 );
-  //  glutSolidSphere(1.0, 20, 20);
-  //    glutSolidSphere(0.8, 80, 80);
+  // generate a sphere with a radius of 1.1, with 20 slices and 20 stacks
+  glutSolidSphere( 0.9, 20, 20 );
+  // draw to the screen
   glFlush();
 }
 
 void myInit()
 {
+  // set the clear color to black
   glClearColor( 1.0, 1.0, 1.0, 1.0 );
+  // set the current color to red
   glColor3f( 1.0, 0.0, 0.0 );
   glMatrixMode( GL_PROJECTION );
   glLoadIdentity();
@@ -152,14 +155,24 @@ void myInit()
 
 void glut_sphere( int argc, char * argv[] )
 {
+  // Create a new GLUquadric object // not used by anything as far as i can tell
   GLUquadric * qobj = gluNewQuadric();
+
+  // Initialize glut
   glutInit( &argc, argv );
+  // Set glut's display mode
   glutInitDisplayMode( GLUT_SINGLE | GLUT_RGB );
+  // Set the initial window size to 500,500
   glutInitWindowSize( 500, 500 );
+  // Create the window and name it pendulum
   glutCreateWindow( "pendulum" );
+  // Set the display function to render the sphere
   glutDisplayFunc( display_sphere );
+  // call the init function
   myInit();
+  // set the clear color
   glClearColor( 0.0F, 0.0F, 1.0F, 1.0F );
+  // start the main loop
   glutMainLoop();
 }
 
@@ -273,6 +286,7 @@ static GLfloat theta[3] = { 0.0, 0.0, 0.0 };
 //
 void polygon( int a, int b, int c, int d )
 {
+  // generate a polygon a set of parameters
   glBegin( GL_POLYGON );
 
   glColor3fv( colors[a] );
@@ -293,6 +307,7 @@ void polygon( int a, int b, int c, int d )
 
 void colorcube()
 {
+  // generate the polygons fora cube
   polygon( 0, 3, 2, 1 );
   polygon( 2, 3, 7, 6 );
   polygon( 0, 4, 7, 3 );
@@ -307,11 +322,15 @@ void colorcube()
 void display()
 {
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+  // replace the current matrix with the identity matrix
   glLoadIdentity();
+  // rotate the matrix with the 3 different rotations of the cube
   glRotatef( theta[0], 1.0, 0.0, 0.0 );
   glRotatef( theta[1], 0.0, 1.0, 0.0 );
   glRotatef( theta[2], 0.0, 0.0, 1.0 );
+  // create the cube
   colorcube();
+  // draw the cube and display it on the screen
   glFlush();
   glutSwapBuffers();
 }
@@ -321,6 +340,7 @@ void display()
 //
 void mouse( int btn, int state, int /*x*/, int /*y*/ )
 {
+  // when you click with the mouse start spinning the next axis
   std::cout << "Mouse function entered -- axis value is: " << axis << "\n";
   if( btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN )
   {
@@ -342,6 +362,7 @@ void mouse( int btn, int state, int /*x*/, int /*y*/ )
 //
 void myReshape( int w, int h )
 {
+  // given the new window size calculate the new viewport for the window
   glViewport( 0, 0, w, h );
   glMatrixMode( GL_PROJECTION );
   glLoadIdentity();
@@ -363,12 +384,15 @@ void myReshape( int w, int h )
 void spinCube()
 {
   std::cout << "entered spinCube()...\n";
-  //  theta[axis] = theta[axis] + 0.020;
+  // theta[axis] = theta[axis] + 0.020;
+  // increment the rotation of the curent axis by 1
   theta[axis] += 1.0;
+  // onces the axis exceeds 360 subtract 360 from it to being it back down
   if( 360.0 < theta[axis] )
   {
     theta[axis] = theta[axis] - 360.0;
   }
+  // rerender the cube
   glutPostRedisplay();
   std::cout << "\t\texiting spinCube()...\n\n";
 }
@@ -381,14 +405,23 @@ void spinCube()
 //
 void rotating_cube( int argc, char * argv[] )
 {
+  // Initialize glut
   glutInit( &argc, argv );
+  // Set the display mode that glut will use
   glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
+  // Set the size of the window
   glutInitWindowSize( 500, 500 );
+  // Set the initial poisition of the window, 0,0 being the top left
   glutInitWindowPosition( 0, 0 );
+  // Set the title of the window
   glutCreateWindow( "Rotating cube" );
+  // set the reshaping function to use which is called when the window is resized
   glutReshapeFunc( myReshape );
+  // define the function used to render the cube
   glutDisplayFunc( display );
+  // define the function that is called each program tick
   glutIdleFunc( spinCube );
+  // define how the program should react to a mouse click
   glutMouseFunc( mouse );
 
   //  Enable hidden surface removal.
@@ -419,6 +452,7 @@ float square_root( float x ) { return (float) std::sqrt( x ); }
 void display_tetra()
 {
   static int list = 0;
+  // if list is zero generate it and create the vertex and planes used to display the tetraheadron
   if( list == 0 )
   {
     // If the display list does not exist, create
@@ -456,33 +490,46 @@ void display_tetra()
   // A display list has been created, which will be called each time a regular tetrahedron is drawn
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   glPushMatrix();
+  // rotate the current matrix by the angle
   glRotatef( angle, 1, 0.5, 0 );
+  // load the tetra into the rotated matrix
   glCallList( list );
   glPopMatrix();
+  // draw it to the screen
   glutSwapBuffers();
 }
 
 void idle()
 {
+  // increment the angle and reset it once it has reached 360
   ++angle;
   if( angle >= 360.0F )
   {
     angle = 0.0F;
   }
+  // wait for 10 milliseconds
   std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+  // redraw the tetra
   display_tetra();
 }
 
 void rotate_tetra( int argc, char * argv[] )
 {
+  // initialize glut
   glutInit( &argc, argv );
+  // Set the display mode that glut will use
   glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE );
+  // Set the initial position of the window
   glutInitWindowPosition( 200, 200 );
+  // Set the initial size of the window
   glutInitWindowSize( WIDTH, HEIGHT );
+  // Create the window and name is "OpenGl Window"
   glutCreateWindow( "OpenGL Window" );
+  // Set the function used to render the tetraheadron
   glutDisplayFunc( &display_tetra );
-
+  // Set the function called each program tick
   glutIdleFunc( &idle );
+  // Start the main loop
   glutMainLoop();
 }
 
@@ -494,8 +541,8 @@ int main( int argc, char * argv[] )
   // glut_sphere_shaded( argc, argv );
   // rotating_cube( argc, argv );
   // glfw_open_window();
-  glut_open_window( argc, argv );
-  // rotate_tetra( argc, argv );
+  // glut_open_window( argc, argv );
+  rotate_tetra( argc, argv );
 
   return 0;
 }
