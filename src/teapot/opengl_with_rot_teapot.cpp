@@ -427,9 +427,9 @@ float rand_color() { return rand() % 9 / 8.0; }
 //------------------------------------------------
 void idle_teapot()
 {
-  x_rot += rot_delta;
+  // x_rot += rot_delta;
   y_rot += rot_delta;
-  z_rot += rot_delta;
+  // z_rot += rot_delta;
 
   ++color_changes;
   if( color_changes % 100 == 0 )
@@ -442,11 +442,17 @@ void idle_teapot()
   //  if (xpos <= 1) { xpos += pos_delta;  ypos += pos_delta; }
   //  else { xpos = ypos = -1; }
 
-  //  xpos = 4 * cos(phi);   ypos = 4 * sin(phi);   phi += 0.1;
-  ypos = 4 * std::cos( phi );
-  zpos = 4 * std::sin( phi );
-  phi += 0.1;
-  //  zpos = 4 * cos(phi);   xpos = 4 * sin(phi);   phi += 0.1;
+  // xpos = 4 * cos( phi );
+  // ypos = 4 * sin( phi );
+  // phi += 0.1;
+
+  // ypos = 4 * std::cos( phi );
+  // zpos = 4 * std::sin( phi );
+  // phi += 0.1;
+
+  // zpos = 4 * cos( phi );
+  // xpos = 4 * sin( phi );
+  // phi += 0.1;
   glutPostRedisplay();
 }
 
@@ -540,7 +546,7 @@ void display_tetra()
     GLfloat ColorG[] = { 0, 1, 0 };
     GLfloat ColorB[] = { 0, 0, 1 };
     GLfloat ColorY[] = { 1, 1, 0 };
-    list = glGenLists( 1 );
+    list             = glGenLists( 1 );
     glNewList( list, GL_COMPILE );
     glBegin( GL_TRIANGLES );
     // plane ABC
@@ -599,13 +605,13 @@ void rotate_tetra( int argc, char * argv[] )
 int main( int argc, char * argv[] )
 {
   std::cout << "Starting program\n";
-  //  glut_sphere(argc, argv);
-  //  glut_sphere_cool(argc, argv);
-  //  glut_sphere_shaded(argc, argv);
-  //  rotating_cube(argc, argv);
-  //  glfw_open_window();
-  //  glut_open_window(argc, argv);
-  // rotate_tetra(argc, argv);
+  // glut_sphere( argc, argv );
+  // glut_sphere_cool( argc, argv );
+  // glut_sphere_shaded( argc, argv );
+  // rotating_cube( argc, argv );
+  // glfw_open_window();
+  // glut_open_window( argc, argv );
+  // rotate_tetra( argc, argv );
   glut_rot_teapot( argc, argv );
 
   return 0;
