@@ -1,7 +1,7 @@
-#ifndef __VECTOR_H__
-#  define VECTOR_H_
+#ifndef VECTOR_H_
+#define VECTOR_H_
 
-#  include <iostream>
+#include <iostream>
 
 class Vector
 {
