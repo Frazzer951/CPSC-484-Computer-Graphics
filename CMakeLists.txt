@@ -9,6 +9,8 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(ClangFormat)
 
 add_subdirectory(src/opengl)
+add_subdirectory(src/teapot)
+add_subdirectory(src/vector)
 
 file(GLOB_RECURSE src_files "src/*.cpp" "src/*.c")
 
