@@ -605,7 +605,8 @@ int main( int argc, char * argv[] )
   //  rotating_cube(argc, argv);
   //  glfw_open_window();
   //  glut_open_window(argc, argv);
-  rotate_tetra( argc, argv );
+  // rotate_tetra(argc, argv);
+  glut_rot_teapot( argc, argv );
 
   return 0;
 }
