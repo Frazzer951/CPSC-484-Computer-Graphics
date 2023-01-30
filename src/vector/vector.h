@@ -1,7 +1,7 @@
 #ifndef __VECTOR_H__
-#define __VECTOR_H__
+#  define VECTOR_H_
 
-#include <iostream>
+#  include <iostream>
 
 class Vector
 {
@@ -9,10 +9,7 @@ public:
   Vector() : Vector( 0, 0, 0 ) {}
   Vector( double x, double y, double z ) : _x( x ), _y( y ), _z( z ) {}
 
-  friend Vector operator+( const Vector & a, const Vector & b )
-  {
-    return Vector( a._x + b._x, a._y + b._y, a._z + b._z );
-  }
+  friend Vector operator+( const Vector & a, const Vector & b ) { return { a._x + b._x, a._y + b._y, a._z + b._z }; }
   // Vector operator+(const Vector& o) {
   //     return Vector(_x + o._x, _y + o._y, _z + o._z);
   // }

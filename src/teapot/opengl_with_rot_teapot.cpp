@@ -3,7 +3,6 @@
 #include <iomanip>
 #include <fstream>
 #include <cstdlib>
-#include <cmath>
 #include <thread>
 #include <chrono>
 
@@ -27,8 +26,8 @@ int glfw_open_window()
   glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
   glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
   GLFWwindow * window = glfwCreateWindow( WIDTH, HEIGHT, "Learn OpenGL using GLFW window", nullptr, nullptr );
-  int          screenWidth;
-  int          screenHeight;
+  int          screenWidth  = 0;
+  int          screenHeight = 0;
   glfwGetFramebufferSize( window, &screenWidth, &screenHeight );
   if( window == nullptr )
   {
@@ -538,10 +537,10 @@ void display_tetra()
   if( list == 0 )
   {
     // If the display list does not exist, create
-    GLfloat PointA[] = { 0.5f, -square_root( 6.0f ) / 12, -square_root( 3.0f ) / 6 };
-    GLfloat PointB[] = { -0.5f, -square_root( 6.0f ) / 12, -square_root( 3.0f ) / 6 };
-    GLfloat PointC[] = { 0.0f, -square_root( 6.0f ) / 12, square_root( 3.0f ) / 3 };
-    GLfloat PointD[] = { 0.0f, square_root( 6.0f ) / 4, 0 };
+    GLfloat PointA[] = { 0.5F, -square_root( 6.0F ) / 12, -square_root( 3.0F ) / 6 };
+    GLfloat PointB[] = { -0.5F, -square_root( 6.0F ) / 12, -square_root( 3.0F ) / 6 };
+    GLfloat PointC[] = { 0.0F, -square_root( 6.0F ) / 12, square_root( 3.0F ) / 3 };
+    GLfloat PointD[] = { 0.0F, square_root( 6.0F ) / 4, 0 };
     GLfloat ColorR[] = { 1, 0, 0 };
     GLfloat ColorG[] = { 0, 1, 0 };
     GLfloat ColorB[] = { 0, 0, 1 };

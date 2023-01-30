@@ -12,7 +12,7 @@ add_subdirectory(src/opengl)
 add_subdirectory(src/teapot)
 add_subdirectory(src/vector)
 
-file(GLOB_RECURSE src_files "src/*.cpp" "src/*.c")
+file(GLOB_RECURSE src_files "src/*.cpp" "src/*.c" "src/*.h" "src/*.hpp" "src/*.hxx")
 
 add_custom_target(
   clangtidy
