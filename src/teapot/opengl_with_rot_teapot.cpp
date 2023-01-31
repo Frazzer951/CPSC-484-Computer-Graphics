@@ -468,7 +468,7 @@ void display_teapot()
   glRotatef( y_rot, 0.0, 1.0, 0.0 );
   glRotatef( z_rot, 0.0, 0.0, 1.0 );
   //
-  float scale = 0.8;
+  float const scale = 0.8;
   glScalef( scale, scale, scale );
   glutWireTeapot( size );
 
