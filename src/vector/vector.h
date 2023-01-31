@@ -32,15 +32,15 @@ public:
   static double dot( const Vector & a, const Vector & b ) { return a.x_ * b.x_ + a.y_ * b.y_ + a.z_ * b.z_; }
 
   // magnitude
-  double mag() { return sqrt( dot( *this, *this ) ); }
+  double mag() const { return sqrt( dot( *this, *this ) ); }
 
   // cross product
   static Vector cross( const Vector & a, const Vector & b )
   {
-    double x = ( a.y_ * b.z_ ) - ( a.z_ * b.y_ );
-    double y = ( a.z_ * b.x_ ) - ( a.x_ * b.z_ );
-    double z = ( a.x_ * b.y_ ) - ( a.y_ * b.x_ );
-    return Vector( x, y, z );
+    double const x = ( a.y_ * b.z_ ) - ( a.z_ * b.y_ );
+    double const y = ( a.z_ * b.x_ ) - ( a.x_ * b.z_ );
+    double const z = ( a.x_ * b.y_ ) - ( a.y_ * b.x_ );
+    return { x, y, z };
   }
 
   // multiply by a scalar
@@ -61,8 +61,8 @@ public:
 
   static void run_tests()
   {
-    Vector v;
-    Vector v2( 1, 1, 2 );
+    Vector const v;
+    Vector const v2( 1, 1, 2 );
 
     std::cout << "\n............... BEGINNING Vector.run_tests()...........\n";
     std::cout << "v is: " << v << "\n";
@@ -71,7 +71,7 @@ public:
     Vector v3 = v + v2;
     std::cout << v << " + " << v2 << " is: " << v3 << "\n";
 
-    Vector v4 = v3 - v2;
+    Vector const v4 = v3 - v2;
     std::cout << v3 << " - " << v2 << " is: " << v4 << "\n";
 
     v3 += v2;
@@ -85,7 +85,7 @@ public:
     assert( Vector( 1, 1, 1 ) == Vector( 1, 1, 1 ) );
     assert( Vector( 1, 1, 1 ) != Vector( 0, 0, 0 ) );
 
-    Vector v5( 1, 2, 3 );
+    Vector const v5( 1, 2, 3 );
     Vector v6( 1, 5, 7 );
     std::cout << v5 << " * " << v6 << " is: " << Vector::dot( v5, v6 ) << "\n";
     std::cout << v5 << " X " << v6 << " is: " << Vector::cross( v5, v6 ) << "\n";
@@ -95,7 +95,7 @@ public:
     std::cout << v5 << " * 5 is: " << v5 * 5 << "\n";
     std::cout << "5 * " << v5 << " is: " << 5 * v5 << "\n";
 
-    Vector v7( 2, 2, 2 );
+    Vector const v7( 2, 2, 2 );
     std::cout << v7 << " / 2 is: " << v7 / 2 << "\n";
 
     Vector v8 = v6.norm();
