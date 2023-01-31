@@ -32,19 +32,26 @@ public:
   static double dot( const Vector & a, const Vector & b ) { return a.x_ * b.x_ + a.y_ * b.y_ + a.z_ * b.z_; }
 
   // magnitude
-  double mag()
+  double mag() { return sqrt( dot( *this, *this ) ); }
+
+  // cross product
+  static Vector cross( const Vector & a, const Vector & b )
   {
-    const Vector & a = *this;
-    return sqrt( dot( a, a ) );
+    double x = ( a.y_ * b.z_ ) - ( a.z_ * b.y_ );
+    double y = ( a.z_ * b.x_ ) - ( a.x_ * b.z_ );
+    double z = ( a.x_ * b.y_ ) - ( a.y_ * b.x_ );
+    return Vector( x, y, z );
   }
 
   // multiply by a scalar
   friend Vector operator*( const Vector & a, double k ) { return { k * a.x_, k * a.y_, k * a.z_ }; }
-  // divide by a scalar
+  friend Vector operator*( double k, const Vector & a ) { return { a * k }; }
 
-  // cross product
+  // divide by a scalar
+  friend Vector operator/( const Vector & a, double k ) { return { a.x_ / k, a.y_ / k, a.z_ / k }; }
 
   // norm
+  Vector norm() { return *this / this->mag(); }
 
   friend std::ostream & operator<<( std::ostream & os, const Vector & v )
   {
@@ -54,15 +61,18 @@ public:
 
   static void run_tests()
   {
-    Vector const v;
-    Vector const v2( 1, 1, 2 );
+    Vector v;
+    Vector v2( 1, 1, 2 );
 
     std::cout << "\n............... BEGINNING Vector.run_tests()...........\n";
     std::cout << "v is: " << v << "\n";
     std::cout << "v2 is: " << v2 << "\n";
 
     Vector v3 = v + v2;
-    std::cout << "v3 is: " << v3 << "\n";
+    std::cout << v << " + " << v2 << " is: " << v3 << "\n";
+
+    Vector v4 = v3 - v2;
+    std::cout << v3 << " - " << v2 << " is: " << v4 << "\n";
 
     v3 += v2;
     std::cout << "v3 after incrementing by: " << v2 << " is: " << v3 << "\n";
@@ -70,16 +80,27 @@ public:
     v3 -= v2;
     std::cout << "v3 after decrementing by: " << v2 << " is: " << v3 << "\n";
 
-    Vector vtest = v3;
-    vtest += v2;
-    vtest -= v2;
-    assert( v3 == vtest );
-
-    Vector const v4 = -v2;
     std::cout << "-v2 is: " << -v2 << "\n";
 
-    Vector const v5 = v4 - v2;
-    std::cout << v4 << " - " << v2 << " is: " << v5 << "\n";
+    assert( Vector( 1, 1, 1 ) == Vector( 1, 1, 1 ) );
+    assert( Vector( 1, 1, 1 ) != Vector( 0, 0, 0 ) );
+
+    Vector v5( 1, 2, 3 );
+    Vector v6( 1, 5, 7 );
+    std::cout << v5 << " * " << v6 << " is: " << Vector::dot( v5, v6 ) << "\n";
+    std::cout << v5 << " X " << v6 << " is: " << Vector::cross( v5, v6 ) << "\n";
+
+    std::cout << "Magnitude of " << v6 << " is: " << v6.mag() << "\n";
+
+    std::cout << v5 << " * 5 is: " << v5 * 5 << "\n";
+    std::cout << "5 * " << v5 << " is: " << 5 * v5 << "\n";
+
+    Vector v7( 2, 2, 2 );
+    std::cout << v7 << " / 2 is: " << v7 / 2 << "\n";
+
+    Vector v8 = v6.norm();
+    std::cout << "Normal of " << v6 << " is: " << v8 << "\n";
+    std::cout << "Magnitude of " << v8 << " is: " << v8.mag() << "\n";
 
     std::cout << "............... ENDING Vector.run_tests()..............\n\n";
   }
