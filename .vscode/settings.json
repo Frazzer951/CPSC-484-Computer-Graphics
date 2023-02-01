@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.txt": "plaintext",
-        "CMakeLists.txt": "cmake"
+        "CMakeLists.txt": "cmake",
+        "stdexcept": "cpp"
     }
 }

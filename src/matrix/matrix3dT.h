@@ -63,30 +63,36 @@ public:
     return matrix3d( std::to_string( k ) + "+" + a.name(), 3, { a[0] + k, a[1] + k, a[2] + k } );
   }
   friend matrix3d operator+( T k, const matrix3d & a ) { return a + k; }
-  friend matrix3d operator-( const matrix3d & a, T k )
-  { /* TODO */
-  }
-  friend matrix3d operator-( T k, const matrix3d & a )
-  { /* TODO */
-  }
+  friend matrix3d operator-( const matrix3d & a, T k ) { return a + -k; }
+  friend matrix3d operator-( T k, const matrix3d & a ) { return k + -a; }
   friend matrix3d operator*( const matrix3d & a, T k )
-  { /* TODO */
+  {
+    return matrix3d( std::to_string( k ) + "*" + a.name(), 3, { a[0] * k, a[1] * k, a[2] * k } );
   }
-
-  friend matrix3d<T> operator*( T k, const matrix3d & a )
-  { /* TODO */
-  }
-  friend matrix3d operator/( const matrix3d & a, T k )
-  { /* TODO */
+  friend matrix3d<T> operator*( T k, const matrix3d & a ) { return a * k; }
+  friend matrix3d    operator/( const matrix3d & a, T k )
+  {
+    if( k == 0 )
+    {
+      throw new std::invalid_argument( "divide by zero" );
+    }
+    double kinv = 1.0 / k;
+    return a * kinv;
   }
   //=======================================================================
-  friend matrix3d operator*( const matrix3d & m, const vector3d<T> & v )
-  { /* TODO */
+  friend vector3d<T> operator*( const matrix3d & m, const vector3d<T> & v )
+  {
+    if( m.dims_ == v.dims_ == 3 )
+    {
+      throw new std::invalid_argument( "only implemented for 3D matrix and vector" );
+    }
+    return vector3d<T>( m.name() + "*" + v.name(), 3,
+                        { vector3d( m.name(), 3, { m[0][0], m[1][0], m[2][0] } ).dot( v ),
+                          vector3d( m.name(), 3, { m[0][1], m[1][1], m[2][1] } ).dot( v ),
+                          vector3d( m.name(), 3, { m[0][2], m[1][2], m[2][2] } ).dot( v ) } );
   }
-  friend matrix3d operator*( const vector3d<T> & v, const matrix3d & m )
-  { /* TODO */
-  }
-  matrix3d<T> operator*( const matrix3d<T> & b );
+  friend vector3d<T> operator*( const vector3d<T> & v, const matrix3d & m ) { return m * v; }
+  matrix3d<T>        operator*( const matrix3d<T> & b );
   //=======================================================================
   matrix3d<T> transpose() const;    // create a new matrix transpose()
   T           determinant() const;
