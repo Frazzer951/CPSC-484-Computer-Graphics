@@ -28,7 +28,7 @@
 // }
 
 
-int main( int argc, const char * argv[] )
+int main( int /*argc*/, const char * /*argv*/[] )
 {
   vector3D::run_tests();
   // test_matrices();

@@ -110,10 +110,10 @@ public:
   double      mag() const;
   double      norm() const { return mag(); }    // L2 norm
   double      angle( const vector3d<T> & other ) const;
-  vector3d<T> cross( const vector3d<T> & other ) const;
+  vector3d<T> cross( const vector3d<T> & v ) const;
   //---------------------------------------------------------------------
   static vector3d<T> zero();
-  static double      value( double val ) { return abs( val ) < 1e-5 ? 0 : val; }
+  static double      value( double val ) { return std::abs( val ) < 1e-5 ? 0 : val; }
 
   //---------------------------------------------------------------------
   friend std::ostream & operator<<( std::ostream & os, const vector3d<T> & v )
@@ -152,7 +152,9 @@ public:
     u.zero();
     u.show();
     vector3D v( "v", 3, { 8, 16, 32 } );
-    vector3D i( "i", 3, { 1, 0, 0 } ), j( "j", 3, { 0, 1, 0 } ), k( "k", 3, { 0, 0, 1 } );
+    vector3D i( "i", 3, { 1, 0, 0 } );
+    vector3D j( "j", 3, { 0, 1, 0 } );
+    vector3D k( "k", 3, { 0, 0, 1 } );
     vector3D w( 3 * i + 4 * j - 2 * k );
 
     u.show();
@@ -197,7 +199,7 @@ public:
 
     std::cout << "*** asserting i.dot(j) == j.dot(k) == k.dot(i) == 0"
               << "\n";
-    assert( i.dot( j ) == j.dot( k ) == k.dot( i ) == 0 );
+    assert( i.dot( j ) == j.dot( k ) == k.dot( i ) == 0.0 );
 
     std::cout << "*** asserting i.cross(j) == k   and  j.cross(k) == i   and   k.cross(i) == j"
               << "\n";
@@ -244,9 +246,9 @@ private:
   }
   void check_bounds( int i ) const;
 
-private:
+
   std::string name_;
-  int         dims_;
+  int         dims_ {};
   T           data_[4];
 };
 

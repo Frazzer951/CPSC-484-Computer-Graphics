@@ -110,9 +110,9 @@ private:
   void check_bounds( int i ) const;
   void swap( T & x, T & y );
 
-private:
+
   std::string name_;
-  int         dims_;
+  int         dims_ {};
   vector3d<T> cols_[4];
   T           data_[16];
 };

@@ -51,7 +51,7 @@ public:
   friend Vector operator/( const Vector & a, double k ) { return { a.x_ / k, a.y_ / k, a.z_ / k }; }
 
   // norm
-  Vector norm() { return *this / this->mag(); }
+  Vector norm() const { return *this / this->mag(); }
 
   friend std::ostream & operator<<( std::ostream & os, const Vector & v )
   {
