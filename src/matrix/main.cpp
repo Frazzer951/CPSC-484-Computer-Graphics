@@ -8,7 +8,7 @@
 
 // MATRIX and VECTOR classes assignment
 #include "vector3dT.h"
-// #include "matrix3dT.h"
+#include "matrix3dT.h"
 
 // void test_matrices_and_vectors() {
 //   print("\n====================  TESTING MATRICES and VECTORS  ========================");

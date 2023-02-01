@@ -94,8 +94,8 @@ public:
   //=======================================================================
   matrix3d<T> minors() const;                 // see defn
   matrix3d<T> cofactor() const;               // (-1)^(i+j)*minors()(i, j)
-  matrix3d<T> adjugate() const;               // cofactor.transpose()
-  matrix3d<T> inverse() const;                // adjugate()/determinant()
+  matrix3d<T> adjoint() const;                // cofactor.transpose()
+  matrix3d<T> inverse() const;                // adjoint()/determinant()
                                               //=======================================================================
   static matrix3d<T> identity( int dims );    // identity matrix
   static matrix3d<T> zero( int dims );        // zero matrix
@@ -342,7 +342,7 @@ matrix3d<T> matrix3d<T>::cofactor() const
 { /* TODO */
 }
 template<typename T>
-matrix3d<T> matrix3d<T>::adjugate() const
+matrix3d<T> matrix3d<T>::adjoint() const
 { /* TODO */
 }
 template<typename T>
