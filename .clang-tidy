@@ -7,7 +7,7 @@ Checks:             '-*,
                     cppcoreguidelines-*,
                     llvm-*,
                     misc-*,
-                    modernize-*,
+                    -modernize-*,
                     performance-*,
                     portability-*,
                     readability-*,
@@ -16,7 +16,10 @@ Checks:             '-*,
                     -llvm-header-guard,
                     -modernize-use-trailing-return-type,
                     -readability-braces-around-statements,
-                    -llvm-include-order
+                    -llvm-include-order,
+                    -bugprone-reserved-identifier,
+                    -readability-identifier-length,
+                    -modernize-use-nodiscard
                     '
 WarningsAsErrors:   ''
 HeaderFilterRegex:  '.hpp'

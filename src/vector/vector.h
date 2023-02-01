@@ -1,5 +1,5 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef __VECTOR_H__
+#define __VECTOR_H__
 
 #include <iostream>
 #include <cassert>
