@@ -103,10 +103,10 @@ public:
   }
   friend bool operator!=( const vector3d<T> & u, const vector3d<T> & v ) { return !( u == v ); }
   //---------------------------------------------------------------------
-  double      dot( const vector3d<T> & other ) const;
+  double      dot( const vector3d<T> & v ) const;
   double      mag() const;
   double      norm() const { return mag(); }    // L2 norm
-  double      angle( const vector3d<T> & other ) const;
+  double      angle( const vector3d<T> & v ) const;
   vector3d<T> cross( const vector3d<T> & v ) const;
   //---------------------------------------------------------------------
   static vector3d<T> zero();
@@ -146,7 +146,6 @@ public:
     // std::cout << u.name() << "\n";
     // std::cout << u << "\n";
     std::cout << "u.name_ is: " << u.name() << "\n";
-    u.zero();
     u.show();
     vector3D v( "v", 3, { 8, 16, 32 } );
     vector3D i( "i", 3, { 1, 0, 0 } );

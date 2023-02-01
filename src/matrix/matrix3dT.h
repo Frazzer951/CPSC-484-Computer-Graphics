@@ -368,7 +368,7 @@ bool matrix3d<T>::operator==( const matrix3d<T> & b ) const
   {
     for( int j = 0; j < dims_; ++j )
     {
-      error += abs( (double) ( a( i, j ) - b( i, j ) ) );
+      error += std::abs( (double) ( a( i, j ) - b( i, j ) ) );
     }
   }
   return error < epsilon;
