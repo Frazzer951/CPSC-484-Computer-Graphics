@@ -86,7 +86,7 @@ public:
     assert( Vector( 1, 1, 1 ) != Vector( 0, 0, 0 ) );
 
     Vector const v5( 1, 2, 3 );
-    Vector v6( 1, 5, 7 );
+    Vector       v6( 1, 5, 7 );
     std::cout << v5 << " * " << v6 << " is: " << Vector::dot( v5, v6 ) << "\n";
     std::cout << v5 << " X " << v6 << " is: " << Vector::cross( v5, v6 ) << "\n";
 

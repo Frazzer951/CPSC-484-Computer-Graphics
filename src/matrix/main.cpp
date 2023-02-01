@@ -6,7 +6,7 @@
 #include <initializer_list>
 #include <cassert>
 
-//MATRIX and VECTOR classes assignment
+// MATRIX and VECTOR classes assignment
 #include "vector3dT.h"
 // #include "matrix3dT.h"
 
@@ -28,12 +28,11 @@
 // }
 
 
-int main(int argc, const char * argv[]) {
+int main( int argc, const char * argv[] )
+{
   vector3D::run_tests();
   // test_matrices();
   // test_matrices_and_vectors();
-    
+
   return 0;
 }
-
-
