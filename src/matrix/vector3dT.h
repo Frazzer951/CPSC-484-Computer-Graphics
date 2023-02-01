@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <cstring>
 #include <cmath>
+#include <cassert>
 #include <initializer_list>
 
 template<typename T>
@@ -60,29 +61,25 @@ public:
   }
 
   friend vector3d<T> operator-( const vector3d<T> & u, const vector3d<T> & v )
-  { /* TODO */
-  }
-  //---------------------------------------------------------------------
-  friend vector3d<T> operator+( T k, const vector3d<T> & v )
   {
-    return vector3d<T>( std::to_string( k ) + "+" + v.name_, v.dims_, { k + v[0], k + v[1], k + v[2], 0 } );
-  }
-  friend vector3d<T> operator+( const vector3d<T> & v, T k )
-  { /* TODO */
+    check_equal_dims( u, v );
+    return vector3d<T>( u.name_ + "-" + v.name_, u.dims_, { u[0] - v[0], u[1] - v[1], u[2] - v[2], 0 } );
   }
   //---------------------------------------------------------------------
-  friend vector3d<T> operator-( T k, const vector3d<T> & v )
-  { /* TODO */
+  friend vector3d<T> operator+( const vector3d<T> & v, T k )
+  {
+    return vector3d<T>( v.name_ + "+" + std::to_string( k ), v.dims_, { k + v[0], k + v[1], k + v[2], 0 } );
   }
-  friend vector3d<T> operator-( const vector3d<T> & v, T k )
-  { /* TODO */
-  }
+  friend vector3d<T> operator+( T k, const vector3d<T> & v ) { return v + k; }
+  //---------------------------------------------------------------------
+  friend vector3d<T> operator-( T k, const vector3d<T> & v ) { return v + -k; }
+  friend vector3d<T> operator-( const vector3d<T> & v, T k ) { return v * -1 + k; }
   //---------------------------------------------------------------------
   friend vector3d<T> operator*( T k, const vector3d<T> & v )
   {
     return vector3d<T>( std::to_string( k ) + v.name_, v.dims_, { k * v[0], k * v[1], k * v[2], 0 } );
   }
-  friend vector3d<T> operator*( const vector3d<T> & v, T k ) { /* TODO */ };
+  friend vector3d<T> operator*( const vector3d<T> & v, T k ) { return k * v; }
   //---------------------------------------------------------------------
   friend vector3d<T> operator/( const vector3d<T> & v, T k )
   {
@@ -181,8 +178,8 @@ public:
     assert( 3.0 + u == u + 3.0 );
     assert( 3.0 * u == u * 3.0 );
 
-    // vector3d<double> a = u - 3.0;       // example of tracking down a failed assertion
-    // vector3d<double> b = -( 3.0 - u);
+    // vector3d<double> a = u - 3.0;    // example of tracking down a failed assertion
+    // vector3d<double> b = -( 3.0 - u );
     // u.show();
     // a.show();
     // b.show();
@@ -199,7 +196,7 @@ public:
 
     std::cout << "*** asserting i.dot(j) == j.dot(k) == k.dot(i) == 0"
               << "\n";
-    assert( i.dot( j ) == j.dot( k ) == k.dot( i ) == 0.0 );
+    assert( i.dot( j ) == j.dot( k ) == k.dot( i ) == 0 );
 
     std::cout << "*** asserting i.cross(j) == k   and  j.cross(k) == i   and   k.cross(i) == j"
               << "\n";
@@ -225,10 +222,12 @@ public:
     vector3D uhat = u / u.mag();
     u.show();
     uhat.show();
+    // double maybe_zero = uhat.mag() - 1.0;
+    // std::cout << "uhat.mag() - 1.0 is... " << maybe_zero << "\n";
     std::cout << "length of uhat.mag() is... " << uhat.mag() << "\n";
     std::cout << "*** asserting u.hat.mag() - 1.0 < 1.0e-10"
               << "\n";
-    assert( uhat.mag() - 1.0 < 1.0e-10 );
+    assert( ( uhat.mag() - 1.0 ) < 1.0e-10 );
 
     std::cout << "...test vectors assertions passed"
               << "\n";
@@ -302,24 +301,42 @@ vector3d<T> & vector3d<T>::operator+=( const vector3d<T> & v )
 }
 template<typename T>
 vector3d<T> & vector3d<T>::operator-=( const vector3d<T> & v )
-{ /* TODO */
+{
+  return operator+=( -v );
 }
 //---------------------------------------------------------------------
 template<typename T>
 vector3d<T> & vector3d<T>::operator+=( T k )
-{ /* TODO */
+{
+  vector3d<T> & u = *this;
+  u[0] += k;
+  u[1] += k;
+  u[2] += k;
+  return *this;
 }
 template<typename T>
 vector3d<T> & vector3d<T>::operator-=( T k )
-{ /* TODO */
+{
+  return operator+=( -k );
 }
 template<typename T>
 vector3d<T> & vector3d<T>::operator*=( T k )
-{ /* TODO */
+{
+  vector3d<T> & u = *this;
+  u[0] *= k;
+  u[1] *= k;
+  u[2] *= k;
+  return *this;
 }
 template<typename T>
 vector3d<T> & vector3d<T>::operator/=( T k )
-{ /* TODO */
+{
+  if( k == 0 )
+  {
+    throw new std::invalid_argument( "divide by zero" );
+  }
+  double kinv = 1.0 / k;
+  return operator*=( kinv );
 }
 
 //---------------------------------------------------------------------
@@ -332,7 +349,9 @@ T vector3d<T>::operator[]( int i ) const
 
 template<typename T>
 T & vector3d<T>::operator[]( int i )
-{ /* TODO */
+{
+  check_bounds( i );
+  return data_[i];
 }    // rw idx
 
 //-----------------------
@@ -344,7 +363,13 @@ vector3d<T> vector3d<T>::operator-()
 //-----------------------
 template<typename T>
 double vector3d<T>::dot( const vector3d<T> & v ) const
-{ /* TODO */
+{
+  check_equal_dims( *this, v );
+  if( v.dims_ != 3 )
+  {
+    throw new std::invalid_argument( "dot only implemented for vector3d's" );
+  }
+  return data_[0] * v[0] + data_[1] * v[1] + data_[2] * v[2];
 }
 //-----------------------
 template<typename T>
@@ -355,7 +380,8 @@ double vector3d<T>::mag() const
 
 template<typename T>
 double vector3d<T>::angle( const vector3d<T> & v ) const
-{ /* TODO */
+{
+  return acos( dot( v ) / ( mag() * v.mag() ) );
 }
 //-----------------------
 template<typename T>
