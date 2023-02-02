@@ -12,6 +12,8 @@
 
 template<typename T>
 class matrix3d;
+template<typename T>
+std::ostream &           operator<<( std::ostream & os, const matrix3d<T> & m );
 typedef matrix3d<double> matrix3dD;
 typedef matrix3d<float>  matrix3dF;
 typedef matrix3d<int>    matrix3dI;
@@ -103,33 +105,16 @@ public:
   bool operator==( const matrix3d<T> & b ) const;
   bool operator!=( const matrix3d<T> & b ) const;
   //=======================================================================
-  friend std::ostream & operator<<( std::ostream & os, const matrix3d<T> & m )
-  {
-    os << "<'" << m.name_ << "', ";
-    for( int i = 0; i < 3; ++i )
-    {
-      os << m.cols_[i];
-    }
-    os << "> OR by rows...\n";
-    for( int i = 0; i < 3; ++i )
-    {
-      for( int j = 0; j < 3; ++j )
-      {
-        os << std::setw( 3 ) << vector3d<T>::value( m( i, j ) ) << " ";
-      }
-      os << "\n";
-    }
-    return os << ">";
-  }
+  friend std::ostream & operator<< <>( std::ostream & os, const matrix3d<T> & m );
 
 private:
   void check_equal_dims( const matrix3d<T> & v ) const;
   void check_bounds( int i ) const;
   void swap( T & x, T & y );
 
-
+private:
   std::string name_;
-  int         dims_ {};
+  int         dims_;
   vector3d<T> cols_[4];
   T           data_[16];
 };
@@ -217,11 +202,13 @@ vector3d<T> & matrix3d<T>::operator[]( int i )
 template<typename T>
 T matrix3d<T>::operator()( int row, int col ) const
 {
+  check_bounds( col );
   return cols_[col][row];
 }
 template<typename T>
 T & matrix3d<T>::operator()( int row, int col )
 {
+  check_bounds( col );
   return cols_[col][row];
 }
 template<typename T>
@@ -422,7 +409,25 @@ bool matrix3d<T>::operator!=( const matrix3d<T> & b ) const
 //=================================================================================================
 // Matrix of minors
 //=================================================================================================
-
+template<typename T>
+std::ostream & operator<<( std::ostream & os, const matrix3d<T> & m )
+{
+  os << "<'" << m.name_ << "', ";
+  for( int i = 0; i < 3; ++i )
+  {
+    os << m.cols_[i];
+  }
+  os << "> OR by rows...\n";
+  for( int i = 0; i < 3; ++i )
+  {
+    for( int j = 0; j < 3; ++j )
+    {
+      os << std::setw( 3 ) << vector3d<T>::value( m( i, j ) ) << " ";
+    }
+    os << "\n";
+  }
+  return os << ">";
+}
 
 //=================================================================================================
 template<typename T>
