@@ -12,8 +12,6 @@
 
 template<typename T>
 class matrix3d;
-template<typename T>
-std::ostream &           operator<<( std::ostream & os, const matrix3d<T> & m );
 typedef matrix3d<double> matrix3dD;
 typedef matrix3d<float>  matrix3dF;
 typedef matrix3d<int>    matrix3dI;
@@ -105,7 +103,24 @@ public:
   bool operator==( const matrix3d<T> & b ) const;
   bool operator!=( const matrix3d<T> & b ) const;
   //=======================================================================
-  friend std::ostream & operator<< <>( std::ostream & os, const matrix3d<T> & m );
+  friend std::ostream & operator<<( std::ostream & os, const matrix3d<T> & m )
+  {
+    os << "<'" << m.name_ << "', ";
+    for( int i = 0; i < 3; ++i )
+    {
+      os << m.cols_[i];
+    }
+    os << "> OR by rows...\n";
+    for( int i = 0; i < 3; ++i )
+    {
+      for( int j = 0; j < 3; ++j )
+      {
+        os << std::setw( 3 ) << vector3d<T>::value( m( i, j ) ) << " ";
+      }
+      os << "\n";
+    }
+    return os << ">";
+  }
 
 private:
   void check_equal_dims( const matrix3d<T> & v ) const;
@@ -239,24 +254,44 @@ matrix3d<T> & matrix3d<T>::operator+=( T k )
 }
 template<typename T>
 matrix3d<T> & matrix3d<T>::operator-=( T k )
-{ /* TODO */
+{
+  return operator+=( -k );
 }
 template<typename T>
 matrix3d<T> & matrix3d<T>::operator*=( T k )
-{ /* TODO */
+{
+  matrix3d<T> & a = *this;
+  name_           = std::to_string( k ) + "+" + name_;
+  for( int i = 0; i < 4; ++i )
+  {
+    a[i] *= k;
+  }
+  return *this;
 }
 template<typename T>
 matrix3d<T> & matrix3d<T>::operator/=( T k )
-{ /* TODO */
+{
+  if( k == 0 )
+  {
+    throw new std::invalid_argument( "divide by zero" );
+  }
+  double kinv = 1.0 / k;
+  return operator*=( kinv );
 }
 //=================================================================================================
 template<typename T>
 matrix3d<T> & matrix3d<T>::operator+=( const matrix3d<T> & b )
-{ /* TODO */
+{
+  matrix3d<T> & a = *this;
+  a[0] += b[0];
+  a[1] += b[1];
+  a[2] += b[2];
+  return *this;
 }
 template<typename T>
 matrix3d<T> & matrix3d<T>::operator-=( const matrix3d<T> & b )
-{ /* TODO */
+{
+  return operator+=( -b );
 }
 //=================================================================================================
 template<typename T>
@@ -274,7 +309,8 @@ matrix3d<T> matrix3d<T>::operator+( const matrix3d<T> & b )
 }
 template<typename T>
 matrix3d<T> matrix3d<T>::operator-( const matrix3d<T> & b )
-{ /* TODO */
+{
+  return operator+( -b );
 }
 //=================================================================================================
 template<typename T>
@@ -360,7 +396,8 @@ matrix3d<T> matrix3d<T>::identity( int dims )
 }
 template<typename T>
 matrix3d<T> matrix3d<T>::zero( int dims )
-{ /* TODO */
+{
+  return matrix3d<T>( "zero", 3, { vector3D::zero(), vector3D::zero(), vector3D::zero() } );
 }
 template<typename T>
 bool matrix3d<T>::operator==( const matrix3d<T> & b ) const
@@ -385,25 +422,7 @@ bool matrix3d<T>::operator!=( const matrix3d<T> & b ) const
 //=================================================================================================
 // Matrix of minors
 //=================================================================================================
-template<typename T>
-std::ostream & operator<<( std::ostream & os, const matrix3d<T> & m )
-{
-  os << "<'" << m.name_ << "', ";
-  for( int i = 0; i < 3; ++i )
-  {
-    os << m.cols_[i];
-  }
-  os << "> OR by rows...\n";
-  for( int i = 0; i < 3; ++i )
-  {
-    for( int j = 0; j < 3; ++j )
-    {
-      os << std::setw( 3 ) << value( m( i, j ) ) << " ";
-    }
-    os << "\n";
-  }
-  return os << ">";
-}
+
 
 //=================================================================================================
 template<typename T>
