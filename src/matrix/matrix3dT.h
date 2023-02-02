@@ -64,7 +64,7 @@ public:
   }
   friend matrix3d operator+( T k, const matrix3d & a ) { return a + k; }
   friend matrix3d operator-( const matrix3d & a, T k ) { return a + -k; }
-  friend matrix3d operator-( T k, const matrix3d & a ) { return k + -a; }
+  friend matrix3d operator-( T k, const matrix3d & a ) { return a * -1 + k; }
   friend matrix3d operator*( const matrix3d & a, T k )
   {
     return matrix3d( std::to_string( k ) + "*" + a.name(), 3, { a[0] * k, a[1] * k, a[2] * k } );
@@ -278,7 +278,7 @@ matrix3d<T> & matrix3d<T>::operator+=( const matrix3d<T> & b )
 template<typename T>
 matrix3d<T> & matrix3d<T>::operator-=( const matrix3d<T> & b )
 {
-  return operator+=( -b );
+  return operator+=( b * -1 );
 }
 //=================================================================================================
 template<typename T>
@@ -297,7 +297,7 @@ matrix3d<T> matrix3d<T>::operator+( const matrix3d<T> & b )
 template<typename T>
 matrix3d<T> matrix3d<T>::operator-( const matrix3d<T> & b )
 {
-  return operator+( -b );
+  return operator+( b * -1 );
 }
 //=================================================================================================
 template<typename T>

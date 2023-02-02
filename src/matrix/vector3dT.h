@@ -72,8 +72,8 @@ public:
   }
   friend vector3d<T> operator+( T k, const vector3d<T> & v ) { return v + k; }
   //---------------------------------------------------------------------
-  friend vector3d<T> operator-( T k, const vector3d<T> & v ) { return v + -k; }
-  friend vector3d<T> operator-( const vector3d<T> & v, T k ) { return v * -1 + k; }
+  friend vector3d<T> operator-( T k, const vector3d<T> & v ) { return v * -1 + k; }
+  friend vector3d<T> operator-( const vector3d<T> & v, T k ) { return v + -k; }
   //---------------------------------------------------------------------
   friend vector3d<T> operator*( T k, const vector3d<T> & v )
   {
