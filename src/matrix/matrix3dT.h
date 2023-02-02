@@ -82,10 +82,6 @@ public:
   //=======================================================================
   friend vector3d<T> operator*( const matrix3d & m, const vector3d<T> & v )
   {
-    if( m.dims_ == v.dims_ == 3 )
-    {
-      throw new std::invalid_argument( "only implemented for 3D matrix and vector" );
-    }
     return vector3d<T>( m.name() + "*" + v.name(), 3,
                         { vector3d( m.name(), 3, { m[0][0], m[1][0], m[2][0] } ).dot( v ),
                           vector3d( m.name(), 3, { m[0][1], m[1][1], m[2][1] } ).dot( v ),
@@ -205,11 +201,13 @@ vector3d<T> & matrix3d<T>::operator[]( int i )
 }
 template<typename T>
 T matrix3d<T>::operator()( int row, int col ) const
-{ /* TODO */
+{
+  return cols_[col][row];
 }
 template<typename T>
 T & matrix3d<T>::operator()( int row, int col )
-{ /* TODO */
+{
+  return cols_[col][row];
 }
 template<typename T>
 T * matrix3d<T>::opengl_memory( int row, int col )
