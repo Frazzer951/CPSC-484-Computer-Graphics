@@ -20,10 +20,7 @@ def sphere_intersect(center, radius, ray_origin, ray_direction):
 
 
 def nearest_intersected_object(objects, ray_origin, ray_direction):
-    distances = [
-        sphere_intersect(obj["center"], obj["radius"], ray_origin, ray_direction)
-        for obj in objects
-    ]
+    distances = [sphere_intersect(obj["center"], obj["radius"], ray_origin, ray_direction) for obj in objects]
     nearest_object = None
     min_distance = np.inf
     for index, distance in enumerate(distances):
@@ -45,6 +42,7 @@ objects = [
     {"center": np.array([0.1, -0.3, 0]), "radius": 0.1},
     {"center": np.array([-0.3, 0, 0]), "radius": 0.15},
 ]
+light = {"position": np.array([5, 5, 5])}
 
 image = np.zeros((height, width, 3))
 with alive_bar(width * height) as bar:
@@ -55,11 +53,14 @@ with alive_bar(width * height) as bar:
             direction = normalize(pixel - origin)
 
             # Check for intersections
-            nearest_object, min_distance = nearest_intersected_object(
-                objects, origin, direction
-            )
+            nearest_object, min_distance = nearest_intersected_object(objects, origin, direction)
             if nearest_object is not None:
                 intersection = origin + min_distance * direction
+                intersection_to_light = normalize(light["position"] - intersection)
+
+                _, min_distance = nearest_intersected_object(objects, intersection, intersection_to_light)
+                intersection_to_light_distance = np.linalg.norm(light["position"] - intersection)
+                is_shadowed = min_distance < intersection_to_light_distance
 
                 # image[i, j] = ...
 
