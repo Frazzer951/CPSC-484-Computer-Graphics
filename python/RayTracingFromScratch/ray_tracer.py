@@ -38,11 +38,37 @@ ratio = float(width) / height
 screen = (-1, 1 / ratio, 1, -1 / ratio)  # left, top, right, bottom
 
 objects = [
-    {"center": np.array([-0.2, 0, -1]), "radius": 0.7},
-    {"center": np.array([0.1, -0.3, 0]), "radius": 0.1},
-    {"center": np.array([-0.3, 0, 0]), "radius": 0.15},
+    {
+        "center": np.array([-0.2, 0, -1]),
+        "radius": 0.7,
+        "ambient": np.array([0.1, 0, 0]),
+        "diffuse": np.array([0.7, 0, 0]),
+        "specular": np.array([1, 1, 1]),
+        "shininess": 100,
+    },
+    {
+        "center": np.array([0.1, -0.3, 0]),
+        "radius": 0.1,
+        "ambient": np.array([0.1, 0, 0.1]),
+        "diffuse": np.array([0.7, 0, 0.7]),
+        "specular": np.array([1, 1, 1]),
+        "shininess": 100,
+    },
+    {
+        "center": np.array([-0.3, 0, 0]),
+        "radius": 0.15,
+        "ambient": np.array([0, 0.1, 0]),
+        "diffuse": np.array([0, 0.6, 0]),
+        "specular": np.array([1, 1, 1]),
+        "shininess": 100,
+    },
 ]
-light = {"position": np.array([5, 5, 5])}
+light = {
+    "position": np.array([5, 5, 5]),
+    "ambient": np.array([1, 1, 1]),
+    "diffuse": np.array([1, 1, 1]),
+    "specular": np.array([1, 1, 1]),
+}
 
 image = np.zeros((height, width, 3))
 with alive_bar(width * height) as bar:
@@ -54,15 +80,45 @@ with alive_bar(width * height) as bar:
 
             # Check for intersections
             nearest_object, min_distance = nearest_intersected_object(objects, origin, direction)
-            if nearest_object is not None:
-                intersection = origin + min_distance * direction
-                intersection_to_light = normalize(light["position"] - intersection)
+            if nearest_object is None:
+                bar()
+                continue
 
-                _, min_distance = nearest_intersected_object(objects, intersection, intersection_to_light)
-                intersection_to_light_distance = np.linalg.norm(light["position"] - intersection)
-                is_shadowed = min_distance < intersection_to_light_distance
+            intersection = origin + min_distance * direction
 
-                # image[i, j] = ...
+            normal_to_surface = normalize(intersection - nearest_object["center"])
+            shifted_point = intersection + 1e-5 * normal_to_surface
+            intersection_to_light = normalize(light["position"] - shifted_point)
+
+            _, min_distance = nearest_intersected_object(objects, shifted_point, intersection_to_light)
+            intersection_to_light_distance = np.linalg.norm(light["position"] - intersection)
+            is_shadowed = min_distance < intersection_to_light_distance
+
+            if is_shadowed:
+                bar()
+                continue
+
+            # RGB
+            illumination = np.zeros((3))
+
+            # ambiant
+            illumination += nearest_object["ambient"] * light["ambient"]
+
+            # diffuse
+            illumination += nearest_object["diffuse"] * light["diffuse"] * np.dot(intersection_to_light, normal_to_surface)
+
+            # specular
+            intersection_to_camera = normalize(camera - intersection)
+            H = normalize(intersection_to_light + intersection_to_camera)
+            illumination += (
+                nearest_object["specular"]
+                * light["specular"]
+                * np.dot(normal_to_surface, H) ** (nearest_object["shininess"] / 4)
+            )
+
+            image[i, j] = np.clip(illumination, 0, 1)
+
+            # image[i, j] = ...
 
             bar()
 
