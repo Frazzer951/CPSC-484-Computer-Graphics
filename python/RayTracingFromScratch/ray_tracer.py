@@ -51,29 +51,38 @@ light = {
 }
 
 objects = [
+    # {
+    #     "center": np.array([-0.2, 0, -1]),
+    #     "radius": 0.7,
+    #     "ambient": np.array([0.1, 0, 0]),
+    #     "diffuse": np.array([0.7, 0, 0]),
+    #     "specular": np.array([1, 1, 1]),
+    #     "shininess": 100,
+    #     "reflection": 0.5,
+    # },
+    # {
+    #     "center": np.array([0.1, -0.3, 0]),
+    #     "radius": 0.1,
+    #     "ambient": np.array([0.1, 0, 0.1]),
+    #     "diffuse": np.array([0.7, 0, 0.7]),
+    #     "specular": np.array([1, 1, 1]),
+    #     "shininess": 100,
+    #     "reflection": 0.5,
+    # },
+    # {
+    #     "center": np.array([-0.3, 0, 0]),
+    #     "radius": 0.15,
+    #     "ambient": np.array([0, 0.1, 0]),
+    #     "diffuse": np.array([0, 0.6, 0]),
+    #     "specular": np.array([1, 1, 1]),
+    #     "shininess": 100,
+    #     "reflection": 0.5,
+    # },
     {
-        "center": np.array([-0.2, 0, -1]),
-        "radius": 0.7,
-        "ambient": np.array([0.1, 0, 0]),
+        "center": np.array([0, 0.2, -1]),
+        "radius": 0.5,
+        "ambient": np.array([0, 0.1, 0.1]),
         "diffuse": np.array([0.7, 0, 0]),
-        "specular": np.array([1, 1, 1]),
-        "shininess": 100,
-        "reflection": 0.5,
-    },
-    {
-        "center": np.array([0.1, -0.3, 0]),
-        "radius": 0.1,
-        "ambient": np.array([0.1, 0, 0.1]),
-        "diffuse": np.array([0.7, 0, 0.7]),
-        "specular": np.array([1, 1, 1]),
-        "shininess": 100,
-        "reflection": 0.5,
-    },
-    {
-        "center": np.array([-0.3, 0, 0]),
-        "radius": 0.15,
-        "ambient": np.array([0, 0.1, 0]),
-        "diffuse": np.array([0, 0.6, 0]),
         "specular": np.array([1, 1, 1]),
         "shininess": 100,
         "reflection": 0.5,
@@ -88,6 +97,27 @@ objects = [
         "reflection": 0.5,
     },
 ]
+
+num_spheres = 10
+delta_angle = 360 / num_spheres
+radius = 0.7
+
+for i in range(num_spheres):
+    angle = np.radians(i * delta_angle)
+    x = radius * np.sin(angle)
+    y = radius * np.cos(angle) + 0.2
+    objects.append(
+        {
+            "center": np.array([x, y, -1]),
+            "radius": 0.1,
+            "ambient": np.array([np.cos(x), np.cos(x + np.radians(120)), np.cos(x - np.radians(120))]),
+            "diffuse": np.array([0.7, 0, 0]),
+            "specular": np.array([1, 1, 1]),
+            "shininess": 100,
+            "reflection": 0.5,
+        }
+    )
+
 
 image = np.zeros((height, width, 3))
 with alive_bar(width * height) as bar:
