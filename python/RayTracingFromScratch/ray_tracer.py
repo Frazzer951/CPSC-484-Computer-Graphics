@@ -55,8 +55,8 @@ def hsv_to_rgb(h, s, v):
         return (v, p, q)
 
 
-width = 300  # 600
-height = 200  # 200
+width = 1920  # 300
+height = 1080  # 200
 
 max_depth = 3
 
@@ -102,8 +102,8 @@ objects = [
     {
         "center": np.array([0, 0.2, -1]),
         "radius": 0.5,
-        "ambient": np.array([0, 1, 1]),
-        "diffuse": np.array([0.7, 0.7, 0.7]),
+        "ambient": np.array([0.2, 0.2, 0.2]),
+        "diffuse": np.array([0.5, 0.5, 0.5]),
         "specular": np.array([1, 1, 1]),
         "shininess": 100,
         "reflection": 0.5,
@@ -198,7 +198,7 @@ with alive_bar(width * height) as bar:
             bar()
 
 
-# plt.imsave("image.png", image)
+plt.imsave("image.png", image)
 
 imgplot = plt.imshow(image)
 plt.show()
