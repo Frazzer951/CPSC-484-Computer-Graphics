@@ -34,8 +34,29 @@ def nearest_intersected_object(objects, ray_origin, ray_direction):
     return nearest_object, min_distance
 
 
-width = 300
-height = 200
+def hsv_to_rgb(h, s, v):
+    if s == 0.0:
+        return (v, v, v)
+    i = int(h * 6.0)
+    f = (h * 6.0) - i
+    p, q, t = v * (1.0 - s), v * (1.0 - s * f), v * (1.0 - s * (1.0 - f))
+    i %= 6
+    if i == 0:
+        return (v, t, p)
+    if i == 1:
+        return (q, v, p)
+    if i == 2:
+        return (p, v, t)
+    if i == 3:
+        return (p, q, v)
+    if i == 4:
+        return (t, p, v)
+    if i == 5:
+        return (v, p, q)
+
+
+width = 300  # 600
+height = 200  # 200
 
 max_depth = 3
 
@@ -81,8 +102,8 @@ objects = [
     {
         "center": np.array([0, 0.2, -1]),
         "radius": 0.5,
-        "ambient": np.array([0, 0.1, 0.1]),
-        "diffuse": np.array([0.7, 0, 0]),
+        "ambient": np.array([0, 1, 1]),
+        "diffuse": np.array([0.7, 0.7, 0.7]),
         "specular": np.array([1, 1, 1]),
         "shininess": 100,
         "reflection": 0.5,
@@ -110,8 +131,8 @@ for i in range(num_spheres):
         {
             "center": np.array([x, y, -1]),
             "radius": 0.1,
-            "ambient": np.array([np.cos(x), np.cos(x + np.radians(120)), np.cos(x - np.radians(120))]),
-            "diffuse": np.array([0.7, 0, 0]),
+            "ambient": np.array(hsv_to_rgb(np.degrees(angle) / 360, 1, 1)),
+            "diffuse": np.array([0.7, 0.7, 0.7]),
             "specular": np.array([1, 1, 1]),
             "shininess": 100,
             "reflection": 0.5,
