@@ -55,8 +55,8 @@ def hsv_to_rgb(h, s, v):
         return (v, p, q)
 
 
-width = 1920  # 300
-height = 1080  # 200
+width = 3000  # 300
+height = 2000  # 200
 
 max_depth = 3
 
@@ -72,33 +72,6 @@ light = {
 }
 
 objects = [
-    # {
-    #     "center": np.array([-0.2, 0, -1]),
-    #     "radius": 0.7,
-    #     "ambient": np.array([0.1, 0, 0]),
-    #     "diffuse": np.array([0.7, 0, 0]),
-    #     "specular": np.array([1, 1, 1]),
-    #     "shininess": 100,
-    #     "reflection": 0.5,
-    # },
-    # {
-    #     "center": np.array([0.1, -0.3, 0]),
-    #     "radius": 0.1,
-    #     "ambient": np.array([0.1, 0, 0.1]),
-    #     "diffuse": np.array([0.7, 0, 0.7]),
-    #     "specular": np.array([1, 1, 1]),
-    #     "shininess": 100,
-    #     "reflection": 0.5,
-    # },
-    # {
-    #     "center": np.array([-0.3, 0, 0]),
-    #     "radius": 0.15,
-    #     "ambient": np.array([0, 0.1, 0]),
-    #     "diffuse": np.array([0, 0.6, 0]),
-    #     "specular": np.array([1, 1, 1]),
-    #     "shininess": 100,
-    #     "reflection": 0.5,
-    # },
     {
         "center": np.array([0, 0.2, -1]),
         "radius": 0.5,
@@ -119,7 +92,7 @@ objects = [
     },
 ]
 
-num_spheres = 10
+num_spheres = 15
 delta_angle = 360 / num_spheres
 radius = 0.7
 
@@ -200,5 +173,5 @@ with alive_bar(width * height) as bar:
 
 plt.imsave("image.png", image)
 
-imgplot = plt.imshow(image)
-plt.show()
+# imgplot = plt.imshow(image)
+# plt.show()
