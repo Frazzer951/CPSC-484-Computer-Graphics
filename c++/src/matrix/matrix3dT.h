@@ -155,7 +155,7 @@ matrix3d<T>::matrix3d( const std::string & name, int dims, const std::initialize
   matrix3d & m = *this;
   for( const T & value : li )
   {
-    m( i / 3, i % 3 ) = value;
+    m( i / dims, i % dims ) = value;
     ++i;
   }
 }
