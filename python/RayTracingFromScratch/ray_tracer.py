@@ -99,12 +99,36 @@ radius = 0.7
 for i in range(num_spheres):
     angle = np.radians(i * delta_angle)
     x = radius * np.sin(angle)
-    y = radius * np.cos(angle) + 0.2
+    y = radius * np.cos(angle)
+    z = 0  # radius * np.sin(angle)
+
+    theta = 15
+    x1 = x * np.cos(theta) + z * np.sin(theta)
+    y1 = y
+    z1 = z * np.cos(theta) - x * np.sin(theta)
+
     objects.append(
         {
-            "center": np.array([x, y, -1]),
+            "center": np.array([x1, y1 + 0.2, z1 - 1]),
             "radius": 0.1,
-            "ambient": np.array(hsv_to_rgb(np.degrees(angle) / 360, 1, 1)),
+            "ambient": np.array(hsv_to_rgb((i * delta_angle) / 360, 1, 1)),
+            "diffuse": np.array([0.7, 0.7, 0.7]),
+            "specular": np.array([1, 1, 1]),
+            "shininess": 100,
+            "reflection": 0.5,
+        }
+    )
+
+    theta = -15
+    x1 = x * np.cos(theta) + z * np.sin(theta)
+    y1 = y
+    z1 = z * np.cos(theta) - x * np.sin(theta)
+
+    objects.append(
+        {
+            "center": np.array([x1, y1 + 0.2, z1 - 1]),
+            "radius": 0.1,
+            "ambient": np.array(hsv_to_rgb((i * delta_angle) / 360, 1, 1)),
             "diffuse": np.array([0.7, 0.7, 0.7]),
             "specular": np.array([1, 1, 1]),
             "shininess": 100,
