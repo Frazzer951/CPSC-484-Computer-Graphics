@@ -35,6 +35,9 @@ public:
   std::string name() const;
   void        name( const std::string & name );
 
+  int  dims() const;
+  void dims( const int & name );
+
   T x() const { return data_[0]; }    // read-only value of x
   T y() const { return data_[1]; }
   T z() const { return data_[2]; }
@@ -286,6 +289,17 @@ template<typename T>
 void vector3d<T>::name( const std::string & name )
 {
   name_ = name;
+}
+
+template<typename T>
+int vector3d<T>::dims() const
+{
+  return dims_;
+}
+template<typename T>
+void vector3d<T>::dims( const int & dims )
+{
+  dims_ = dims;
 }
 
 template<typename T>

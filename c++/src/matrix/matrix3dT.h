@@ -45,6 +45,8 @@ public:
   void                name( const std::string & name );
   const std::string & name() const;
 
+  void      dims( const int & name );
+  const int dims() const;
   //============================ LINEAR ALGEBRA =========================
   matrix3d<T> & operator+=( T k );
   matrix3d<T> & operator-=( T k );
@@ -82,10 +84,23 @@ public:
   //=======================================================================
   friend vector3d<T> operator*( const matrix3d & m, const vector3d<T> & v )
   {
-    return vector3d<T>( m.name() + "*" + v.name(), 3,
-                        { vector3d( m.name(), 3, { m[0][0], m[1][0], m[2][0] } ).dot( v ),
-                          vector3d( m.name(), 3, { m[0][1], m[1][1], m[2][1] } ).dot( v ),
-                          vector3d( m.name(), 3, { m[0][2], m[1][2], m[2][2] } ).dot( v ) } );
+    if( m.dims() != v.dims() )
+    {
+      throw new std::invalid_argument( "Dimensions don't match" );
+    }
+    int         dims = m.dims();
+    vector3d<T> new_vec( m.name() + "*" + v.name(), dims );
+
+    for( int j = 0; j <= dims; j++ )
+    {
+      double dot = 0;
+      for( int i = 0; i <= dims; i++ )
+      {
+        dot += m[i][j] * v[i];
+      }
+      new_vec[j] = dot;
+    }
+    return new_vec;
   }
   friend vector3d<T> operator*( const vector3d<T> & v, const matrix3d & m ) { return m * v; }
   matrix3d<T>        operator*( const matrix3d<T> & b );
@@ -226,6 +241,17 @@ template<typename T>
 const std::string & matrix3d<T>::name() const
 {
   return name_;
+}
+
+template<typename T>
+void matrix3d<T>::dims( const int & dims )
+{
+  dims_ = dims;
+}
+template<typename T>
+const int matrix3d<T>::dims() const
+{
+  return dims_;
 }
 //=================================== LINEAR ALGEBRA ================================
 template<typename T>
