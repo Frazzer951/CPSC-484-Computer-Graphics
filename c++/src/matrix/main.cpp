@@ -191,7 +191,7 @@ void test_matrices()
   std::cout << "...asserting inverse passed" << std::endl;
 
   std::cout << "...asserting identity" << std::endl;
-  std::cout << c.identity( 3 ) << std::endl;
+  std::cout << matrix3dD::identity( 3 ) << std::endl;
   assert( c.identity( 3 ) == matrix3dD( "c", 3, { 1, 0, 0, 0, 1, 0, 0, 0, 1 } ) );
   std::cout << "...asserting identity passed" << std::endl;
 
@@ -237,7 +237,7 @@ void test_openGL()
 }
 
 
-int main( int argc, const char * argv[] )
+int main( int /*argc*/, const char * /*argv*/[] )
 {
   vector3D::run_tests();
   test_matrices_and_vectors();

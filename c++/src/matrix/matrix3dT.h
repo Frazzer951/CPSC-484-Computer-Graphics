@@ -45,8 +45,8 @@ public:
   void                name( const std::string & name );
   const std::string & name() const;
 
-  void      dims( const int & name );
-  const int dims() const;
+  void dims( const int & dims );
+  int  dims() const;
   //============================ LINEAR ALGEBRA =========================
   matrix3d<T> & operator+=( T k );
   matrix3d<T> & operator-=( T k );
@@ -249,7 +249,7 @@ void matrix3d<T>::dims( const int & dims )
   dims_ = dims;
 }
 template<typename T>
-const int matrix3d<T>::dims() const
+int matrix3d<T>::dims() const
 {
   return dims_;
 }
@@ -410,7 +410,7 @@ matrix3d<T> matrix3d<T>::identity( int dims )
 template<typename T>
 matrix3d<T> matrix3d<T>::zero( int dims )
 {
-  return matrix3d<T>( "zero", 3, { vector3D::zero(), vector3D::zero(), vector3D::zero() } );
+  return matrix3d<T>( "zero", dims, { vector3D::zero(), vector3D::zero(), vector3D::zero() } );
 }
 template<typename T>
 bool matrix3d<T>::operator==( const matrix3d<T> & b ) const

@@ -36,7 +36,7 @@ public:
   void        name( const std::string & name );
 
   int  dims() const;
-  void dims( const int & name );
+  void dims( const int & dims );
 
   T x() const { return data_[0]; }    // read-only value of x
   T y() const { return data_[1]; }
