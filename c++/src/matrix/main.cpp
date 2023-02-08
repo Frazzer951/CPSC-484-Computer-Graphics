@@ -45,6 +45,7 @@ void test_matrices()
 
 
   std::cout << m << std::endl;
+  std::cout << mT << std::endl;
 
   //=========================================================
   //=========================================================
@@ -209,7 +210,7 @@ void test_matrices()
 
 void test_openGL()
 {
-  std::cout << "==========================================================================\n";
+  std::cout << "\n==========================================================================\n";
   std::cout << "====================  TESTING OPENGL FUNCTIONS  =========================\n";
   std::cout << "==========================================================================\n";
 
@@ -220,13 +221,16 @@ void test_openGL()
   double *    openGLMatrix = m.opengl_memory( 3, 3 );
 
   std::string colMajor = "";
-  for( int i = 0; i < 16; i++ )
+  for( int i = 0; i < 15; i++ )
   {
     colMajor += std::to_string( int( openGLMatrix[i] ) ) + " ";
   }
   colMajor += std::to_string( int( openGLMatrix[15] ) );
 
-  // assert(testStr == colMajor);
+  std::cout << testStr << std::endl;
+  std::cout << colMajor << std::endl;
+
+  assert( testStr == colMajor );
   std::cout << std::endl;
   std::cout << "...testing opengl_matrix passed\n";
 
@@ -237,7 +241,7 @@ void test_openGL()
 }
 
 
-int main( int /*argc*/, const char * /*argv*/[] )
+int main( int argc, const char * argv[] )
 {
   vector3D::run_tests();
   test_matrices_and_vectors();
@@ -246,3 +250,139 @@ int main( int /*argc*/, const char * /*argv*/[] )
 
   return 0;
 }
+
+
+/*
+====================  TESTING VECTORS  ========================
+u.name_ is: u
+<u,   1   2   4   0>
+<u,   1   2   4   0>
+<v,   8  16  32   0>
+<i,   1   0   0   0>
+<j,   0   1   0   0>
+<k,   0   0   1   0>
+j + k is: <j+k,   0   1   1   0>
+<3.000000i+4.000000j-2.000000k,   3   4  -2   0>
+*** asserting u == u and u != v
+*** asserting u + v == v + u   and  u - v == -(v - u)    and   -(-u) == u
+*** 3.0 + u == u + 3.0   and   3.0 * u == u * 3.0
+*** asserting u - 3.- == -(3.0 - u)
+*** asserting 5.0 * u == u * 5.0
+*** asserting u + vector3D::zero() == u
+*** asserting i.dot(j) == j.dot(k) == k.dot(i) == 0
+*** asserting i.cross(j) == k   and  j.cross(k) == i   and   k.cross(i) == j
+*** asserting u.cross(v) == -v.cross(u)
+i.angle(j) is: 1.57
+pi/2 is: 1.57
+*** asserting i.angle(j) == j.angle(k) == k.angle(i) == M_PI/2
+<u,   1   2   4   0>
+<0.218218u, 0.218 0.436 0.873   0>
+length of uhat.mag() is... 1
+*** asserting u.hat.mag() - 1.0 < 1.0e-10
+...test vectors assertions passed
+====================  FINISHED testing vectors  ========================
+
+
+====================  TESTING MATRICES and VECTORS  ========================
+<p,   1   2   0>
+<'m', <col0,   1   3   0   0><col1,   2   4   0   0><col2,   0   0   0   0>> OR by rows...
+  1   2   0
+  3   4   0
+  0   0   0
+>
+...test p * m == m * p
+...test p * m == m * p passed
+<q,   1   2   3   0>
+<'n', <col0,   1   4   7   0><col1,   2   5   8   0><col2,   3   6   9   0>> OR by rows...
+  1   2   3
+  4   5   6
+  7   8   9
+>
+...test q * n == n * q
+...test q * n == n * q passed
+...test_matrices_and_vectors assertions passed
+====================  FINISHED TESTING MATRICES and VECTORS  ========================
+
+====================  TESTING MATRICES  ========================
+<'m', <col0,   1   4   7   0><col1,   2   5   8   0><col2,   3   6   9   0>> OR by rows...
+  1   2   3
+  4   5   6
+  7   8   9
+>
+<'mT', <col0,   1   2   3   0><col1,   4   5   6   0><col2,   7   8   9   0>> OR by rows...
+  1   4   7
+  2   5   8
+  3   6   9
+>
+...test matrices transpose
+...test matrices transpose passed
+...test matrices copy constructor
+...test matrices copy constructor passed
+...test matrices assignment operator
+...test matrices assignment operator passed
+...test matrices equality operator
+...test matrices equality operator passed
+...test matrices inequality operator
+...test matrices inequality operator passed
+...test matrices sign operators
+...testing matrix addition and subtraction
+...testing matrix addition and subtraction passed
+...testing matrix scalar multiplication
+...testing matrix scalar multiplication passed
+...testing matrix scalar division
+...testing matrix scalar division passed
+...testing matrix scalar addition and subtraction
+...testing matrix multiplication
+...testing matrix multiplication passed
+...testing matrix sign operators passed
+...testing matrix unary minus
+...testing matrix unary minus passed
+...testing matrix transpose, minor, cofactor, determinant, adjoint, and inverse
+<'c', <col0,  -1   2   3   0><col1,  -2   1   4   0><col2,   2   1   5   0>> OR by rows...
+ -1  -2   2
+  2   1   1
+  3   4   5
+>
+...asserting transpose
+...asserting transpose passed
+...asserting minors
+...asserting minors passed
+...asserting cofactors
+...asserting cofactors passed
+...asserting determinant
+...asserting determinant passed
+...asserting adjoint (TRANSPOSE OF COFACTOR MATRIX)
+...asserting adjoint passed
+...asserting inverse
+...asserting inverse passed
+...asserting identity
+<'I3', <col0,   1   0   0   0><col1,   0   1   0   0><col2,   0   0   1   0>> OR by rows...
+  1   0   0
+  0   1   0
+  0   0   1
+>
+...asserting identity passed
+...testing matrix transpose, minor, cofactor, determinant, adjoint, and inverse passed
+==========================================================================
+==========================  TESTING PASSED  =============================
+==========================================================================
+====================  FINISHED TESTING MATRICES  ========================
+
+==========================================================================
+====================  TESTING OPENGL FUNCTIONS  =========================
+==========================================================================
+...testing opengl_matrix
+<'m', <col0,   1   4   7   0><col1,   2   5   8   0><col2,   3   6   9   0>> OR by rows...
+  1   2   3
+  4   5   6
+  7   8   9
+>
+1 4 7 0 2 5 8 0 3 6 9 0 0 0 0 1
+1 4 7 0 2 5 8 0 3 6 9 0 0 0 0 1
+
+...testing opengl_matrix passed
+==========================================================================
+==========================  TESTING PASSED  =============================
+==========================================================================
+====================  FINISHED TESTING OPENGL  ==========================
+*/

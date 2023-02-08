@@ -228,7 +228,33 @@ T & matrix3d<T>::operator()( int row, int col )
 }
 template<typename T>
 T * matrix3d<T>::opengl_memory( int row, int col )
-{ /* TODO */
+{
+  matrix3d & m      = *this;
+  T *        opengl = new T[( row + 1 ) * ( col + 1 )];
+
+  for( int i = 0; i <= row; i++ )
+  {
+    for( int j = 0; j <= col; j++ )
+    {
+      T val;
+      if( i == row && j == col )
+      {
+        val = 1;
+      }
+      else if( i == row || j == col )
+      {
+        val = 0;
+      }
+      else
+      {
+        val = m[i][j];
+      }
+
+      opengl[i * ( col + 1 ) + j] = val;
+    }
+  }
+
+  return opengl;
 }
 // implement code here
 //=================================================================================================
@@ -350,11 +376,33 @@ template<typename T>
 matrix3d<T> matrix3d<T>::transpose() const
 {
   const matrix3d<T> & m = *this;
-  /* TODO */
+  matrix3d<T>         t( m.name() + "T", m.dims() );
+
+  for( int i = 0; i < m.dims_; i++ )
+  {
+    for( int j = i; j < m.dims_; j++ )
+    {
+      if( i == j )
+      {
+        t[i][j] = m[i][j];
+      }
+      else
+      {
+        t[i][j] = m[j][i];
+        t[j][i] = m[i][j];
+      }
+    }
+  }
+
+  return t;
 }
 template<typename T>
 T matrix3d<T>::determinant() const
-{ /* TODO */
+{
+  const matrix3d<T> & m = *this;
+  return ( m[0][0] * ( m[1][1] * m[2][2] - m[2][1] * m[1][2] ) )
+       - ( m[0][1] * ( m[1][0] * m[2][2] - m[2][0] * m[1][2] ) )
+       + ( m[0][2] * ( m[1][0] * m[2][1] - m[2][0] * m[1][1] ) );
 }
 template<typename T>
 T matrix3d<T>::trace() const
@@ -392,20 +440,42 @@ matrix3d<T> matrix3d<T>::minors() const
 }
 template<typename T>
 matrix3d<T> matrix3d<T>::cofactor() const
-{ /* TODO */
+{
+  const matrix3d<T> & m = minors();
+  matrix3d<T>         cof( "Cofactor(" + name_ + ")", m.dims() );
+
+  for( int i = 0; i < dims_; i++ )
+  {
+    for( int j = 0; j < dims_; j++ )
+    {
+      cof[i][j] = std::pow( -1, ( i + 1 ) + ( j + 1 ) ) * m[i][j];
+    }
+  }
+
+  return cof;
 }
 template<typename T>
 matrix3d<T> matrix3d<T>::adjoint() const
-{ /* TODO */
+{
+  return cofactor().transpose();
 }
 template<typename T>
 matrix3d<T> matrix3d<T>::inverse() const
-{ /* TODO */
+{
+  return adjoint() / determinant();
 }
 //=================================================================================================
 template<typename T>
 matrix3d<T> matrix3d<T>::identity( int dims )
-{ /* TODO */
+{
+  matrix3d<T> iden( "I" + std::to_string( dims ), dims );
+
+  for( int i = 0; i < dims; i++ )
+  {
+    iden[i][i] = 1;
+  }
+
+  return iden;
 }
 template<typename T>
 matrix3d<T> matrix3d<T>::zero( int dims )

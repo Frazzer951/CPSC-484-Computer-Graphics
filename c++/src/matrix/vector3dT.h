@@ -9,7 +9,6 @@
 #include <iomanip>
 #include <cstring>
 #include <cmath>
-#include <cassert>
 #include <initializer_list>
 
 template<typename T>
@@ -69,11 +68,11 @@ public:
     return vector3d<T>( u.name_ + "-" + v.name_, u.dims_, { u[0] - v[0], u[1] - v[1], u[2] - v[2], 0 } );
   }
   //---------------------------------------------------------------------
-  friend vector3d<T> operator+( const vector3d<T> & v, T k )
+  friend vector3d<T> operator+( T k, const vector3d<T> & v )
   {
-    return vector3d<T>( v.name_ + "+" + std::to_string( k ), v.dims_, { k + v[0], k + v[1], k + v[2], 0 } );
+    return vector3d<T>( std::to_string( k ) + "+" + v.name_, v.dims_, { k + v[0], k + v[1], k + v[2], 0 } );
   }
-  friend vector3d<T> operator+( T k, const vector3d<T> & v ) { return v + k; }
+  friend vector3d<T> operator+( const vector3d<T> & v, T k ) { return k + v; }
   //---------------------------------------------------------------------
   friend vector3d<T> operator-( T k, const vector3d<T> & v ) { return v * -1 + k; }
   friend vector3d<T> operator-( const vector3d<T> & v, T k ) { return v + -k; }
@@ -106,11 +105,11 @@ public:
   }
   friend bool operator!=( const vector3d<T> & u, const vector3d<T> & v ) { return !( u == v ); }
   //---------------------------------------------------------------------
-  double      dot( const vector3d<T> & v ) const;
+  double      dot( const vector3d<T> & other ) const;
   double      mag() const;
   double      norm() const { return mag(); }    // L2 norm
-  double      angle( const vector3d<T> & v ) const;
-  vector3d<T> cross( const vector3d<T> & v ) const;
+  double      angle( const vector3d<T> & other ) const;
+  vector3d<T> cross( const vector3d<T> & other ) const;
   //---------------------------------------------------------------------
   static vector3d<T> zero();
   static double      value( double val ) { return std::abs( val ) < 1e-5 ? 0 : val; }
@@ -149,11 +148,10 @@ public:
     // std::cout << u.name() << "\n";
     // std::cout << u << "\n";
     std::cout << "u.name_ is: " << u.name() << "\n";
+    u.zero();
     u.show();
     vector3D v( "v", 3, { 8, 16, 32 } );
-    vector3D i( "i", 3, { 1, 0, 0 } );
-    vector3D j( "j", 3, { 0, 1, 0 } );
-    vector3D k( "k", 3, { 0, 0, 1 } );
+    vector3D i( "i", 3, { 1, 0, 0 } ), j( "j", 3, { 0, 1, 0 } ), k( "k", 3, { 0, 0, 1 } );
     vector3D w( 3 * i + 4 * j - 2 * k );
 
     u.show();
@@ -224,8 +222,6 @@ public:
     vector3D uhat = u / u.mag();
     u.show();
     uhat.show();
-    // double maybe_zero = uhat.mag() - 1.0;
-    // std::cout << "uhat.mag() - 1.0 is... " << maybe_zero << "\n";
     std::cout << "length of uhat.mag() is... " << uhat.mag() << "\n";
     std::cout << "*** asserting u.hat.mag() - 1.0 < 1.0e-10"
               << "\n";
@@ -247,9 +243,9 @@ private:
   }
   void check_bounds( int i ) const;
 
-
+private:
   std::string name_;
-  int         dims_ {};
+  int         dims_;
   T           data_[4];
 };
 
