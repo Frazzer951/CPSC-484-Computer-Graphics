@@ -14,8 +14,8 @@
 void test_matrices_and_vectors()
 {
   std::cout << "\n====================  TESTING MATRICES and VECTORS  ========================\n";
-  vector3D  p( "p", 2, { 1, 2 } );
-  matrix3dD m( "m", 2, { 1, 2, 3, 4 } );
+  vector3D const  p( "p", 2, { 1, 2 } );
+  matrix3dD const m( "m", 2, { 1, 2, 3, 4 } );
   std::cout << p << std::endl;
   std::cout << m << std::endl;
 
@@ -23,8 +23,8 @@ void test_matrices_and_vectors()
   assert( p * m == m * p );
   std::cout << "...test p * m == m * p passed \n";
 
-  vector3D  q( "q", 3, { 1, 2, 3 } );
-  matrix3dD n( "n", 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
+  vector3D const  q( "q", 3, { 1, 2, 3 } );
+  matrix3dD const n( "n", 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
   std::cout << ( q ) << std::endl;
   std::cout << ( n ) << std::endl;
 
@@ -40,8 +40,8 @@ void test_matrices_and_vectors()
 void test_matrices()
 {
   std::cout << "\n====================  TESTING MATRICES  ========================\n";
-  matrix3dD m( "m", 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
-  matrix3dD mT( "mT", 3, { 1, 4, 7, 2, 5, 8, 3, 6, 9 } );
+  matrix3dD       m( "m", 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
+  matrix3dD const mT( "mT", 3, { 1, 4, 7, 2, 5, 8, 3, 6, 9 } );
 
 
   std::cout << m << std::endl;
@@ -57,7 +57,7 @@ void test_matrices()
   //=========================================================
   //=========================================================
   std::cout << "...test matrices copy constructor \n";
-  matrix3dD m2( m );
+  matrix3dD const m2( m );
   assert( m2 == m );
   std::cout << "...test matrices copy constructor passed\n";
   //=========================================================
@@ -80,7 +80,7 @@ void test_matrices()
   //=========================================================
 
   std::cout << "...test matrices inequality operator \n";
-  matrix3dD m4( "m4", 3, { 0, 1, 2, 3, 5, 7, 0, 25, 63 } );
+  matrix3dD const m4( "m4", 3, { 0, 1, 2, 3, 5, 7, 0, 25, 63 } );
   assert( m != m4 );
   std::cout << "...test matrices inequality operator passed\n";
   //=========================================================
@@ -153,7 +153,7 @@ void test_matrices()
   //=========================================================
   //=========================================================
   std::cout << "...testing matrix unary minus\n";
-  matrix3dD m8( "m8", 3, { -1, -2, -3, -4, -5, -6, -7, -8, -9 } );
+  matrix3dD const m8( "m8", 3, { -1, -2, -3, -4, -5, -6, -7, -8, -9 } );
   assert( -m == m8 );
 
   std::cout << "...testing matrix unary minus passed\n";
@@ -161,7 +161,7 @@ void test_matrices()
 
   std::cout << "...testing matrix transpose, minor, cofactor, determinant, adjoint, and inverse\n";
 
-  matrix3dD c( "c", 3, { -1, -2, 2, 2, 1, 1, 3, 4, 5 } );
+  matrix3dD const c( "c", 3, { -1, -2, 2, 2, 1, 1, 3, 4, 5 } );
 
   std::cout << c << std::endl;
   std::cout << "...asserting transpose" << std::endl;
@@ -217,10 +217,10 @@ void test_openGL()
   std::cout << "...testing opengl_matrix\n";
   matrix3dD m( "m", 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
   std::cout << m << std::endl;
-  std::string testStr      = "1 4 7 0 2 5 8 0 3 6 9 0 0 0 0 1";
-  double *    openGLMatrix = m.opengl_memory( 3, 3 );
+  std::string const testStr      = "1 4 7 0 2 5 8 0 3 6 9 0 0 0 0 1";
+  double *          openGLMatrix = m.opengl_memory( 3, 3 );
 
-  std::string colMajor = "";
+  std::string colMajor;
   for( int i = 0; i < 15; i++ )
   {
     colMajor += std::to_string( int( openGLMatrix[i] ) ) + " ";
@@ -241,7 +241,7 @@ void test_openGL()
 }
 
 
-int main( int argc, const char * argv[] )
+int main( int /*argc*/, const char * /*argv*/[] )
 {
   vector3D::run_tests();
   test_matrices_and_vectors();
