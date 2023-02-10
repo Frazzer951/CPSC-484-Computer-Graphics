@@ -12,7 +12,7 @@
 #include "matrix3dT.h"
 
 
-int main( int argc, const char * argv[] )
+int main( int /*argc*/, const char * /*argv*/[] )
 {
   vector3D::run_tests();
   matrix3D::run_tests();

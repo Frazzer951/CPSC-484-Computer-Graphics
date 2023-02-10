@@ -268,7 +268,7 @@ public:
     assert( -( -a ) == a );
 
     std::cout << "test matrix(1 2 3   4 5 6   7 8 9) has determinant 0\n";
-    matrix3D zerod( "zerod", 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
+    matrix3D const zerod( "zerod", 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9 } );
     assert( zerod.determinant() == 0 );
 
     std::cout << "testing matrix vector multiplication\n";
@@ -300,9 +300,9 @@ private:
   void check_bounds( int i ) const;
   void swap( T & x, T & y );
 
-private:
+
   std::string name_;
-  int         dims_;
+  int         dims_ {};
   vector3d<T> cols_[4];
   T           data_[16];
 

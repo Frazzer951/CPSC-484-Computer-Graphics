@@ -109,11 +109,11 @@ public:
   }
   friend bool operator!=( const vector3d<T> & u, const vector3d<T> & v ) { return !( u == v ); }
   //---------------------------------------------------------------------
-  double      dot( const vector3d<T> & other ) const;
+  double      dot( const vector3d<T> & v ) const;
   double      mag() const;
   double      norm() const { return mag(); }    // L2 norm
-  double      angle( const vector3d<T> & other ) const;
-  vector3d<T> cross( const vector3d<T> & other ) const;
+  double      angle( const vector3d<T> & v ) const;
+  vector3d<T> cross( const vector3d<T> & v ) const;
   //---------------------------------------------------------------------
   static vector3d<T> zero();
   static double      value( double val ) { return std::abs( val ) < 1e-5 ? 0 : val; }
@@ -152,10 +152,12 @@ public:
     // std::cout << u.name() << "\n";
     // std::cout << u << "\n";
     std::cout << "u.name_ is: " << u.name() << "\n";
-    u.zero();
+    vector3d<double>::zero();
     u.show();
     vector3D v( "v", 3, { 8, 16, 32 } );
-    vector3D i( "i", 3, { 1, 0, 0 } ), j( "j", 3, { 0, 1, 0 } ), k( "k", 3, { 0, 0, 1 } );
+    vector3D i( "i", 3, { 1, 0, 0 } );
+    vector3D j( "j", 3, { 0, 1, 0 } );
+    vector3D k( "k", 3, { 0, 0, 1 } );
     vector3D w( 3 * i + 4 * j - 2 * k );
 
     u.show();
@@ -247,9 +249,9 @@ private:
   }
   void check_bounds( int i ) const;
 
-private:
+
   std::string name_;
-  int         dims_;
+  int         dims_ {};
   T           data_[4];
 
   // use for operator== and division to test if dividing by a number that is very close to 0
