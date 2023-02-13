@@ -1,2 +1,6 @@
 build/
 .venv/
+
+# MacOS
+__MACOSX/
+.DS_Store
