@@ -76,6 +76,7 @@ public:
 private:
     void delete_objects();
     void delete_lights();
+    Sphere* sphere_maker(Point3D pt, float radius, RGBColor color, float ka=0.25, float kd=0.75);
 
 public:
     ViewPlane	vp;
