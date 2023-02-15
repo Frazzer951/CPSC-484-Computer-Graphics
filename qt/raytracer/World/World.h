@@ -70,8 +70,8 @@ public:
 
     void display_pixel(const int row, const int column, const RGBColor& pixel_color) const;
     ShadeRec hit_objects(const Ray& ray);
-                 // next function ONLY in chapter 3:  bare-bones ray tracing
-//    ShadeRec hit_bare_bones_objects(const Ray& ray);
+    // next function ONLY in chapter 3:  bare-bones ray tracing
+    //    ShadeRec hit_bare_bones_objects(const Ray& ray);
 
 private:
     void delete_objects();
