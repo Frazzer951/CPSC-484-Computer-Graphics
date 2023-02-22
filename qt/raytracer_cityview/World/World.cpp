@@ -58,31 +58,31 @@ RGBColor lightBlue(0.7, 0.95, 1.0);
 // and set its parameters
 
 World::World()
-	:  	background_color(black),
-        tracer_ptr(nullptr),
-		ambient_ptr(new Ambient),
-        camera_ptr(nullptr)
+    :  	background_color(black),
+      tracer_ptr(nullptr),
+      ambient_ptr(new Ambient),
+      camera_ptr(nullptr)
 {
-//    qDebug() << __PRETTY_FUNCTION__;
+    //    qDebug() << __PRETTY_FUNCTION__;
 }
 //------------------------------------------------------------------ destructor
 World::~World() {
     //    qDebug() << __PRETTY_FUNCTION__;
 
     if (tracer_ptr) {
-		delete tracer_ptr;
+        delete tracer_ptr;
         tracer_ptr = nullptr;
-	}
-	if (ambient_ptr) {
-		delete ambient_ptr;
+    }
+    if (ambient_ptr) {
+        delete ambient_ptr;
         ambient_ptr = nullptr;
-	}
-	if (camera_ptr) {
-		delete camera_ptr;
+    }
+    if (camera_ptr) {
+        delete camera_ptr;
         camera_ptr = nullptr;
-	}
-	delete_objects();
-	delete_lights();
+    }
+    delete_objects();
+    delete_lights();
 }
 //------------------------------------------------------------------ render_scene
 // This uses orthographic viewing along the zw axis
@@ -90,22 +90,22 @@ void
 World::render_scene() const {
     //    qDebug() << __PRETTY_FUNCTION__;
     RGBColor	pixel_color;
-	Ray			ray;
-	int 		hres 	= vp.hres;
-	int 		vres 	= vp.vres;
-//	float		s		= vp.s;
-	float		zw		= 100.0;				// hardwired in
+    Ray			ray;
+    int 		hres 	= vp.hres;
+    int 		vres 	= vp.vres;
+    //	float		s		= vp.s;
+    float		zw		= 100.0;				// hardwired in
 
     int n = (int)sqrt((float)vp.num_samples);
     Point2D sp;    // sample point in [0, 1] x [0, 1]
     Point2D pp;    // sample point on a pixel
 
-//    open_window(vp.hres, vp.vres);
+    //    open_window(vp.hres, vp.vres);
 
-	ray.d = Vector3D(0, 0, -1);
+    ray.d = Vector3D(0, 0, -1);
 
     for (int r = 0; r < vres; r++)	{		// up
-		for (int c = 0; c <= hres; c++) {	// across
+        for (int c = 0; c <= hres; c++) {	// across
             pixel_color = black;
 
             for (int p = 0; p < n; ++p) {        // anti-aliasing code from ch. 4
@@ -113,14 +113,14 @@ World::render_scene() const {
                     qDebug() << "just BEFORE creating sp";
                     sp = vp.sampler_ptr->sample_unit_square();
                     qDebug() << "just after creating sp";
-//                    pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n);   // regular sampling
-//                    pp.y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
+                    //                    pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n);   // regular sampling
+                    //                    pp.y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
 
-//                    pp.x = vp.s * (c - 0.5 * vp.hres + rand_int());  // random sampling
-//                    pp.y = vp.s * (r - 0.5 * vp.vres + rand_int());
+                    //                    pp.x = vp.s * (c - 0.5 * vp.hres + rand_int());  // random sampling
+                    //                    pp.y = vp.s * (r - 0.5 * vp.vres + rand_int());
 
-//                    pp.x = vp.s * (c - 0.5 * vp.hres + q + rand_int());  // jittered sampling
-//                    pp.y = vp.s * (r - 0.5 * vp.vres + p + rand_int());
+                    //                    pp.x = vp.s * (c - 0.5 * vp.hres + q + rand_int());  // jittered sampling
+                    //                    pp.y = vp.s * (r - 0.5 * vp.vres + p + rand_int());
 
                     pp.x = vp.s * (c - 0.5 * vp.hres + sp.x);  // jittered sampling
                     pp.y = vp.s * (r - 0.5 * vp.vres + sp.y);
@@ -130,8 +130,8 @@ World::render_scene() const {
                 }
             }
             pixel_color /= vp.num_samples;      // average the colors
-			display_pixel(r, c, pixel_color);
-		}
+            display_pixel(r, c, pixel_color);
+        }
     }
 }
 //void
@@ -162,9 +162,9 @@ World::max_to_one(const RGBColor& c) const  {
     float max_value = max(c.r, max(c.g, c.b));
 
     if (max_value > 1.0) {
-		return (c / max_value);
+        return (c / max_value);
     } else {
-		return (c);
+        return (c);
     }
 }
 // ------------------------------------------------------------------ clamp_to_color
@@ -174,10 +174,10 @@ World::clamp_to_color(const RGBColor& raw_color) const {
     //    qDebug() << __PRETTY_FUNCTION__;
     RGBColor c(raw_color);
 
-	if (raw_color.r > 1.0 || raw_color.g > 1.0 || raw_color.b > 1.0) {
-		c.r = 1.0; c.g = 0.0; c.b = 0.0;
-	}
-	return (c);
+    if (raw_color.r > 1.0 || raw_color.g > 1.0 || raw_color.b > 1.0) {
+        c.r = 1.0; c.g = 0.0; c.b = 0.0;
+    }
+    return (c);
 }
 // ---------------------------------------------------------------------------display_pixel
 // raw_color is the pixel color computed by the ray tracer
@@ -193,51 +193,51 @@ World::display_pixel(const int row, const int column, const RGBColor& raw_color)
     //    qDebug() << __PRETTY_FUNCTION__;
     RGBColor mapped_color;
 
-	if (vp.show_out_of_gamut)
-		mapped_color = clamp_to_color(raw_color);
-	else
-		mapped_color = max_to_one(raw_color);
+    if (vp.show_out_of_gamut)
+        mapped_color = clamp_to_color(raw_color);
+    else
+        mapped_color = max_to_one(raw_color);
 
-	if (vp.gamma != 1.0)
-		mapped_color = mapped_color.powc(vp.inv_gamma);
+    if (vp.gamma != 1.0)
+        mapped_color = mapped_color.powc(vp.inv_gamma);
 
-   //have to start from max y coordinate to convert to screen coordinates
-   int x = column;
-   int y = vp.vres - row - 1;
+    //have to start from max y coordinate to convert to screen coordinates
+    int x = column;
+    int y = vp.vres - row - 1;
 
-   //    qDebug() << __PRETTY_FUNCTION__;
-   paintArea->setPixel(x, y, (int)(mapped_color.r * 255),
-                             (int)(mapped_color.g * 255),
-                             (int)(mapped_color.b * 255));
+    //    qDebug() << __PRETTY_FUNCTION__;
+    paintArea->setPixel(x, y, (int)(mapped_color.r * 255),
+                        (int)(mapped_color.g * 255),
+                        (int)(mapped_color.b * 255));
 }
 // ----------------------------------------------------------------------------- hit_objects
 ShadeRec
 World::hit_objects(const Ray& ray) {
     //    qDebug() << __PRETTY_FUNCTION__;
 
-	ShadeRec	sr(*this);
-	double		t;
-	Normal normal;
-	Point3D local_hit_point;
-	float		tmin 			= kHugeValue;
-	int 		num_objects 	= (int)objects.size();
+    ShadeRec	sr(*this);
+    double		t;
+    Normal normal;
+    Point3D local_hit_point;
+    float		tmin 			= kHugeValue;
+    int 		num_objects 	= (int)objects.size();
 
     for (int j = 0; j < num_objects; j++) {
-		if (objects[j]->hit(ray, t, sr) && (t < tmin)) {
-			sr.hit_an_object	= true;
-			tmin 				= t;
-			sr.material_ptr     = objects[j]->get_material();
-			sr.hit_point 		= ray.o + t * ray.d;
-			normal 				= sr.normal;
-			local_hit_point	 	= sr.local_hit_point;
-		}
+        if (objects[j]->hit(ray, t, sr) && (t < tmin)) {
+            sr.hit_an_object	= true;
+            tmin 				= t;
+            sr.material_ptr     = objects[j]->get_material();
+            sr.hit_point 		= ray.o + t * ray.d;
+            normal 				= sr.normal;
+            local_hit_point	 	= sr.local_hit_point;
+        }
     }
     if (sr.hit_an_object) {
-		sr.t = tmin;
-		sr.normal = normal;
-		sr.local_hit_point = local_hit_point;
-	}
-	return(sr);
+        sr.t = tmin;
+        sr.normal = normal;
+        sr.local_hit_point = local_hit_point;
+    }
+    return(sr);
 }
 
 //ShadeRec
@@ -267,11 +267,11 @@ void
 World::delete_objects() {
     //    qDebug() << __PRETTY_FUNCTION__;
     int num_objects = (int)objects.size();
-	for (int j = 0; j < num_objects; j++) {
-		delete objects[j];
+    for (int j = 0; j < num_objects; j++) {
+        delete objects[j];
         objects[j] = nullptr;
-	}
-	objects.erase (objects.begin(), objects.end());
+    }
+    objects.erase (objects.begin(), objects.end());
 }
 //------------------------------------------------------------------ delete_lights
 void
@@ -279,12 +279,12 @@ World::delete_lights() {
     //    qDebug() << __PRETTY_FUNCTION__;
     int num_lights = (int)lights.size();
 
-	for (int j = 0; j < num_lights; j++) {
-		delete lights[j];
+    for (int j = 0; j < num_lights; j++) {
+        delete lights[j];
         lights[j] = nullptr;
-	}
+    }
 
-	lights.erase (lights.begin(), lights.end());
+    lights.erase (lights.begin(), lights.end());
 }
 
 void World::set_material(GeometricObject* geo, RGBColor color) {
@@ -433,7 +433,7 @@ void World::checkerboard_row(RGBColor color1, RGBColor color2, int index) {
     for (int i = -7; i < 7; ++i) {
         RGBColor color = i % 2 == 0 ? color1 : color2;
         add_rect_helper(color,  Point3D(i, index - 4, -50), Vector3D(0, 1, 0), Vector3D(1, 0, 0),
-                    Normal(1, 1, 1));
+                        Normal(1, 1, 1));
     }
 }
 
@@ -483,7 +483,7 @@ void World::build_city(void) {
 void World::build() {
     init_environment();
 
-//    build_spheres();
+    //    build_spheres();
 
     build_checkerboard(white, lightGrey);
     build_city();
