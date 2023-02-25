@@ -415,9 +415,17 @@ void World::init_viewplane() {
 void World::init_cameras() {
     // camera
     Pinhole* pinhole_ptr = new Pinhole;
+
+    // spheres
+    // pinhole_ptr->set_eye(0, 0, 500);
+    // pinhole_ptr->set_lookat(0.0);
+    // pinhole_ptr->set_view_distance(600.0);
+
+    // city_view
     pinhole_ptr->set_eye(-0.5, 0, 70);
     pinhole_ptr->set_lookat(-0.5, 0, -10);
     pinhole_ptr->set_view_distance(800.0);
+
     pinhole_ptr->compute_uvw();
     set_camera(pinhole_ptr);
 }
@@ -483,7 +491,7 @@ void World::build_city(void) {
 void World::build() {
     init_environment();
 
-    //    build_spheres();
+    // build_spheres();
 
     build_checkerboard(white, lightGrey);
     build_city();
