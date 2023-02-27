@@ -8,10 +8,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(ClangFormat)
 
+add_subdirectory(src/data_structs)
 add_subdirectory(src/opengl)
 add_subdirectory(src/teapot)
-add_subdirectory(src/vector)
-add_subdirectory(src/data_structs)
 
 file(GLOB_RECURSE src_files "src/*.cpp" "src/*.c" "src/*.h" "src/*.hpp" "src/*.hxx")
 
