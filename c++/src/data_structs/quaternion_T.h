@@ -45,25 +45,47 @@ public:
   {
     return quaternion( a.w + b.w, a.x + b.x, a.y + b.y, a.z + b.z );
   }
-  friend quaternion operator-( const quaternion & a, const quaternion & b );
-  friend quaternion operator*( const quaternion & a, const quaternion & b );
+  friend quaternion operator-( const quaternion & a, const quaternion & b )
+  { /* TODO */
+  }
+  friend quaternion operator*( const quaternion & a, const quaternion & b )
+  { /* TODO */
+  }
 
-  friend quaternion operator+( const quaternion & q, T k );
-  friend quaternion operator+( T k, const quaternion & q );
+  friend quaternion operator+( const quaternion & q, T k )
+  { /* TODO */
+  }
+  friend quaternion operator+( T k, const quaternion & q )
+  { /* TODO */
+  }
 
 
-  friend quaternion operator-( const quaternion & q, T k );
-  friend quaternion operator-( T k, const quaternion & q );
+  friend quaternion operator-( const quaternion & q, T k )
+  { /* TODO */
+  }
+  friend quaternion operator-( T k, const quaternion & q )
+  { /* TODO */
+  }
 
-  friend quaternion operator*( const quaternion & q, T k );
-  friend quaternion operator*( T k, const quaternion & q );
-  friend quaternion operator/( const quaternion & q, T k );
+  friend quaternion operator*( const quaternion & q, T k )
+  { /* TODO */
+  }
+  friend quaternion operator*( T k, const quaternion & q )
+  { /* TODO */
+  }
+  friend quaternion operator/( const quaternion & q, T k )
+  { /* TODO */
+  }
 
 
   quaternion operator-() const;
 
-  friend bool operator==( const quaternion & q, const quaternion & r );
-  friend bool operator!=( const quaternion & q, const quaternion & r );
+  friend bool operator==( const quaternion & q, const quaternion & r )
+  { /* TODO */
+  }
+  friend bool operator!=( const quaternion & q, const quaternion & r )
+  { /* TODO */
+  }
   vector3d<T> vector() const;
   T           scalar() const;
 
