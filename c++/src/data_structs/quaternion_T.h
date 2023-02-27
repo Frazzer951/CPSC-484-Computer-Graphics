@@ -45,42 +45,28 @@ public:
   {
     return quaternion( a.w + b.w, a.x + b.x, a.y + b.y, a.z + b.z );
   }
-  friend quaternion operator-( const quaternion & a, const quaternion & b )
-  { /* TODO */
-  }
+  friend quaternion operator-( const quaternion & a, const quaternion & b ) { return a + -b; }
   friend quaternion operator*( const quaternion & a, const quaternion & b )
-  { /* TODO */
+  {
+    T w1 = a.w, x1 = a.x, y1 = a.y, z1 = a.z;
+    T w2 = b.w, x2 = b.x, y2 = b.y, z2 = b.z;
+
+    return quaternion( ( w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2 ), ( w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2 ),
+                       ( w1 * y2 + y1 * w2 + z1 * x2 - x1 * z2 ), ( w1 * z2 + z1 * w2 + x1 * y2 - y1 * x2 ), );
   }
 
-  friend quaternion operator+( const quaternion & q, T k )
-  { /* TODO */
-  }
-  friend quaternion operator+( T k, const quaternion & q )
-  { /* TODO */
-  }
+  friend quaternion operator+( const quaternion & q, T k ) { return quaternion( q.w + k, q.x + k, q.y + k, q.z + k ); }
+  friend quaternion operator+( T k, const quaternion & q ) { return q + k; }
+
+  friend quaternion operator-( const quaternion & q, T k ) { return q + -k; }
+  friend quaternion operator-( T k, const quaternion & q ) { return q + -k; }
+
+  friend quaternion operator*( const quaternion & q, T k ) { return quaternion( k * q.w, k * q.x, k * q.y, k * q.z ); }
+  friend quaternion operator*( T k, const quaternion & q ) { return q * k; }
+  friend quaternion operator/( const quaternion & q, T k ) { return q * ( 1.0 / k ); }
 
 
-  friend quaternion operator-( const quaternion & q, T k )
-  { /* TODO */
-  }
-  friend quaternion operator-( T k, const quaternion & q )
-  { /* TODO */
-  }
-
-  friend quaternion operator*( const quaternion & q, T k )
-  { /* TODO */
-  }
-  friend quaternion operator*( T k, const quaternion & q )
-  { /* TODO */
-  }
-  friend quaternion operator/( const quaternion & q, T k )
-  { /* TODO */
-  }
-
-
-  quaternion operator-() const
-  { /* TODO */
-  }
+  quaternion operator-() const { return quaternion( -w, -x, -y, -z ); }
 
   friend bool operator==( const quaternion & q, const quaternion & r )
   { /* TODO */
