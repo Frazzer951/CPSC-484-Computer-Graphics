@@ -11,7 +11,7 @@ include(ClangFormat)
 add_subdirectory(src/opengl)
 add_subdirectory(src/teapot)
 add_subdirectory(src/vector)
-add_subdirectory(src/matrix)
+add_subdirectory(src/data_structs)
 
 file(GLOB_RECURSE src_files "src/*.cpp" "src/*.c" "src/*.h" "src/*.hpp" "src/*.hxx")
 
