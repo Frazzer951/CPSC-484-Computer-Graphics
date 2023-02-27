@@ -509,7 +509,32 @@ void World::build_city(void) {
 #define HEIGHT 4
 
 void World::build_practical() {
-    /* TODO */
+    int num_x = 20;
+    int num_y = num_x - 3;
+    int spacing = 3;
+
+    // Dark Orange Pillars X
+    int height_darkOrange = 4;
+    for (int i = 0; i < num_x; i++) {
+        add_bb_helper(darkOrange, Point3D(i * spacing, 0, 0), Point3D(i * spacing + 1, 1, height_darkOrange));
+    }
+
+    // Dark Orange Pillars Y
+    for (int i = 0; i < num_y; i++) {
+        add_bb_helper(darkOrange, Point3D(0, spacing * (i + 3), 0), Point3D(1, spacing * (i + 3) + 1, height_darkOrange));
+    }
+
+    // Green Cyan Pillars X
+    int height_greenCyan = 8;
+    for (int i = 0; i < num_x; i++) {
+        add_bb_helper(greenCyan, Point3D(i * spacing, spacing, 0), Point3D(i * spacing + 1, spacing + 1, height_greenCyan));
+    }
+
+    // Light Green Pillars X
+    int height_lightGreen = 16;
+    for (int i = 0; i < num_x; i++) {
+        add_bb_helper(lightGreen, Point3D(i * spacing, spacing * 2, 0), Point3D(i * spacing + 1, spacing * 2 + 1, height_lightGreen));
+    }
 }
 
 
@@ -527,9 +552,10 @@ void World::build() {
     //  OR... to build the practical environment
     init_environment(Point3D(-4, -4, 8), Point3D(2, 2, 6), 80.0, Point3D(0, 0, 1));
     build_practical();  /* TODO */
-    build_checkerboard(white, lightGrey, -4, -4, 14, 14, 0);    // fastest
-    //    build_checkerboard(white, lightGrey, -4, -4, 26, 26, 0);    // slower
-    //    build_checkerboard(white, lightGrey, -8, -8, 52, 52, 0);          // very slow
+    // build_checkerboard(white, lightGrey, -4, -4, 4, 4, 0);      // fastest
+    // build_checkerboard(white, lightGrey, -4, -4, 14, 14, 0);    // fast
+    // build_checkerboard(white, lightGrey, -4, -4, 26, 26, 0);    // slower
+    build_checkerboard(white, lightGrey, -8, -8, 52, 52, 0);    // very slow
 }
 
 
