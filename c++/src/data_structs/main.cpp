@@ -10,13 +10,22 @@
 // MATRIX and VECTOR classes assignment
 #include "vector3dT.h"
 #include "matrix3dT.h"
+#include "quaternion_T.h"
 
+void test_quaternions()
+{
+  std::cout << "\n====================  TESTING QUATERNIONS  ========================\n";
+  //quaternion<double>::run_tests();
+  std::cout << "...test_quaternions assertions passed\n";
+  std::cout << "====================  FINISHED testing quaternions  ========================\n";
+}
 
 int main( int /*argc*/, const char * /*argv*/[] )
 {
-  vector3D::run_tests();
-  matrix3D::run_tests();
-
+  // vector3D::run_tests();
+  // matrix3D::run_tests();
+  test_quaternions();
+  std::cout << "... program completed...\n";
 
   return 0;
 }

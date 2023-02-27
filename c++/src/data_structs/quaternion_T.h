@@ -9,8 +9,8 @@
 #define quaternion_T_h
 
 #include <cmath>
-#include "vector3d_T.h"
-#include "matrix3d_T.h"
+#include "vector3dT.h"
+#include "matrix3dT.h"
 
 template <typename T> class quaternion;
 template <typename T> using quat = class quaternion<T>;
@@ -94,7 +94,7 @@ public:
    if (q.magnitude() == 0.0 && q.w == 0)   { return os << "0)"; }
    if (q.magnitude() == 0.0 && q.w == 0)   { return os << "0)"; }
    if (q.magnitude() == 1.0 && q.w == 1)   { return os << "1)"; }
-   if (q.vector().magnitude() == 0.0)      { return os << q.w << ")"; }
+   if (q.vector().mag() == 0.0)      { return os << q.w << ")"; }
    else { return os << q.w << q.vector() << ")"; }
  }
 
@@ -105,7 +105,7 @@ private:
 };
 
 void plane_rotation(const std::string& msg, const quatD& plane, const std::initializer_list<double>& li) {
- matrix3dD rotate = matrix3dD("rot_matrix", 3, li);
+ matrix3D rotate = matrix3D("rot_matrix", 3, li);
  assert(plane.rot_matrix() == rotate);
  std::cout << msg << " is: " << plane << plane.rot_matrix() << "\n";
 }
@@ -155,7 +155,7 @@ void quaternion<T>::run_tests() {
  std::cout << "\nangle (deg) between c and d is: " << c.angle(d) << "\n";
  quatD c_minus_d = c - d;
  std::cout << "c_minus_d is: " << c_minus_d;
- matrix3dD rot_matrix = c_minus_d.rot_matrix();
+ matrix3D rot_matrix = c_minus_d.rot_matrix();
  std::cout << "rot_matrix of c_minus_d is: " << c_minus_d.rot_matrix() << "\n";
 
  double rad2_2 = sqrt(2)/2.0;
