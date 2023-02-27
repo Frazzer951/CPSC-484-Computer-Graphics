@@ -551,7 +551,7 @@ void World::build() {
 
     //  OR... to build the practical environment
     init_environment(Point3D(-4, -4, 8), Point3D(2, 2, 6), 80.0, Point3D(0, 0, 1));
-    build_practical();  /* TODO */
+    build_practical();
     // build_checkerboard(white, lightGrey, -4, -4, 4, 4, 0);      // fastest
     // build_checkerboard(white, lightGrey, -4, -4, 14, 14, 0);    // fast
     // build_checkerboard(white, lightGrey, -4, -4, 26, 26, 0);    // slower
