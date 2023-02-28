@@ -550,7 +550,9 @@ void World::build() {
     // build_checkerboard(white, lightGrey, -7, -7, 7, 7, -10);
 
     //  OR... to build the practical environment
-    init_environment(Point3D(-4, -4, 8), Point3D(2, 2, 6), 80.0, Point3D(0, 0, 1));
+    // init_environment(Point3D(-4, -4, 5), Point3D(2, 2, 5), 80.0, Point3D(0, 0, 1)); // a
+    // init_environment(Point3D(-4, -4, 8), Point3D(2, 2, 6), 80.0, Point3D(0, 0, 1)); // b
+    init_environment(Point3D(-6, 5, 9), Point3D(2, 5, 9), 80.0, Point3D(0, 0, 1)); // c
     build_practical();
     // build_checkerboard(white, lightGrey, -4, -4, 4, 4, 0);      // fastest
     // build_checkerboard(white, lightGrey, -4, -4, 14, 14, 0);    // fast
