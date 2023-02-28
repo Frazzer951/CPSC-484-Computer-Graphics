@@ -69,11 +69,10 @@ public:
   quaternion operator-() const;
 
   friend bool operator==( const quaternion & q, const quaternion & r )
-  { /*TODO*/
+  {
+    return q.w == r.w && q.x == r.x && q.y == r.y && q.z == r.z;
   }
-  friend bool operator!=( const quaternion & q, const quaternion & r )
-  { /*TODO*/
-  }
+  friend bool operator!=( const quaternion & q, const quaternion & r ) { return !( q == r ); }
   vector3d<T> vector() const;
   T           scalar() const;
 
@@ -165,66 +164,79 @@ void plane_rotation( const std::string & msg, const quatD & plane, const std::in
 //=================================================================================================
 template<typename T>
 quaternion<T> quaternion<T>::i()
-{ /* TODO */
+{
+  return quaternion( 0.0, 1.0, 0.0, 0.0 );
 }
 
 template<typename T>
 quaternion<T> quaternion<T>::j()
-{ /* TODO */
+{
+  return quaternion( 0.0, 0.0, 1.0, 0.0 );
 }
 
 template<typename T>
 quaternion<T> quaternion<T>::k()
-{ /* TODO */
+{
+  return quaternion( 0.0, 0.0, 0.0, 1.0 );
 }
 
 template<typename T>
 double quaternion<T>::ii()
-{ /* TODO */
+{
+  return -1.0;
 }
 
 template<typename T>
 double quaternion<T>::jj()
-{ /* TODO */
+{
+  return -1.0;
 }
 
 template<typename T>
 double quaternion<T>::kk()
-{ /* TODO */
+{
+  return -1.0;
 }
 
 template<typename T>
 double quaternion<T>::ijk()
-{ /* TODO */
+{
+  return -1.0;
 }
 
 template<typename T>
 quaternion<T> quaternion<T>::ij()
-{ /* TODO */
+{
+  return k();
 }
 
 template<typename T>
 quaternion<T> quaternion<T>::jk()
-{ /* TODO */
+{
+  return i();
 }
 
 template<typename T>
 quaternion<T> quaternion<T>::ki()
-{ /* TODO */
+{
+  return j();
 }
 
 template<typename T>
 quaternion<T> quaternion<T>::ji()
-{ /* TODO */
+{
+  return -k();
 }
 template<typename T>
 quaternion<T> quaternion<T>::kj()
-{ /* TODO */
+{
+  return -i();
 }
 
 template<typename T>
 quaternion<T> quaternion<T>::ik()
-{ /* TODO */
+{
+  return -j();
 }
 //=================================================================================================
 
@@ -243,63 +255,89 @@ quaternion<T> quaternion<T>::operator-() const
 //=================================================================================================
 template<typename T>
 vector3d<T> quaternion<T>::vector() const
-{ /* TODO */
+{
+  return vector3d<T>( "quaternion", 3, { x, y, z } );
 }
 
 template<typename T>
 T quaternion<T>::scalar() const
-{ /* TODO */
+{
+  return w;
 }
 
 template<typename T>
 quaternion<T> quaternion<T>::unit_scalar() const
-{ /* TODO */
+{
+  return quaternion( 1.0, x, y, z );
 }
 
 template<typename T>
 quaternion<T> quaternion<T>::conjugate() const
-{ /* TODO */
+{
+  return quaternion( w, -x, -y, -z );
 }
 
 template<typename T>
 quaternion<T> quaternion<T>::inverse() const
-{ /* TODO */
+{
+  return conjugate() / ( pow( magnitude(), 2 ) );
 }
 
 template<typename T>
 quaternion<T> quaternion<T>::unit() const
-{ /* TODO */
+{
+  return *this / magnitude();
 }
 
 template<typename T>
 double quaternion<T>::norm() const
-{ /* TODO */
+{
+  return sqrt( pow( w, 2 ) + pow( x, 2 ) + pow( y, 2 ) + pow( z, 2 ) );
 }
 
 template<typename T>
 double quaternion<T>::magnitude() const
-{ /* TODO */
+{
+  return norm();
 }
 
 template<typename T>
 double quaternion<T>::dot( const quaternion & v ) const
-{ /* TODO */
+{
+  return w * v.w + vector().dot( v.vector() );
 }
 
 template<typename T>
 double quaternion<T>::angle( const quaternion & v ) const
-{ /* TODO */
+{
+  quaternion<T> z       = conjugate() * v;
+  double        zvnorm  = z.vector().norm();
+  double        zscalar = z.scalar();
+  double        angle   = atan2( zvnorm, zscalar );
+  return angle * 180.0 / 3.1415;
 }
 
 template<typename T>
 matrix3d<T> quaternion<T>::rot_matrix() const
-{ /* TODO */
+{
+  return matrix3d<T>( "rot_matrix", 3,
+                      { -2.0 * ( pow( y, 2 ) + pow( z, 2 ) ) + 1.0, 2.0 * ( x * y - w * z ), 2.0 * ( x * z + w * y ),
+                        2.0 * ( x * y + w * z ), -2.0 * ( pow( x, 2 ) + pow( z, 2 ) ) + 1.0, 2.0 * ( y * z - w * x ),
+                        2.0 * ( x * z - w * y ), 2.0 * ( y * z + w * x ),
+                        -2.0 * ( pow( x, 2 ) + pow( y, 2 ) ) + 1.0 } );
 }
 
 // rotates point pt (pt.x, pt.y, pt.z) about (axis.x, axis.y, axis.z) by theta
 template<typename T>
 vec3 quaternion<T>::rotate( const vector3D & pt, const vector3D & axis, double theta )
-{ /* TODO */
+{
+  double     costheta2 = cos( theta / 2.0 );
+  double     sintheta2 = sin( theta / 2.0 );
+  quaternion q         = quaternion( costheta2, axis.x() * sintheta2, axis.y() * sintheta2, axis.z() * sintheta2 );
+  quaternion q_star    = quaternion( q.w, -q.x, -q.y, -q.z );
+  quaternion p         = quaternion( 0, pt.x, pt.y, pt.z );
+  quaternion p_rot     = q * p * q_star;
+  return p_rot.vector();
 }
 //=================================================================================================
 
