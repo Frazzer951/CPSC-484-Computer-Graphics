@@ -52,7 +52,7 @@ public:
     T w2 = b.w, x2 = b.x, y2 = b.y, z2 = b.z;
 
     return quaternion( ( w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2 ), ( w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2 ),
-                       ( w1 * y2 + y1 * w2 + z1 * x2 - x1 * z2 ), ( w1 * z2 + z1 * w2 + x1 * y2 - y1 * x2 ), );
+                       ( w1 * y2 + y1 * w2 + z1 * x2 - x1 * z2 ), ( w1 * z2 + z1 * w2 + x1 * y2 - y1 * x2 ) );
   }
 
   friend quaternion operator+( const quaternion & q, T k ) { return quaternion( q.w + k, q.x + k, q.y + k, q.z + k ); }
@@ -66,13 +66,13 @@ public:
   friend quaternion operator/( const quaternion & q, T k ) { return q * ( 1.0 / k ); }
 
 
-  quaternion operator-() const { return quaternion( -w, -x, -y, -z ); }
+  quaternion operator-() const;
 
   friend bool operator==( const quaternion & q, const quaternion & r )
-  { /* TODO */
+  { /*TODO*/
   }
   friend bool operator!=( const quaternion & q, const quaternion & r )
-  { /* TODO */
+  { /*TODO*/
   }
   vector3d<T> vector() const;
   T           scalar() const;
@@ -160,6 +160,144 @@ void plane_rotation( const std::string & msg, const quatD & plane, const std::in
   std::cout << msg << " is: " << plane << plane.rot_matrix() << "\n";
 }
 
+//=================================================================================================
+// Static Quaternions
+//=================================================================================================
+template<typename T>
+quaternion<T> quaternion<T>::i()
+{ /*TODO*/
+}
+
+template<typename T>
+quaternion<T> quaternion<T>::j()
+{ /*TODO*/
+}
+
+template<typename T>
+quaternion<T> quaternion<T>::k()
+{ /*TODO*/
+}
+
+template<typename T>
+double quaternion<T>::ii()
+{ /*TODO*/
+}
+
+template<typename T>
+double quaternion<T>::jj()
+{ /*TODO*/
+}
+
+template<typename T>
+double quaternion<T>::kk()
+{ /*TODO*/
+}
+
+template<typename T>
+double quaternion<T>::ijk()
+{ /*TODO*/
+}
+
+template<typename T>
+quaternion<T> quaternion<T>::ij()
+{ /*TODO*/
+}
+
+template<typename T>
+quaternion<T> quaternion<T>::jk()
+{ /*TODO*/
+}
+
+template<typename T>
+quaternion<T> quaternion<T>::ki()
+{ /*TODO*/
+}
+
+template<typename T>
+quaternion<T> quaternion<T>::ji()
+{ /*TODO*/
+}
+
+template<typename T>
+quaternion<T> quaternion<T>::kj()
+{ /*TODO*/
+}
+
+
+template<typename T>
+quaternion<T> quaternion<T>::ik()
+{ /*TODO*/
+}
+//=================================================================================================
+
+//=================================================================================================
+// Quaternion Operators
+//=================================================================================================
+template<typename T>
+quaternion<T> quaternion<T>::operator-() const
+{
+  return quaternion( -w, -x, -y, -z );
+}
+//=================================================================================================
+
+//=================================================================================================
+// Quaternion Functions
+//=================================================================================================
+template<typename T>
+vector3d<T> quaternion<T>::vector() const
+{ /*TODO*/
+}
+
+template<typename T>
+T quaternion<T>::scalar() const
+{ /*TODO*/
+}
+
+template<typename T>
+quaternion<T> quaternion<T>::unit_scalar() const
+{ /*TODO*/
+}
+
+template<typename T>
+quaternion<T> quaternion<T>::conjugate() const
+{ /*TODO*/
+}
+
+template<typename T>
+quaternion<T> quaternion<T>::inverse() const
+{ /*TODO*/
+}
+
+template<typename T>
+quaternion<T> quaternion<T>::unit() const
+{ /*TODO*/
+}
+
+template<typename T>
+double quaternion<T>::norm() const
+{ /*TODO*/
+}
+
+template<typename T>
+double quaternion<T>::magnitude() const
+{ /*TODO*/
+}
+
+template<typename T>
+double quaternion<T>::dot( const quaternion & v ) const
+{ /*TODO*/
+}
+
+template<typename T>
+double quaternion<T>::angle( const quaternion & v ) const
+{ /*TODO*/
+}
+
+template<typename T>
+matrix3d<T> quaternion<T>::rot_matrix() const
+{ /*TODO*/
+}
+//=================================================================================================
 
 std::string yes_or_no( bool condition ) { return condition ? "YES" : "no"; }
 
@@ -266,127 +404,5 @@ void quaternion<T>::run_tests()
       << "https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/examples/index.htm\n";
 }
 
-//=================================================================================================
-// Static Quaternions
-//=================================================================================================
-template<typename T>
-quaternion<T> quaternion<T>::i()
-{ /* TODO */
-}
-template<typename T>
-quaternion<T> quaternion<T>::j()
-{ /* TODO */
-}
-template<typename T>
-quaternion<T> quaternion<T>::k()
-{ /* TODO */
-}
-
-template<typename T>
-double quaternion<T>::ii()
-{ /* TODO */
-}
-template<typename T>
-double quaternion<T>::jj()
-{ /* TODO */
-}
-template<typename T>
-double quaternion<T>::kk()
-{ /* TODO */
-}
-template<typename T>
-double quaternion<T>::ijk()
-{ /* TODO */
-}
-
-template<typename T>
-quaternion<T> quaternion<T>::ij()
-{ /* TODO */
-}
-template<typename T>
-quaternion<T> quaternion<T>::jk()
-{ /* TODO */
-}
-template<typename T>
-quaternion<T> quaternion<T>::ki()
-{ /* TODO */
-}
-
-template<typename T>
-quaternion<T> quaternion<T>::ji()
-{ /* TODO */
-}
-template<typename T>
-quaternion<T> quaternion<T>::kj()
-{ /* TODO */
-}
-template<typename T>
-quaternion<T> quaternion<T>::ik()
-{ /* TODO */
-}
-//=================================================================================================
-
-//=================================================================================================
-// Quaternion Functions
-//=================================================================================================
-template<typename T>
-vector3d<T> quaternion<T>::vector() const
-{ /* TODO */
-}
-template<typename T>
-T quaternion<T>::scalar() const
-{ /* TODO */
-}
-
-template<typename T>
-quaternion<T> quaternion<T>::unit_scalar() const
-{ /* TODO */
-}
-
-template<typename T>
-quaternion<T> quaternion<T>::conjugate() const
-{ /* TODO */
-}
-
-template<typename T>
-quaternion<T> quaternion<T>::inverse() const
-{ /* TODO */
-}
-
-template<typename T>
-quaternion<T> quaternion<T>::unit() const
-{ /* TODO */
-}
-
-template<typename T>
-double quaternion<T>::norm() const
-{ /* TODO */
-}
-template<typename T>
-double quaternion<T>::magnitude() const
-{ /* TODO */
-}
-
-template<typename T>
-double quaternion<T>::dot( const quaternion & v ) const
-{ /* TODO */
-}
-
-template<typename T>
-double quaternion<T>::angle( const quaternion & v ) const
-{ /* TODO */
-}
-
-template<typename T>
-matrix3d<T> quaternion<T>::rot_matrix() const
-{ /* TODO */
-}
-
-// rotates point pt (pt.x, pt.y, pt.z) about (axis.x, axis.y, axis.z) by theta
-template<typename T>
-vec3 quaternion<T>::rotate( const vector3D & pt, const vector3D & axis, double theta )
-{ /* TODO */
-}
-//=================================================================================================
 
 #endif /* quaternion_T_h */
