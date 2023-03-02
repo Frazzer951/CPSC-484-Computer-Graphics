@@ -306,7 +306,7 @@ void World::set_material(GeometricObject* geo, RGBColor color) {
     geo->set_material(matte_ptr);
 }
 
-void World::add_sphere_helper(RGBColor color, Point3D pt, int radius) {
+void World::add_sphere_helper(RGBColor color, Point3D pt, double radius) {
     Sphere*	s = new Sphere(pt, radius);
     set_material(s, color);
     add_object(s);
@@ -318,6 +318,10 @@ void World::add_bb_helper(RGBColor color, Point3D p0, Point3D p1, double r) {
     BeveledBox* bb = new BeveledBox(p0, p1, r);
     set_material(bb, color);
     add_object(bb);
+}
+
+void World::add_bb_helper(RGBColor color, Point3D p0, double dx, double dy, double dz, double r) {
+    World::add_bb_helper(color, p0, Point3D(p0.x + dx, p0.y + dy, p0.z + dz), r);
 }
 
 void World::add_rect_helper(RGBColor color, Point3D pt, Vector3D pt1, Vector3D pt2,
@@ -509,6 +513,10 @@ void World::build_city(void) {
 #define HEIGHT 4
 
 void World::build_practical() {
+    // init_environment(Point3D(-3.5, -3.5, 5), Point3D(2, 2, 5), 90.0, Point3D(0, 0, 1)); // a
+    // init_environment(Point3D(-4, -4, 8), Point3D(2, 2, 6), 80.0, Point3D(0, 0, 1)); // b
+    // init_environment(Point3D(-18.5, 5, 9), Point3D(2, 5, 9), 200.0, Point3D(0, 0, 1)); // c
+
     int num_x = 20;
     int num_y = num_x - 3;
     int spacing = 3;
@@ -537,6 +545,15 @@ void World::build_practical() {
     }
 }
 
+void build_box_sphere_triangle(World * w) {
+    double height = 3.0;
+    double radius = height / 4;
+    w->add_bb_helper(darkOrange, Point3D(0), 1, 1, height);
+    w->add_sphere_helper(lightGreen, Point3D(radius / 4, 1.85, height - radius), radius);
+    w->add_triangle_helper(greenCyan, Point3D(-0.75,  2.3, 0.1),
+                                      Point3D( 0   , -0.4, 1.5),
+                                      Point3D( 2   ,  2  , 2.5));
+}
 
 void World::build() {
     //  to build spheres...
@@ -550,14 +567,20 @@ void World::build() {
     // build_checkerboard(white, lightGrey, -7, -7, 7, 7, -10);
 
     //  OR... to build the practical environment
-    // init_environment(Point3D(-4, -4, 5), Point3D(2, 2, 5), 80.0, Point3D(0, 0, 1)); // a
+    // init_environment(Point3D(-3.5, -3.5, 5), Point3D(2, 2, 5), 90.0, Point3D(0, 0, 1)); // a
     // init_environment(Point3D(-4, -4, 8), Point3D(2, 2, 6), 80.0, Point3D(0, 0, 1)); // b
-    init_environment(Point3D(-6, 5, 9), Point3D(2, 5, 9), 80.0, Point3D(0, 0, 1)); // c
-    build_practical();
+    // init_environment(Point3D(-18.5, 5, 9), Point3D(2, 5, 9), 200.0, Point3D(0, 0, 1)); // c
+    // build_practical();
+    // build_checkerboard(white, lightGrey, -2, -2, 2, 2, 0);      // small
     // build_checkerboard(white, lightGrey, -4, -4, 4, 4, 0);      // fastest
     // build_checkerboard(white, lightGrey, -4, -4, 14, 14, 0);    // fast
     // build_checkerboard(white, lightGrey, -4, -4, 26, 26, 0);    // slower
-    build_checkerboard(white, lightGrey, -8, -8, 52, 52, 0);    // very slow
+    // build_checkerboard(white, lightGrey, -8, -8, 52, 52, 0);    // very slow
+
+    // init_environment(Point3D(1, 1, 6), Point3D(2, 1, -6), 130.0, Point3D(0, 0, 1)); // top
+    init_environment(Point3D(-4, 1, 1.5), Point3D(1, 1, 1.5), 120.0, Point3D(0, 0, 1)); // a
+    build_box_sphere_triangle(this);
+    // build_checkerboard(white, lightGrey, -2, -2, 4, 4, 0);
 }
 
 

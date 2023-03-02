@@ -55,20 +55,21 @@ public:
 
     void display_pixel(const int row, const int column, const RGBColor& pixel_color) const;
     ShadeRec hit_objects(const Ray& ray);
-                 // next function ONLY in chapter 3:  bare-bones ray tracing
-//    ShadeRec hit_bare_bones_objects(const Ray& ray);
+    // next function ONLY in chapter 3:  bare-bones ray tracing
+    //    ShadeRec hit_bare_bones_objects(const Ray& ray);
 
-private:
+    //private:
     void delete_objects();
     void delete_lights();
-    void add_sphere_helper(RGBColor color, Point3D pt, int radius);
+    void add_sphere_helper(RGBColor color, Point3D pt, double radius);
     void add_bb_helper(RGBColor color, Point3D pt1, Point3D pt2, double r=0.1);
+    void add_bb_helper(RGBColor color, Point3D pt1, double dx=1, double dy=1, double dz=1, double r=0.1);
     void add_rect_helper(RGBColor color, Point3D pt, Vector3D pt1, Vector3D pt2,
                          Normal n);
     void add_triangle_helper(RGBColor color, Point3D pt0, Point3D pt1, Point3D pt2);
 
     void build_spheres(void);
-//    void init_cameras();
+    //    void init_cameras();
     void init_cameras(Point3D eye, Point3D lookat, double view_distance, Point3D up);
     void init_viewplane(void);
     void init_light(void);
