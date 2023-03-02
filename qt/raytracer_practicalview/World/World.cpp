@@ -546,13 +546,17 @@ void World::build_practical() {
 }
 
 void build_box_sphere_triangle(World * w) {
-    double height = 3.0;
-    double radius = height / 4;
-    w->add_bb_helper(darkOrange, Point3D(0), 1, 1, height);
-    w->add_sphere_helper(lightGreen, Point3D(radius / 4, 1.85, height - radius), radius);
-    w->add_triangle_helper(greenCyan, Point3D(-0.75,  2.3, 0.1),
-                                      Point3D( 0   , -0.4, 1.5),
-                                      Point3D( 2   ,  2  , 2.5));
+    w->add_sphere_helper(lightGreen, Point3D(-0.45, -0.4, 1.45), 0.5);
+    w->add_bb_helper(darkOrange, Point3D(0.2, -0.2, 0), 0.7, 1.0, 2, 0);
+    w->add_triangle_helper(greenCyan, Point3D(-1.1, -0.8, 0.15),
+                                      Point3D( 1.2, -0.2, 1.1),
+                                      Point3D(-0.4,  0.3, 1.5));
+
+//    add_sphere_helper(lightGreen, Point3D(-45,-40,45), 50);
+//    add_bb_helper(darkOrange, Point3D(20,-20,-100), Point3D(90,100,100));
+//    add_triangle_helper(greenCyan, Point3D(-110, -80, -85),
+//                                   Point3D( 120, -20,  10),
+//                                   Point3D(-40 ,  30,  50));
 }
 
 void World::build() {
@@ -578,9 +582,23 @@ void World::build() {
     // build_checkerboard(white, lightGrey, -8, -8, 52, 52, 0);    // very slow
 
     // init_environment(Point3D(1, 1, 6), Point3D(2, 1, -6), 130.0, Point3D(0, 0, 1)); // top
-    init_environment(Point3D(-4, 1, 1.5), Point3D(1, 1, 1.5), 120.0, Point3D(0, 0, 1)); // a
+
+    init_environment(Point3D(0, -5, 1), Point3D(0, 0, 1), 300.0, Point3D(0, 0, 1));    // a
+    // init_environment(Point3D(3, -5, 5), Point3D(0, 0, 0.5), 300.0, Point3D(0, 0, 1));  // b
+    // init_environment(Point3D(-10, 5, 21), Point3D(0, -1, 0), 300.0, Point3D(0, 0, 1)); // c
     build_box_sphere_triangle(this);
-    // build_checkerboard(white, lightGrey, -2, -2, 4, 4, 0);
+    build_checkerboard(white, lightGrey, -4, -2, 4, 4, 0);
+
+
+    // init_environment(Point3D(0, -500, 0), Point3D(0,0,0), 300.0, Point3D(0, 0, 1));
+    // init_environment(Point3D(300, -500, 400), Point3D(0,0,-50), 250.0, Point3D(0, 0, 1));
+    // init_environment(Point3D(-1000, 500, 2000), Point3D(0,-100,0), 250.0, Point3D(0, 0, 1));
+
+    // add_sphere_helper(lightGreen, Point3D(-45,-40,45), 50);
+    // add_bb_helper(darkOrange, Point3D(20,-20,-100), Point3D(90,100,100));
+    // add_triangle_helper(greenCyan, Point3D(-110, -80, -85),
+    //                                Point3D( 120, -20,  10),
+    //                                Point3D(-40 ,  30,  50));
 }
 
 
