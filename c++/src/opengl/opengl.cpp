@@ -16,35 +16,31 @@
 //
 const GLint WIDTH = 800, HEIGHT = 600;
 
-int glfw_open_window()
-{    // new window with GLFW
+int glfw_open_window() {    // new window with GLFW
   glfwInit();
   glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
   glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
   glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
   glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
   glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
-  GLFWwindow * window       = glfwCreateWindow( WIDTH, HEIGHT, "Learn OpenGL using GLFW window", nullptr, nullptr );
-  int          screenWidth  = 0;
-  int          screenHeight = 0;
+  GLFWwindow *window       = glfwCreateWindow( WIDTH, HEIGHT, "Learn OpenGL using GLFW window", nullptr, nullptr );
+  int         screenWidth  = 0;
+  int         screenHeight = 0;
   glfwGetFramebufferSize( window, &screenWidth, &screenHeight );
-  if( window == nullptr )
-  {
+  if ( window == nullptr ) {
     std::cout << "Failed to create GLFW window\n";
     glfwTerminate();
     return -1;
   }
   glfwMakeContextCurrent( window );
   glewExperimental = GL_TRUE;
-  if( glewInit() != GLEW_OK )
-  {
+  if ( glewInit() != GLEW_OK ) {
     std::cout << "Failed to initialize GLEW\n";
     return -1;
   }
 
   glViewport( 0, 0, screenWidth, screenHeight );
-  while( glfwWindowShouldClose( window ) == 0 )
-  {
+  while ( glfwWindowShouldClose( window ) == 0 ) {
     glfwPollEvents();
     glClearColor( 0.8F, 0.3F, 0.3F, 1.0F );
     glClear( GL_COLOR_BUFFER_BIT );
@@ -54,15 +50,13 @@ int glfw_open_window()
   return 0;
 }
 
-void RenderSceneCB()
-{
+void RenderSceneCB() {
   glClear( GL_COLOR_BUFFER_BIT );
   glutSwapBuffers();
 }
 void InitializeGlutCallbacks() { glutDisplayFunc( RenderSceneCB ); }
 
-int glut_open_window( int argc, char * argv[] )
-{    // new window with GLUT
+int glut_open_window( int argc, char *argv[] ) {    // new window with GLUT
   glutInit( &argc, argv );
   glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA );
   glutInitWindowSize( 1024, 768 );
@@ -81,8 +75,7 @@ int glut_open_window( int argc, char * argv[] )
 //------------------------------------------------------------------------------------------------------------------------
 // display solid sphere with reflected light
 //
-void display_sphere_cool()
-{
+void display_sphere_cool() {
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   glPushMatrix();
   GLfloat color[] = { 1.0, 0.0, 0.0, 1.0 };
@@ -92,8 +85,7 @@ void display_sphere_cool()
   glutSwapBuffers();
 }
 
-void glut_sphere_cool( int argc, char * argv[] )
-{
+void glut_sphere_cool( int argc, char *argv[] ) {
   glutInit( &argc, argv );
   glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
   glutInitWindowSize( 400, 400 );
@@ -123,8 +115,7 @@ void glut_sphere_cool( int argc, char * argv[] )
 //------------------------------------------------------------------------------------------------------------------------
 // display segment through sphere
 //
-void display_sphere()
-{
+void display_sphere() {
   // clear the buffer
   glClear( GL_COLOR_BUFFER_BIT );
   // set the current color to cyan
@@ -137,8 +128,7 @@ void display_sphere()
   glFlush();
 }
 
-void myInit()
-{
+void myInit() {
   // set the clear color to black
   glClearColor( 1.0, 1.0, 1.0, 1.0 );
   // set the current color to red
@@ -153,10 +143,9 @@ void myInit()
   glMatrixMode( GL_MODELVIEW );
 }
 
-void glut_sphere( int argc, char * argv[] )
-{
+void glut_sphere( int argc, char *argv[] ) {
   // Create a new GLUquadric object // not used by anything as far as i can tell
-  GLUquadric * qobj = gluNewQuadric();
+  GLUquadric *qobj = gluNewQuadric();
 
   // Initialize glut
   glutInit( &argc, argv );
@@ -176,8 +165,7 @@ void glut_sphere( int argc, char * argv[] )
   glutMainLoop();
 }
 
-void resize( int width, int height )
-{
+void resize( int width, int height ) {
   const float ar = (float) width / (float) height;
   glViewport( 0, 0, width, height );
   glMatrixMode( GL_PROJECTION );
@@ -187,8 +175,7 @@ void resize( int width, int height )
   glLoadIdentity();
 }
 
-void display_shapes()
-{
+void display_shapes() {
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   glColor3d( 1, 0, 0 );
   glPushMatrix();
@@ -225,8 +212,7 @@ const GLfloat mat_diffuse[]    = { 0.8F, 0.8F, 0.8F, 1.0F };
 const GLfloat mat_specular[]   = { 1.0F, 1.0F, 1.0F, 1.0F };
 const GLfloat high_shininess[] = { 100.0F };
 
-void glut_sphere_shaded( int argc, char * argv[] )
-{
+void glut_sphere_shaded( int argc, char *argv[] ) {
   glutInit( &argc, argv );
   glutInitWindowSize( 640, 480 );
   glutInitWindowPosition( 10, 10 );
@@ -265,14 +251,38 @@ void glut_sphere_shaded( int argc, char * argv[] )
 //
 //  This is the include statement I need for Mac OS X.
 //
-GLfloat vertices[][3] = { { -1.0, -1.0, -1.0 }, { 1.0, -1.0, -1.0 }, { 1.0, 1.0, -1.0 }, { -1.0, 1.0, -1.0 },
-                          { -1.0, -1.0, 1.0 },  { 1.0, -1.0, 1.0 },  { 1.0, 1.0, 1.0 },  { -1.0, 1.0, 1.0 } };
+GLfloat vertices[][3] = {
+  {-1.0, -1.0, -1.0},
+  { 1.0, -1.0, -1.0},
+  { 1.0,  1.0, -1.0},
+  {-1.0,  1.0, -1.0},
+  {-1.0, -1.0,  1.0},
+  { 1.0, -1.0,  1.0},
+  { 1.0,  1.0,  1.0},
+  {-1.0,  1.0,  1.0}
+};
 
-GLfloat normals[][3] = { { -1.0, -1.0, -1.0 }, { 1.0, -1.0, -1.0 }, { 1.0, 1.0, -1.0 }, { -1.0, 1.0, -1.0 },
-                         { -1.0, -1.0, 1.0 },  { 1.0, -1.0, 1.0 },  { 1.0, 1.0, 1.0 },  { -1.0, 1.0, 1.0 } };
+GLfloat normals[][3] = {
+  {-1.0, -1.0, -1.0},
+  { 1.0, -1.0, -1.0},
+  { 1.0,  1.0, -1.0},
+  {-1.0,  1.0, -1.0},
+  {-1.0, -1.0,  1.0},
+  { 1.0, -1.0,  1.0},
+  { 1.0,  1.0,  1.0},
+  {-1.0,  1.0,  1.0}
+};
 
-GLfloat colors[][3] = { { 0.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 },
-                        { 0.0, 0.0, 1.0 }, { 1.0, 0.0, 1.0 }, { 1.0, 1.0, 1.0 }, { 0.0, 1.0, 1.0 } };
+GLfloat colors[][3] = {
+  {0.0, 0.0, 0.0},
+  {1.0, 0.0, 0.0},
+  {1.0, 1.0, 0.0},
+  {0.0, 1.0, 0.0},
+  {0.0, 0.0, 1.0},
+  {1.0, 0.0, 1.0},
+  {1.0, 1.0, 1.0},
+  {0.0, 1.0, 1.0}
+};
 
 static GLint   axis     = 2;
 static GLfloat theta[3] = { 0.0, 0.0, 0.0 };
@@ -284,8 +294,7 @@ static GLfloat theta[3] = { 0.0, 0.0, 0.0 };
 //****************************************************************************80
 //    POLYGON defines the colors, vertices and normals for a quadrilateral.
 //
-void polygon( int a, int b, int c, int d )
-{
+void polygon( int a, int b, int c, int d ) {
   // generate a polygon a set of parameters
   glBegin( GL_POLYGON );
 
@@ -305,8 +314,7 @@ void polygon( int a, int b, int c, int d )
   glEnd();
 }
 
-void colorcube()
-{
+void colorcube() {
   // generate the polygons fora cube
   polygon( 0, 3, 2, 1 );
   polygon( 2, 3, 7, 6 );
@@ -319,8 +327,7 @@ void colorcube()
 //****************************************************************************80
 //    DISPLAY generates the graphics output.
 //
-void display()
-{
+void display() {
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   // replace the current matrix with the identity matrix
   glLoadIdentity();
@@ -338,41 +345,27 @@ void display()
 //****************************************************************************80
 //    MOUSE determines the response to mouse input.
 //
-void mouse( int btn, int state, int /*x*/, int /*y*/ )
-{
+void mouse( int btn, int state, int /*x*/, int /*y*/ ) {
   // when you click with the mouse start spinning the next axis
   std::cout << "Mouse function entered -- axis value is: " << axis << "\n";
-  if( btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN )
-  {
-    ++axis;
-  }
-  if( btn == GLUT_MIDDLE_BUTTON && state == GLUT_DOWN )
-  {
-    ++axis;
-  }
-  if( btn == GLUT_RIGHT_BUTTON && state == GLUT_DOWN )
-  {
-    ++axis;
-  }
+  if ( btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN ) { ++axis; }
+  if ( btn == GLUT_MIDDLE_BUTTON && state == GLUT_DOWN ) { ++axis; }
+  if ( btn == GLUT_RIGHT_BUTTON && state == GLUT_DOWN ) { ++axis; }
   axis %= 3;
 }
 
 //****************************************************************************80
 //    MYRESHAPE determines the window mapping.
 //
-void myReshape( int w, int h )
-{
+void myReshape( int w, int h ) {
   // given the new window size calculate the new viewport for the window
   glViewport( 0, 0, w, h );
   glMatrixMode( GL_PROJECTION );
   glLoadIdentity();
 
-  if( w <= h )
-  {
+  if ( w <= h ) {
     glOrtho( -2.0, 2.0, -2.0 * (GLfloat) h / (GLfloat) w, 2.0 * (GLfloat) h / (GLfloat) w, -10.0, 10.0 );
-  }
-  else
-  {
+  } else {
     glOrtho( -2.0 * (GLfloat) h / (GLfloat) w, 2.0 * (GLfloat) h / (GLfloat) w, -2.0, 2.0, -10.0, 10.0 );
   }
   glMatrixMode( GL_MODELVIEW );
@@ -381,17 +374,13 @@ void myReshape( int w, int h )
 //****************************************************************************80
 //    SPINCUBE adjusts the angle of rotation and redisplays the picture.
 //
-void spinCube()
-{
+void spinCube() {
   std::cout << "entered spinCube()...\n";
   // theta[axis] = theta[axis] + 0.020;
   // increment the rotation of the curent axis by 1
   theta[axis] += 1.0;
   // onces the axis exceeds 360 subtract 360 from it to being it back down
-  if( 360.0 < theta[axis] )
-  {
-    theta[axis] = theta[axis] - 360.0;
-  }
+  if ( 360.0 < theta[axis] ) { theta[axis] = theta[axis] - 360.0; }
   // rerender the cube
   glutPostRedisplay();
   std::cout << "\t\texiting spinCube()...\n\n";
@@ -403,8 +392,7 @@ void spinCube()
 //    about the X, Y or Z axis.  Each time the user clicks the mouse, the
 //    "next" axis is used for rotation.
 //
-void rotating_cube( int argc, char * argv[] )
-{
+void rotating_cube( int argc, char *argv[] ) {
   // Initialize glut
   glutInit( &argc, argv );
   // Set the display mode that glut will use
@@ -431,12 +419,11 @@ void rotating_cube( int argc, char * argv[] )
   std::cout << "axis: " << axis << "\n";
 }
 
-#define ColoredVertex( c, v )                                                                                          \
-  do {                                                                                                                 \
-    glColor3fv( c );                                                                                                   \
-    glVertex3fv( v );                                                                                                  \
-  }                                                                                                                    \
-  while( 0 )
+#define ColoredVertex( c, v ) \
+  do {                        \
+    glColor3fv( c );          \
+    glVertex3fv( v );         \
+  } while ( 0 )
 #define WIDTH  400
 #define HEIGHT 400
 
@@ -449,12 +436,10 @@ float square_root( float x ) { return (float) std::sqrt( x ); }
 //    about the X, Y or Z axis.  Each time the user clicks the mouse, the
 //    "next" axis is used for rotation.
 //
-void display_tetra()
-{
+void  display_tetra() {
   static int list = 0;
   // if list is zero generate it and create the vertex and planes used to display the tetraheadron
-  if( list == 0 )
-  {
+  if ( list == 0 ) {
     // If the display list does not exist, create
     GLfloat PointA[] = { 0.5F, -square_root( 6.0F ) / 12, -square_root( 3.0F ) / 6 };
     GLfloat PointB[] = { -0.5F, -square_root( 6.0F ) / 12, -square_root( 3.0F ) / 6 };
@@ -499,22 +484,17 @@ void display_tetra()
   glutSwapBuffers();
 }
 
-void idle()
-{
+void idle() {
   // increment the angle and reset it once it has reached 360
   ++angle;
-  if( angle >= 360.0F )
-  {
-    angle = 0.0F;
-  }
+  if ( angle >= 360.0F ) { angle = 0.0F; }
   // wait for 10 milliseconds
   std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
   // redraw the tetra
   display_tetra();
 }
 
-void rotate_tetra( int argc, char * argv[] )
-{
+void rotate_tetra( int argc, char *argv[] ) {
   // initialize glut
   glutInit( &argc, argv );
   // Set the display mode that glut will use
@@ -533,8 +513,7 @@ void rotate_tetra( int argc, char * argv[] )
   glutMainLoop();
 }
 
-int main( int argc, char * argv[] )
-{
+int main( int argc, char *argv[] ) {
   std::cout << "Starting program\n";
   // glut_sphere( argc, argv );
   // glut_sphere_cool( argc, argv );
