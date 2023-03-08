@@ -65,40 +65,40 @@
 class GeometryEngine;
 
 class TextureCube : public QOpenGLWidget, protected QOpenGLFunctions {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    using QOpenGLWidget::QOpenGLWidget;
-    TextureCube(int x, int y);
-    ~TextureCube();
+  using QOpenGLWidget::QOpenGLWidget;
+  TextureCube( int x, int y );
+  ~TextureCube();
 
-    void set_xy(int x, int y);
-    void set_rotation(QQuaternion& rotation);
+  void set_xy( int x, int y );
+  void set_rotation( QQuaternion &rotation );
 
-    void resizeGL(int w, int h) override;
-    void paintGL() override;
+  void resizeGL( int w, int h ) override;
+  void paintGL() override;
 
-    void initShaders();
-    void initTextures();
-    void initOpenGL();
+  void initShaders();
+  void initTextures();
+  void initOpenGL();
 
-    void initializeGL() override;
-    void timerEvent(QTimerEvent *e) override;
+  void initializeGL() override;
+  void timerEvent( QTimerEvent *e ) override;
 
 protected:
-    void mousePressEvent(QMouseEvent *e) override;
-    void mouseReleaseEvent(QMouseEvent *e) override;
+  void mousePressEvent( QMouseEvent *e ) override;
+  void mouseReleaseEvent( QMouseEvent *e ) override;
 
 private:
-    int xoffset, yoffset;
+  int xoffset, yoffset;
 
-    QBasicTimer timer;
-    QOpenGLShaderProgram program;
-    GeometryEngine* geometries = nullptr;
-    QOpenGLTexture* texture = nullptr;
-    QMatrix4x4 projection;
+  QBasicTimer          timer;
+  QOpenGLShaderProgram program;
+  GeometryEngine      *geometries = nullptr;
+  QOpenGLTexture      *texture    = nullptr;
+  QMatrix4x4           projection;
 
-    QQuaternion rotation;
+  QQuaternion rotation;
 };
 
-#endif // MAINWIDGET_H
+#endif    // MAINWIDGET_H
