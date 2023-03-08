@@ -48,105 +48,60 @@
 **
 ****************************************************************************/
 
-#include <QMouseEvent>
+#ifndef MAIN_WIDGET_H
+#define MAIN_WIDGET_H
 
-#include <cmath>
-#include "main_widget.h"
+#include "geometryengine.h"
+#include "texture_cube.h"
 
-#define OFFSET 2
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions>
+#include <QMatrix4x4>
+#include <QQuaternion>
+#include <QVector2D>
+#include <QBasicTimer>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLTexture>
 
-MainWidget::~MainWidget() {}
+class GeometryEngine;
 
-void MainWidget::mousePressEvent( QMouseEvent *e ) {
-  // Save mouse press position
-  mousePressPosition = QVector2D( e->position() );
-}
+class MainWidget : public QOpenGLWidget, protected QOpenGLFunctions {
+  Q_OBJECT
 
-void MainWidget::mouseReleaseEvent( QMouseEvent *e ) {
-  // Mouse release position - mouse press position
-  QVector2D diff = QVector2D( e->position() ) - mousePressPosition;
+public:
+  using QOpenGLWidget::QOpenGLWidget;
+  ~MainWidget();
 
-  // Rotation axis is perpendicular
-  //     to the mouse position difference vector
-  QVector3D n = QVector3D( diff.y(), diff.x(), 0.0 ).normalized();
+protected:
+  void mousePressEvent( QMouseEvent *e ) override;
+  void mouseReleaseEvent( QMouseEvent *e ) override;
+  void timerEvent( QTimerEvent *e ) override;
 
-  // Accelerate angular speed relative
-  //     to the length of the mouse sweep
-  qreal acc = diff.length() / 100.0;
+  void initializeGL() override;
+  void resizeGL( int w, int h ) override;
+  void paintGL() override;
 
-  // Calculate new rotation axis as weighted sum
-  rotationAxis = ( rotationAxis * angularSpeed + n * acc ).normalized();
-  angularSpeed += acc;    // Increase angular speed
-}
+  void initShaders();
+  void initTextures();
 
-#include <QtDebug>
+private:
+  QBasicTimer timer;
+  //    QOpenGLShaderProgram program;
+  //    GeometryEngine *geometries = nullptr;
 
-void MainWidget::timerEvent( QTimerEvent * ) {
-  // Decrease angular speed (friction)
-  // angularSpeed *= 0.99;
+  //    QOpenGLTexture *texture = nullptr;
 
-  static bool accel = true;
+  //    QMatrix4x4 projection;
 
-  if ( ( accel && angularSpeed > 10.0 ) || ( !accel && angularSpeed < 0.5 ) ) {
-    accel = !accel;
-  } else if ( accel ) {
-    angularSpeed *= 1.01;
-  } else {
-    angularSpeed *= 0.99;
-  }
+  QVector2D   mousePressPosition;
+  QVector3D   rotationAxis;
+  qreal       angularSpeed = 0;
+  QQuaternion rotation;
 
-  // Stop rotation when speed goes below threshold
-  if ( angularSpeed < 0.01 ) { angularSpeed = 0.0; }
+  TextureCube ul;
+  TextureCube ur;
+  TextureCube bl;
+  TextureCube br;
+};
 
-  qDebug() << "angularSpeed: " << angularSpeed;
-  rotation = QQuaternion::fromAxisAndAngle( rotationAxis, angularSpeed ) * rotation;
-  ul.set_rotation( rotation );
-  ur.set_rotation( rotation );
-  bl.set_rotation( rotation );
-  br.set_rotation( rotation );
-
-  update();
-}
-
-void MainWidget::initializeGL() {
-  ul.set_xy( -OFFSET, OFFSET );
-  ur.set_xy( OFFSET, OFFSET );
-  bl.set_xy( -OFFSET, -OFFSET );
-  br.set_xy( OFFSET, -OFFSET );
-
-  ul.initializeGL();
-  ur.initializeGL();
-  bl.initializeGL();
-  br.initializeGL();
-
-  timer.start( 12, this );
-}
-
-void MainWidget::initShaders() {
-  ul.initShaders();
-  ur.initShaders();
-  bl.initShaders();
-  br.initShaders();
-}
-
-void MainWidget::initTextures() {
-  ul.initTextures();
-  ur.initTextures();
-  bl.initTextures();
-  br.initTextures();
-}
-
-void MainWidget::resizeGL( int w, int h ) {
-  ul.resizeGL( w, h );
-  ur.resizeGL( w, h );
-  bl.resizeGL( w, h );
-  br.resizeGL( w, h );
-}
-
-void MainWidget::paintGL() {
-  //        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  ul.paintGL();
-  ur.paintGL();
-  bl.paintGL();
-  br.paintGL();
-}
+#endif    // MAIN_WIDGET_H

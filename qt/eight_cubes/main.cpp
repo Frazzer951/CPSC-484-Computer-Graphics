@@ -48,105 +48,29 @@
 **
 ****************************************************************************/
 
-#include <QMouseEvent>
+#include <QApplication>
+#include <QLabel>
+#include <QSurfaceFormat>
 
-#include <cmath>
-#include "main_widget.h"
+#ifndef QT_NO_OPENGL
+#  include "main_widget.h"
+#endif
 
-#define OFFSET 2
+int main( int argc, char *argv[] ) {
+  QApplication app( argc, argv );
 
-MainWidget::~MainWidget() {}
+  QSurfaceFormat format;
+  format.setDepthBufferSize( 24 );
+  QSurfaceFormat::setDefaultFormat( format );
 
-void MainWidget::mousePressEvent( QMouseEvent *e ) {
-  // Save mouse press position
-  mousePressPosition = QVector2D( e->position() );
-}
-
-void MainWidget::mouseReleaseEvent( QMouseEvent *e ) {
-  // Mouse release position - mouse press position
-  QVector2D diff = QVector2D( e->position() ) - mousePressPosition;
-
-  // Rotation axis is perpendicular
-  //     to the mouse position difference vector
-  QVector3D n = QVector3D( diff.y(), diff.x(), 0.0 ).normalized();
-
-  // Accelerate angular speed relative
-  //     to the length of the mouse sweep
-  qreal acc = diff.length() / 100.0;
-
-  // Calculate new rotation axis as weighted sum
-  rotationAxis = ( rotationAxis * angularSpeed + n * acc ).normalized();
-  angularSpeed += acc;    // Increase angular speed
-}
-
-#include <QtDebug>
-
-void MainWidget::timerEvent( QTimerEvent * ) {
-  // Decrease angular speed (friction)
-  // angularSpeed *= 0.99;
-
-  static bool accel = true;
-
-  if ( ( accel && angularSpeed > 10.0 ) || ( !accel && angularSpeed < 0.5 ) ) {
-    accel = !accel;
-  } else if ( accel ) {
-    angularSpeed *= 1.01;
-  } else {
-    angularSpeed *= 0.99;
-  }
-
-  // Stop rotation when speed goes below threshold
-  if ( angularSpeed < 0.01 ) { angularSpeed = 0.0; }
-
-  qDebug() << "angularSpeed: " << angularSpeed;
-  rotation = QQuaternion::fromAxisAndAngle( rotationAxis, angularSpeed ) * rotation;
-  ul.set_rotation( rotation );
-  ur.set_rotation( rotation );
-  bl.set_rotation( rotation );
-  br.set_rotation( rotation );
-
-  update();
-}
-
-void MainWidget::initializeGL() {
-  ul.set_xy( -OFFSET, OFFSET );
-  ur.set_xy( OFFSET, OFFSET );
-  bl.set_xy( -OFFSET, -OFFSET );
-  br.set_xy( OFFSET, -OFFSET );
-
-  ul.initializeGL();
-  ur.initializeGL();
-  bl.initializeGL();
-  br.initializeGL();
-
-  timer.start( 12, this );
-}
-
-void MainWidget::initShaders() {
-  ul.initShaders();
-  ur.initShaders();
-  bl.initShaders();
-  br.initShaders();
-}
-
-void MainWidget::initTextures() {
-  ul.initTextures();
-  ur.initTextures();
-  bl.initTextures();
-  br.initTextures();
-}
-
-void MainWidget::resizeGL( int w, int h ) {
-  ul.resizeGL( w, h );
-  ur.resizeGL( w, h );
-  bl.resizeGL( w, h );
-  br.resizeGL( w, h );
-}
-
-void MainWidget::paintGL() {
-  //        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  ul.paintGL();
-  ur.paintGL();
-  bl.paintGL();
-  br.paintGL();
+  app.setApplicationName( "four_cubes" );
+  app.setApplicationVersion( "0.1" );
+#ifndef QT_NO_OPENGL
+  MainWidget widget;
+  widget.show();
+#else
+  QLabel note( "OpenGL Support required" );
+  note.show();
+#endif
+  return app.exec();
 }
