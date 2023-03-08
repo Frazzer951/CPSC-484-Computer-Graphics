@@ -90,8 +90,21 @@ void MainWidget::mouseReleaseEvent( QMouseEvent *e ) {
 
 //! [1]
 void MainWidget::timerEvent( QTimerEvent * ) {
-  angularSpeed *= 0.99;
-  rotation     = QQuaternion::fromAxisAndAngle( rotationAxis, angularSpeed ) * rotation;
+  static bool faster = true;
+
+  if ( faster ) {
+    angularSpeed *= 1.01;
+  } else {
+    angularSpeed *= 0.99;
+  }
+
+  if ( faster && angularSpeed >= 20.0 ) {
+    faster = false;
+  } else if ( !faster && angularSpeed <= 5.0 ) {
+    faster = true;
+  }
+
+  rotation = QQuaternion::fromAxisAndAngle( rotationAxis, angularSpeed ) * rotation;
   update();
 }
 //! [1]
@@ -137,7 +150,8 @@ void MainWidget::initShaders() {
 //! [4]
 void MainWidget::initTextures() {
   // Load cube.png image
-  texture = new QOpenGLTexture( QImage( ":/cube.png" ).mirrored() );
+  // texture = new QOpenGLTexture( QImage( ":/cube.png" ).mirrored() );
+  texture = new QOpenGLTexture( QImage( ":/cube_new.png" ).mirrored() );
 
   // Set nearest filtering mode for texture minification
   texture->setMinificationFilter( QOpenGLTexture::Nearest );
