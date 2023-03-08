@@ -63,7 +63,7 @@ int main( int argc, char *argv[] ) {
   format.setDepthBufferSize( 24 );
   QSurfaceFormat::setDefaultFormat( format );
 
-  app.setApplicationName( "four_cubes" );
+  app.setApplicationName( "eight_cubes" );
   app.setApplicationVersion( "0.1" );
 #ifndef QT_NO_OPENGL
   MainWidget widget;

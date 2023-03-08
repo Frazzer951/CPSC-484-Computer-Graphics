@@ -72,7 +72,7 @@ void TextureCube::mouseReleaseEvent( QMouseEvent * ) {}
 
 void TextureCube::timerEvent( QTimerEvent * ) {}
 
-void TextureCube::set_xy( int x, int y ) {
+void TextureCube::set_xy( double x, double y ) {
   xoffset = x;
   yoffset = y;
 }
@@ -141,6 +141,7 @@ void TextureCube::paintGL() {
   QMatrix4x4 matrix;
   matrix.translate( xoffset, yoffset, -5.0 );
   matrix.rotate( rotation );
+  matrix.scale( 0.5 );
 
   // Set modelview-projection matrix
   program.setUniformValue( "mvp_matrix", projection * matrix );

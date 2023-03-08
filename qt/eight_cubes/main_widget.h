@@ -98,10 +98,15 @@ private:
   qreal       angularSpeed = 0;
   QQuaternion rotation;
 
-  TextureCube ul;
-  TextureCube ur;
-  TextureCube bl;
-  TextureCube br;
+  TextureCube ulA;
+  TextureCube urA;
+  TextureCube blA;
+  TextureCube brA;
+
+  TextureCube ulB;
+  TextureCube urB;
+  TextureCube blB;
+  TextureCube brB;
 };
 
 #endif    // MAIN_WIDGET_H

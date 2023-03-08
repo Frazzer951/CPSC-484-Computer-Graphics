@@ -72,7 +72,7 @@ public:
   TextureCube( int x, int y );
   ~TextureCube();
 
-  void set_xy( int x, int y );
+  void set_xy( double x, double y );
   void set_rotation( QQuaternion &rotation );
 
   void resizeGL( int w, int h ) override;
@@ -90,7 +90,7 @@ protected:
   void mouseReleaseEvent( QMouseEvent *e ) override;
 
 private:
-  int xoffset, yoffset;
+  double xoffset, yoffset;
 
   QBasicTimer          timer;
   QOpenGLShaderProgram program;
