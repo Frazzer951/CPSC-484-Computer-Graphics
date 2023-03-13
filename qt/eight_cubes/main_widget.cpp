@@ -49,16 +49,17 @@
 ****************************************************************************/
 
 #include <QMouseEvent>
+#include <QtDebug>
 
 #include <cmath>
 #include "main_widget.h"
 
-#define OFFSET 2.0
-#define CUBES  30
+#define OFFSET 6.0
 #define RADIUS 20
+#define CUBES  30
 
 MainWidget::MainWidget() : QOpenGLWidget() {
-  qDebug() << "constructung " << CUBES << " texture cubes...";
+  qDebug() << "constructing " << CUBES << " texture cubes...";
   for ( int i = 0; i < CUBES; i++ ) { texture_cubes.push_back( new TextureCube( 0, 0 ) ); }
 }
 
@@ -89,15 +90,13 @@ void MainWidget::mouseReleaseEvent( QMouseEvent *e ) {
   angularSpeed += acc;    // Increase angular speed
 }
 
-#include <QtDebug>
-
 void MainWidget::timerEvent( QTimerEvent * ) {
   // Decrease angular speed (friction)
   // angularSpeed *= 0.99;
 
   static bool accel = true;
 
-  if ( ( accel && angularSpeed > 20.0 ) || ( !accel && angularSpeed < 0.5 ) ) {
+  if ( ( accel && angularSpeed > 10.0 ) || ( !accel && angularSpeed < 0.5 ) ) {
     accel = !accel;
   } else if ( accel ) {
     angularSpeed *= 1.01;
@@ -120,6 +119,7 @@ void MainWidget::timerEvent( QTimerEvent * ) {
 
 void MainWidget::initializeGL() {
   double theta = ( 2 * M_PI ) / (double) CUBES;
+
   for ( int i = 0; i < CUBES; i++ ) {
     // x = r cos(theta) and y = r sin(theta)
     double x = RADIUS * std::cos( i * theta );

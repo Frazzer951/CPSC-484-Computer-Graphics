@@ -74,6 +74,7 @@ public:
   using QOpenGLWidget::QOpenGLWidget;
   MainWidget();
   ~MainWidget();
+  void resizeGL( int w, int h ) override;
 
 protected:
   void mousePressEvent( QMouseEvent *e ) override;
@@ -81,7 +82,6 @@ protected:
   void timerEvent( QTimerEvent *e ) override;
 
   void initializeGL() override;
-  void resizeGL( int w, int h ) override;
   void paintGL() override;
 
   void initShaders();

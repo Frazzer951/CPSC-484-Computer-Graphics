@@ -141,7 +141,6 @@ void TextureCube::paintGL() {
   QMatrix4x4 matrix;
   matrix.translate( xoffset, yoffset, -27.0 );
   matrix.rotate( rotation );
-  // matrix.scale( 0.5 );
 
   // Set modelview-projection matrix
   program.setUniformValue( "mvp_matrix", projection * matrix );
