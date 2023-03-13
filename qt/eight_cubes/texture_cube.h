@@ -69,7 +69,7 @@ class TextureCube : public QOpenGLWidget, protected QOpenGLFunctions {
 
 public:
   using QOpenGLWidget::QOpenGLWidget;
-  TextureCube( int x, int y );
+  TextureCube( double x, double y );
   ~TextureCube();
 
   void set_xy( double x, double y );

@@ -54,8 +54,18 @@
 #include "main_widget.h"
 
 #define OFFSET 2.0
+#define CUBES  30
+#define RADIUS 20
 
-MainWidget::~MainWidget() {}
+MainWidget::MainWidget() : QOpenGLWidget() {
+  qDebug() << "constructung " << CUBES << " texture cubes...";
+  for ( int i = 0; i < CUBES; i++ ) { texture_cubes.push_back( new TextureCube( 0, 0 ) ); }
+}
+
+MainWidget::~MainWidget() {
+  qDebug() << "destroying " << CUBES << " texture cubes...";
+  for ( int i = 0; i < CUBES; i++ ) { delete texture_cubes[i]; }
+}
 
 void MainWidget::mousePressEvent( QMouseEvent *e ) {
   // Save mouse press position
@@ -87,7 +97,7 @@ void MainWidget::timerEvent( QTimerEvent * ) {
 
   static bool accel = true;
 
-  if ( ( accel && angularSpeed > 10.0 ) || ( !accel && angularSpeed < 0.5 ) ) {
+  if ( ( accel && angularSpeed > 20.0 ) || ( !accel && angularSpeed < 0.5 ) ) {
     accel = !accel;
   } else if ( accel ) {
     angularSpeed *= 1.01;
@@ -103,89 +113,37 @@ void MainWidget::timerEvent( QTimerEvent * ) {
   }
 
   rotation = QQuaternion::fromAxisAndAngle( rotationAxis, angularSpeed ) * rotation;
-  ulA.set_rotation( rotation );
-  urA.set_rotation( rotation );
-  blA.set_rotation( rotation );
-  brA.set_rotation( rotation );
-
-  ulB.set_rotation( rotation );
-  urB.set_rotation( rotation );
-  blB.set_rotation( rotation );
-  brB.set_rotation( rotation );
+  for ( int i = 0; i < CUBES; i++ ) { texture_cubes[i]->set_rotation( rotation ); }
 
   update();
 }
 
 void MainWidget::initializeGL() {
-  double divisor = 2.5;
-  ulA.set_xy( -OFFSET / divisor, OFFSET );
-  urA.set_xy( OFFSET / divisor, OFFSET );
-  blA.set_xy( -OFFSET / divisor, -OFFSET );
-  brA.set_xy( OFFSET / divisor, -OFFSET );
-
-  ulB.set_xy( -OFFSET, OFFSET / divisor );
-  urB.set_xy( OFFSET, OFFSET / divisor );
-  blB.set_xy( -OFFSET, -OFFSET / divisor );
-  brB.set_xy( OFFSET, -OFFSET / divisor );
-
-  ulA.initializeGL();
-  urA.initializeGL();
-  blA.initializeGL();
-  brA.initializeGL();
-
-  ulB.initializeGL();
-  urB.initializeGL();
-  blB.initializeGL();
-  brB.initializeGL();
+  double theta = ( 2 * M_PI ) / (double) CUBES;
+  for ( int i = 0; i < CUBES; i++ ) {
+    // x = r cos(theta) and y = r sin(theta)
+    double x = RADIUS * std::cos( i * theta );
+    double y = RADIUS * std::sin( i * theta );
+    texture_cubes[i]->set_xy( x, y );
+    texture_cubes[i]->initializeGL();
+  }
 
   timer.start( 12, this );
 }
 
 void MainWidget::initShaders() {
-  ulA.initShaders();
-  urA.initShaders();
-  blA.initShaders();
-  brA.initShaders();
-
-  ulB.initShaders();
-  urB.initShaders();
-  blB.initShaders();
-  brB.initShaders();
+  for ( int i = 0; i < CUBES; i++ ) { texture_cubes[i]->initShaders(); }
 }
 
 void MainWidget::initTextures() {
-  ulA.initTextures();
-  urA.initTextures();
-  blA.initTextures();
-  brA.initTextures();
-
-  ulB.initTextures();
-  urB.initTextures();
-  blB.initTextures();
-  brB.initTextures();
+  for ( int i = 0; i < CUBES; i++ ) { texture_cubes[i]->initTextures(); }
 }
 
 void MainWidget::resizeGL( int w, int h ) {
-  ulA.resizeGL( w, h );
-  urA.resizeGL( w, h );
-  blA.resizeGL( w, h );
-  brA.resizeGL( w, h );
-
-  ulB.resizeGL( w, h );
-  urB.resizeGL( w, h );
-  blB.resizeGL( w, h );
-  brB.resizeGL( w, h );
+  for ( int i = 0; i < CUBES; i++ ) { texture_cubes[i]->resizeGL( w, h ); }
 }
 
 void MainWidget::paintGL() {
   //        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  ulA.paintGL();
-  urA.paintGL();
-  blA.paintGL();
-  brA.paintGL();
-
-  ulB.paintGL();
-  urB.paintGL();
-  blB.paintGL();
-  brB.paintGL();
+  for ( int i = 0; i < CUBES; i++ ) { texture_cubes[i]->paintGL(); }
 }

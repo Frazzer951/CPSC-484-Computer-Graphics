@@ -63,6 +63,8 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
 
+#include <vector>
+
 class GeometryEngine;
 
 class MainWidget : public QOpenGLWidget, protected QOpenGLFunctions {
@@ -70,6 +72,7 @@ class MainWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 public:
   using QOpenGLWidget::QOpenGLWidget;
+  MainWidget();
   ~MainWidget();
 
 protected:
@@ -98,15 +101,7 @@ private:
   qreal       angularSpeed = 0;
   QQuaternion rotation;
 
-  TextureCube ulA;
-  TextureCube urA;
-  TextureCube blA;
-  TextureCube brA;
-
-  TextureCube ulB;
-  TextureCube urB;
-  TextureCube blB;
-  TextureCube brB;
+  std::vector<TextureCube *> texture_cubes;
 };
 
 #endif    // MAIN_WIDGET_H

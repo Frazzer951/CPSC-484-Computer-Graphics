@@ -55,7 +55,7 @@
 #include "texture_cube.h"
 #include "main_widget.h"
 
-TextureCube::TextureCube( int x, int y ) : xoffset( x ), yoffset( y ) { qDebug( "TextureCube created\n" ); }
+TextureCube::TextureCube( double x, double y ) : xoffset( x ), yoffset( y ) { qDebug( "TextureCube created\n" ); }
 
 TextureCube::~TextureCube() {
   // Make sure the context is current when deleting the texture
@@ -125,7 +125,7 @@ void TextureCube::resizeGL( int w, int h ) {
   qreal aspect = qreal( w ) / qreal( h ? h : 1 );    // Calculate aspect ratio
 
   //    const qreal zNear = 3.0, zFar = 7.0, fov = 45.0;
-  const qreal zNear = 1.0, zFar = 10.0, fov = 80.0;
+  const qreal zNear = 1.0, zFar = 30.0, fov = 80.0;
 
   projection.setToIdentity();    // Reset projection
 
@@ -139,9 +139,9 @@ void TextureCube::paintGL() {
 
   // Calculate model view transformation
   QMatrix4x4 matrix;
-  matrix.translate( xoffset, yoffset, -5.0 );
+  matrix.translate( xoffset, yoffset, -27.0 );
   matrix.rotate( rotation );
-  matrix.scale( 0.5 );
+  // matrix.scale( 0.5 );
 
   // Set modelview-projection matrix
   program.setUniformValue( "mvp_matrix", projection * matrix );
