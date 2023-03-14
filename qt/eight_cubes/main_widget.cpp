@@ -59,12 +59,12 @@
 #define CUBES  30
 
 MainWidget::MainWidget() : QOpenGLWidget() {
-  qDebug() << "constructing " << CUBES << " texture cubes...";
+  qDebug() << "Constructing " << CUBES << " texture cubes...";
   for ( int i = 0; i < CUBES; i++ ) { texture_cubes.push_back( new TextureCube( 0, 0 ) ); }
 }
 
 MainWidget::~MainWidget() {
-  qDebug() << "destroying " << CUBES << " texture cubes...";
+  qDebug() << "Destroying " << CUBES << " texture cubes...";
   for ( int i = 0; i < CUBES; i++ ) { delete texture_cubes[i]; }
 }
 

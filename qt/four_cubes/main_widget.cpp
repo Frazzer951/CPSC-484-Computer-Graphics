@@ -98,7 +98,8 @@ void MainWidget::timerEvent( QTimerEvent * ) {
   // Stop rotation when speed goes below threshold
   if ( angularSpeed < 0.01 ) { angularSpeed = 0.0; }
 
-  qDebug() << "angularSpeed: " << angularSpeed;
+  // qDebug() << "angularSpeed: " << angularSpeed;
+  // qDebug() << "rotationAxis: " << rotationAxis;
   rotation = QQuaternion::fromAxisAndAngle( rotationAxis, angularSpeed ) * rotation;
   ul.set_rotation( rotation );
   ur.set_rotation( rotation );
