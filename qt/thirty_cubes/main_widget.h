@@ -65,39 +65,37 @@
 
 #include <vector>
 
-
 class GeometryEngine;
 
-class MainWidget : public QOpenGLWidget, protected QOpenGLFunctions
-{
-    Q_OBJECT
+class MainWidget : public QOpenGLWidget, protected QOpenGLFunctions {
+  Q_OBJECT
 
 public:
-    using QOpenGLWidget::QOpenGLWidget;
-    MainWidget();
-    ~MainWidget();
-    void resizeGL(int w, int h) override;
+  using QOpenGLWidget::QOpenGLWidget;
+  MainWidget();
+  ~MainWidget();
+  void resizeGL( int w, int h ) override;
 
 protected:
-    void mousePressEvent(QMouseEvent *e) override;
-    void mouseReleaseEvent(QMouseEvent *e) override;
-    void timerEvent(QTimerEvent *e) override;
+  void mousePressEvent( QMouseEvent *e ) override;
+  void mouseReleaseEvent( QMouseEvent *e ) override;
+  void timerEvent( QTimerEvent *e ) override;
 
-    void initializeGL() override;
-    void paintGL() override;
+  void initializeGL() override;
+  void paintGL() override;
 
-    void initShaders();
-    void initTextures();
+  void initShaders();
+  void initTextures();
 
 private:
-    QBasicTimer timer;
+  QBasicTimer timer;
 
-    QVector2D mousePressPosition;
-    QVector3D rotationAxis;
-    qreal angularSpeed = 0;
-    QQuaternion rotation;
+  QVector2D   mousePressPosition;
+  QVector3D   rotationAxis;
+  qreal       angularSpeed = 0;
+  QQuaternion rotation;
 
-    std::vector<TextureCube*> texture_cubes;
+  std::vector<TextureCube *> texture_cubes;
 };
 
-#endif // MAIN_WIDGET_H
+#endif    // MAIN_WIDGET_H
