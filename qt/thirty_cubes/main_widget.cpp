@@ -58,7 +58,7 @@
 #define OFFSET 6
 #define RADIUS 20
 
-#define CUBES 30
+#define CUBES 75
 
 MainWidget::MainWidget() : QOpenGLWidget(), texture_cubes() {
   qDebug() << "constructing " << CUBES << " texture_cubes...";
@@ -115,9 +115,43 @@ void MainWidget::timerEvent( QTimerEvent * ) {
 
 void MainWidget::initializeGL() {
   for ( int i = 0; i < CUBES; ++i ) {
-    double x = RADIUS * cos( i * 2.0 * M_PI / CUBES );
-    double y = RADIUS * sin( i * 2.0 * M_PI / CUBES );
+    // 5 rings
+    // 1  1
+    // 7  8
+    // 12 20
+    // 25 45
+    // 30 75
+    double x = 0;
+    double y = 0;
 
+    if ( i < 1 ) {
+    } else if ( i < 8 ) {
+      double theta = 2.0 * M_PI / 7.0;
+      int    num   = i - 1;
+
+      x = 5 * cos( num * theta );
+      y = 5 * sin( num * theta );
+    } else if ( i < 20 ) {
+      double theta = 2.0 * M_PI / 12.0;
+      int    num   = i - 8;
+
+      x = 10 * cos( num * theta );
+      y = 10 * sin( num * theta );
+    } else if ( i < 45 ) {
+      double theta = 2.0 * M_PI / 25.0;
+      int    num   = i - 20;
+
+      x = 15 * cos( num * theta );
+      y = 15 * sin( num * theta );
+    } else {
+      double theta = 2.0 * M_PI / 30.0;
+      int    num   = i - 45;
+
+      x = 20 * cos( num * theta );
+      y = 20 * sin( num * theta );
+    }
+
+    //qDebug() << "x: " << x << ", y: " << y;
     auto p = texture_cubes[i];
     p->set_xy( x, y );
     p->initializeGL();

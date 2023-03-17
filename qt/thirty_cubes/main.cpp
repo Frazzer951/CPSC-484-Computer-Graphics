@@ -67,6 +67,7 @@ int main( int argc, char *argv[] ) {
   app.setApplicationVersion( "0.1" );
 #ifndef QT_NO_OPENGL
   MainWidget widget;
+  // widget.resize( 400, 400 );
   widget.resize( 800, 800 );
   widget.resizeGL( 5, 5 );
   widget.show();
