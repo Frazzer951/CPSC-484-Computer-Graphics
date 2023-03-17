@@ -1,12 +1,10 @@
 #ifndef __MESH__
 #define __MESH__
 
-
 // 	Copyright (C) Kevin Suffern 2000-2007.
 //	This C++ code is for non-commercial purposes only.
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
-
 
 // A mesh object stores the data for mesh triangles:
 //
@@ -23,27 +21,22 @@
 
 #include "Point3D.h"
 #include "Normal.h"
-	
 
 struct Mesh {
 public:
-    Mesh(void);
-    Mesh(const Mesh& m);
-    Mesh&
-    operator= (const Mesh& rhs);
+  Mesh( void );
+  Mesh( const Mesh &m );
+  Mesh &operator=( const Mesh &rhs );
 
-    ~Mesh(void);
+  ~Mesh( void );
 
-
-    std::vector<Point3D> 		vertices;				// mesh vertices
-    std::vector<Normal> 		normals;				// average normal at each vertex;
-    std::vector<float>			u;						// u texture coordinate at each vertex
-    std::vector<float>			v;						// v texture coordinate at each vertex
-    std::vector<std::vector<int> > 	vertex_faces;			// the triangles shared by each vertex
-    int 					num_vertices; 			// number of vertices
-    int 					num_triangles; 			// number of triangles
+  std::vector<Point3D>          vertices;         // mesh vertices
+  std::vector<Normal>           normals;          // average normal at each vertex;
+  std::vector<float>            u;                // u texture coordinate at each vertex
+  std::vector<float>            v;                // v texture coordinate at each vertex
+  std::vector<std::vector<int>> vertex_faces;     // the triangles shared by each vertex
+  int                           num_vertices;     // number of vertices
+  int                           num_triangles;    // number of triangles
 };
 
 #endif
-
-

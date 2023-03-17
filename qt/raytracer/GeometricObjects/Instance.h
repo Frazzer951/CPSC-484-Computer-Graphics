@@ -6,69 +6,59 @@
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
-// This includes a bounding box, instead of computing it. 
+// This includes a bounding box, instead of computing it.
 // This uses extra memory but the object to be transformed may be a grid or some other complex object
 // whose bouding box is expensive to compute.
 
 #include "GeometricObjects/GeometricObject.h"
 #include "Utilities/Matrix.h"
 
-
-class Instance: public GeometricObject {	
+class Instance : public GeometricObject {
 public:
-    Instance(void);
-    Instance(GeometricObject* obj_ptr);
+  Instance( void );
+  Instance( GeometricObject *obj_ptr );
 
-    virtual Instance* clone(void) const;
+  virtual Instance *clone( void ) const;
 
-    Instance(const Instance& instance);
-    Instance&
-    operator= (const Instance& rhs);
+  Instance( const Instance &instance );
+  Instance &operator=( const Instance &rhs );
 
-    virtual	~Instance(void);
+  virtual ~Instance( void );
 
+  void set_object( GeometricObject *obj_ptr );
+  void transform_texture( const bool transform );
 
-    void  set_object(GeometricObject* obj_ptr);
-    void  transform_texture(const bool transform);
+  virtual void compute_bounding_box( void );
 
-    virtual void compute_bounding_box(void);
+  virtual BBox get_bounding_box( void );
 
-    virtual BBox get_bounding_box(void);
+  virtual Material *get_material( void ) const;
+  virtual void      set_material( Material *materialPtr );
 
-    virtual Material* get_material(void) const;
-    virtual void set_material(Material* materialPtr);
+  virtual bool hit( const Ray &ray, double &tmin, ShadeRec &sr ) const;
+  virtual bool shadow_hit( const Ray &ray, double &tmin ) const;
 
-    virtual bool hit(const Ray& ray, double& tmin, ShadeRec& sr) const;
-    virtual bool shadow_hit(const Ray& ray, double& tmin) const;
+  // affine tranformation functions
+  void translate( const Vector3D &trans );
+  void translate( const double dx, const double dy, const double dz );
+  void scale( const Vector3D &s );
 
-    // affine tranformation functions
-    void translate(const Vector3D& trans);
-    void translate(const double dx, const double dy, const double dz);
-    void scale(const Vector3D& s);
+  void scale( const double a, const double b, const double c );
 
-    void scale(const double a, const double b, const double c);
+  virtual void rotate_x( double r );
+  virtual void rotate_y( double r );
+  virtual void rotate_z( double r );
 
-    virtual void rotate_x(double r);
-    virtual void rotate_y(double r);
-    virtual void rotate_z(double r);
-
-    void shear(const Matrix& m);
+  void shear( const Matrix &m );
 
 private:
-    GeometricObject*	object_ptr;				// object to be transformed
-    Matrix				inv_matrix;		    	// inverse transformation matrix
-    static 	Matrix		forward_matrix; 		// transformation matrix
-    BBox				bbox;					// transformed object's bounding box
-    bool				transform_the_texture;	// do we transform the texture?
-
-
+  GeometricObject *object_ptr;               // object to be transformed
+  Matrix           inv_matrix;               // inverse transformation matrix
+  static Matrix    forward_matrix;           // transformation matrix
+  BBox             bbox;                     // transformed object's bounding box
+  bool             transform_the_texture;    // do we transform the texture?
 };
 
-
-inline void
-Instance::transform_texture(const bool transform) {
-	transform_the_texture = transform;
-}	
+inline void Instance::transform_texture( const bool transform ) { transform_the_texture = transform; }
 
 #endif

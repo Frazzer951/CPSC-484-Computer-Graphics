@@ -6,7 +6,6 @@
 ////	This C++ code is licensed under the GNU General Public License Version 2.
 ////	See the file COPYING.txt for the full license.
 
-
 //// This file contains the declaration of the class Archway
 //// This is a door with a semi-circular arch at the top
 //// The door sides are beveled boxes, and the arch is beveled wedges
@@ -21,8 +20,6 @@
 ////					num_blocks - number of blocks in the side columns
 ////					num_wedges - number of wedges in the archway
 ////					rb - common bevel radius of the block and wedges
-
-
 
 //#include "Grid.h"
 

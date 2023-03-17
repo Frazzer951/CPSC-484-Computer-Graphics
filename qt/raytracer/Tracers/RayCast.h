@@ -3,27 +3,19 @@
 
 #include "Tracer.h"
 
-
 //=====================================
 // RayCast
 //=====================================
 //
-class RayCast: public Tracer {
+class RayCast : public Tracer {
 public:
-    RayCast();
-    RayCast(World* _worldPtr);
+  RayCast();
+  RayCast( World *_worldPtr );
 
-    virtual ~RayCast();
+  virtual ~RayCast();
 
-
-    virtual RGBColor trace_ray(const Ray&) const;   // ignore depth
-    virtual RGBColor trace_ray(const Ray, const int) const;
+  virtual RGBColor trace_ray( const Ray & ) const;    // ignore depth
+  virtual RGBColor trace_ray( const Ray, const int ) const;
 };
 
 #endif
-
-
-
-
-
-

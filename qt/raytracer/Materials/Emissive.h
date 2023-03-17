@@ -4,18 +4,16 @@
 //#include "Utilities/RGBColor.h"
 //#include "Utilities/ShadeRec.h"
 
-
 //class Emissive: public Material {
 //public:
 //  Emissive(void);
-  
+
 //  virtual Emissive* clone() = 0;
 
 //  Emissive(const Emissive& other);
 //  Emissive& operator=(const Emissive& other);
 
 //  virtual ~Emissive();
-
 
 //  void scale_radiance(const float _ls);
 //  void set_ce(const float r, const float g, const float b);

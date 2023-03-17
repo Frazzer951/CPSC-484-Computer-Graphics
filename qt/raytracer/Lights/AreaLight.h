@@ -7,7 +7,6 @@
 ////	This C++ code is licensed under the GNU General Public License Version 2.
 ////	See the file COPYING.txt for the full license.
 
-
 //#include "Utilities/RGBColor.h"
 //#include "Utilities/Vector3D.h"
 //#include "Utilities/Point3D.h"
@@ -15,7 +14,6 @@
 //#include "Lights/Light.h"
 //#include "Materials/Material.h"
 //#include "GeometricObjects/GeometricObject.h"
-
 
 //class AreaLight: public Light {
 //public:
@@ -28,7 +26,6 @@
 //    operator= (const AreaLight& rhs);
 
 //    virtual ~AreaLight(void);
-
 
 //    void set_object(GeometricObject* obj_ptr);
 
@@ -48,7 +45,6 @@
 //    Vector3D			wi;			     // unit direction from hit point being shaded to sample point on light surface
 //};
 
-
 //// --------------------------------------------------------------- set_object
 
 //inline void
@@ -58,4 +54,3 @@
 //}
 
 //#endif
-

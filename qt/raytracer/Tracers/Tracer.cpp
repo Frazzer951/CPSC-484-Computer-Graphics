@@ -6,14 +6,11 @@
 //	: world_ptr(NULL)
 //{}
 
-
 //// -------------------------------------------------------------------- constructor
 
 //Tracer::Tracer(World* _worldPtr)
 //	: world_ptr(_worldPtr)
 //{}
-
-
 
 //// -------------------------------------------------------------------- destructor
 
@@ -22,7 +19,6 @@
 //		world_ptr = NULL;
 //}
 
-
 //// -------------------------------------------------------------------- trace_ray
 
 //RGBColor
@@ -30,13 +26,9 @@
 //	return (black);
 //}
 
-
 //// -------------------------------------------------------------------- trace_ray
 
 //RGBColor
 //Tracer::trace_ray(const Ray, const int) const {
 //	return (black);
 //}
-
-
-

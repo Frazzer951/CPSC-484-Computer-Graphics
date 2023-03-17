@@ -6,7 +6,6 @@
 ////	This C++ code is licensed under the GNU General Public License Version 2.
 ////	See the file COPYING.txt for the full license.
 
-
 //// This file contains the definition of the class BeveledWedge
 
 //// The parameters are:
@@ -14,11 +13,10 @@
 ////					minimum and maximum y extents y0 and y1
 ////					minimum and maximum azimuth angle extents phi0 and phi1
 ////					bevel radius rb
-				
-//// There is no default constructor
-				
-//#include "GeometricObjects/CompoundObjects/Compound.h"
 
+//// There is no default constructor
+
+//#include "GeometricObjects/CompoundObjects/Compound.h"
 
 ////-------------------------------------------------------------------------------- class BeveledWedge
 

@@ -6,18 +6,15 @@
 ////	This C++ code is licensed under the GNU General Public License Version 2.
 ////	See the file COPYING.txt for the full license.
 
-
 //// This contains the declaration of the class Grid.
 //// The copy constructor, assignment operator, and destructor, are dummy functions.
 //// The reason is that a grid can contain an arbitrary number of objects, can therefore be of arbitrary size.
-
 
 //// There is no set_bounding_box function because the bounding box is constructed in the setup_cells
 //// function.
 
 //// This Grid class is also way too large. All the triangle and PLY file code should be placed in
 //// a separate class called TriangleMesh that inherits from Grid.
-
 
 //#include "Compound.h"
 //#include "Utilities/ShadeRec.h"
@@ -46,7 +43,6 @@
 
 //    virtual bool hit(const Ray& ray, double& tmin, ShadeRec& sr) const;
 //    virtual bool shadow_hit(const Ray& ray, double& tmin) const;
-
 
 //    void  setup_cells(void);
 //    void  reverse_mesh_normals(void);
@@ -79,12 +75,3 @@
 //}
 
 //#endif
-
-
-
-
-
-
-
-
-

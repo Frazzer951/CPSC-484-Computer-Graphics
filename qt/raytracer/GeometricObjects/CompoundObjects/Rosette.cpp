@@ -3,12 +3,10 @@
 ////	This C++ code is licensed under the GNU General Public License Version 2.
 ////	See the file COPYING.txt for the full license.
 
-
 //// This file contains the definition of the class Rosette
 
 //// There are two versions of the function construct_rosette: one for Figure 21.11(a) and one for
 //// Figure 21.17 (commented out)
-
 
 //#include "Rosette.h"
 //#include "BeveledWedge.h"
@@ -28,7 +26,6 @@
 //{
 //	construct_rosette();
 //}
-
 
 //// ------------------------------------------------------------------------------ constructor
 
@@ -50,7 +47,6 @@
 //	construct_rosette();
 //}
 
-	
 //// ------------------------------------------------------------------------------ copy constructor
 
 //Rosette::Rosette(const Rosette& r)
@@ -70,7 +66,6 @@
 //	return(new Rosette(*this));
 //}
 
-
 //// ------------------------------------------------------------------------------ assignment operator
 
 //Rosette&
@@ -79,7 +74,7 @@
 //		return (*this);
 
 //	Grid::operator= (rhs);
-	
+
 //	num_rings	= rhs.num_rings;
 //	hole_radius	= rhs.hole_radius;
 //	ring_width  = rhs.ring_width;
@@ -90,19 +85,17 @@
 //	return (*this) ;
 //}
 
-
 //// ------------------------------------------------------------------------------ destructor
- 
-//Rosette::~Rosette(void) {}
 
+//Rosette::~Rosette(void) {}
 
 //// ------------------------------------------------------------------------------ construct_rosette
 //// this function constructs the wedges in a rosette pattern and stores them in a grid
 //// this is the regular version, for Figure 21.11
- 
+
 //void
 //Rosette::construct_rosette(void) {
-	
+
 //	for (int k = 0; k < num_rings; k++) {
 //		for (int j = 0; j < num_wedges[k]; j++) {
 //			double angle_width = 360 / num_wedges[k];  // the azimuth angle extent of each wedge
@@ -110,23 +103,21 @@
 //			double r1 = hole_radius + (k + 1) * ring_width;
 //			double phi0 = j * angle_width;
 //			double phi1 = (j + 1) * angle_width;
-			
+
 //			BeveledWedge* wedge_ptr = new BeveledWedge(y0, y1, r0, r1, rb, phi0 , phi1);
 //			add_object(wedge_ptr);
 //		}
 //	}
 //}
 
-
-
 ///*
 
 //// ------------------------------------------------------------------------------ construct_rosette
 //// use this version to render Figure 21.17
- 
+
 //void
 //Rosette::construct_rosette(void) {
-	
+
 //	for (int k = 0; k < num_rings; k++) {
 //		for (int j = 0; j < num_wedges[k]; j++) {
 //			double angle_width = 360 / num_wedges[k];  // the azimuth angle extent of each wedge
@@ -135,18 +126,11 @@
 //			double angle_offset = 63 * k;
 //			double phi0 = j * angle_width + angle_offset;
 //			double phi1 = (j + 1) * angle_width + angle_offset;
-			
+
 //			BeveledWedge* wedge_ptr = new BeveledWedge(y0, y1, r0, r1, rb, phi0 , phi1);
 //			add_object(wedge_ptr);
 //		}
 //	}
 //}
 
-
 //*/
-
-
-
-											
-																
-

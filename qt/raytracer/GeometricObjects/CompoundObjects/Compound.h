@@ -6,44 +6,40 @@
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
-#include <vector> 
+#include <vector>
 
 #include "GeometricObjects/GeometricObject.h"
 
 //-------------------------------------------------------------------------------- class Compound
 
-class Compound: public GeometricObject {	
+class Compound : public GeometricObject {
 public:
-    Compound(void);
+  Compound( void );
 
-    virtual Compound* clone(void) const;
+  virtual Compound *clone( void ) const;
 
-    Compound(const Compound& c);
-    Compound&
-    operator= (const Compound& c);
+  Compound( const Compound &c );
+  Compound &operator=( const Compound &c );
 
-    ~Compound (void);
+  ~Compound( void );
 
-    virtual void  set_material(Material* material_ptr);
-    virtual void  add_object(GeometricObject* object_ptr);
+  virtual void set_material( Material *material_ptr );
+  virtual void add_object( GeometricObject *object_ptr );
 
-    int get_num_objects(void);
+  int get_num_objects( void );
 
-    virtual bool hit(const Ray& ray, double& tmin, ShadeRec& s) const;
-    virtual bool shadow_hit(const Ray& ray, double& tmin) const;
+  virtual bool hit( const Ray &ray, double &tmin, ShadeRec &s ) const;
+  virtual bool shadow_hit( const Ray &ray, double &tmin ) const;
 
 protected:
-    std::vector<GeometricObject*> objects;
+  std::vector<GeometricObject *> objects;
 
 private:
-    void  delete_objects(void);
-    void  copy_objects(const std::vector<GeometricObject*>& rhs_objects);
-
+  void delete_objects( void );
+  void copy_objects( const std::vector<GeometricObject *> &rhs_objects );
 };
 // ------------------------------------------------------------------------------- get_num_objects
 
-inline int
-Compound::get_num_objects(void) { return (objects.size()); }
+inline int Compound::get_num_objects( void ) { return ( objects.size() ); }
 
 #endif

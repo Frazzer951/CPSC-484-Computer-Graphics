@@ -6,32 +6,27 @@
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // SmoothMeshTriangle is a MeshTriangle that uses smooth shading with an interpolated normal at each hit point
 
 #include "MeshTriangle.h"
 
-class SmoothMeshTriangle: public MeshTriangle {		
+class SmoothMeshTriangle : public MeshTriangle {
 public:
-    SmoothMeshTriangle(void);
-    SmoothMeshTriangle(Mesh* _meshPtr, const int i0, const int i1, const int i2);
+  SmoothMeshTriangle( void );
+  SmoothMeshTriangle( Mesh *_meshPtr, const int i0, const int i1, const int i2 );
 
-    SmoothMeshTriangle(const SmoothMeshTriangle& fmt);
+  SmoothMeshTriangle( const SmoothMeshTriangle &fmt );
 
-    virtual SmoothMeshTriangle*  clone(void) const;
-    SmoothMeshTriangle&
-    operator= (const SmoothMeshTriangle& rhs);
+  virtual SmoothMeshTriangle *clone( void ) const;
+  SmoothMeshTriangle         &operator=( const SmoothMeshTriangle &rhs );
 
-    virtual ~SmoothMeshTriangle(void);
+  virtual ~SmoothMeshTriangle( void );
 
-
-    virtual	bool hit(const Ray& ray, double& tmin, ShadeRec& sr) const;
-    virtual bool shadow_hit(const Ray& ray, double& tmin) const;
-
+  virtual bool hit( const Ray &ray, double &tmin, ShadeRec &sr ) const;
+  virtual bool shadow_hit( const Ray &ray, double &tmin ) const;
 
 protected:
-    Normal interpolate_normal(const float beta, const float gamma) const;
+  Normal interpolate_normal( const float beta, const float gamma ) const;
 };
 
 #endif
-

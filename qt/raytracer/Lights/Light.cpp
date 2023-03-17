@@ -7,32 +7,21 @@ Light::Light() {}
 
 // ---------------------------------------------------------------------- dopy constructor
 
-Light::Light(const Light&) {}
-
+Light::Light( const Light & ) {}
 
 // ---------------------------------------------------------------------- assignment operator
 
-Light&
-Light::operator= (const Light& rhs) {
-    if (this == &rhs)
-        return (*this);
+Light &Light::operator=( const Light &rhs ) {
+  if ( this == &rhs ) return ( *this );
 
-    return (*this);
+  return ( *this );
 }
-
 
 // ---------------------------------------------------------------------- destructor
 
 Light::~Light() {}
 
-
-
 // ---------------------------------------------------------------------- L
 // returns the radiance
 
-RGBColor
-Light::L(ShadeRec&) {
-    return (black);
-}
-
-
+RGBColor Light::L( ShadeRec & ) { return ( black ); }

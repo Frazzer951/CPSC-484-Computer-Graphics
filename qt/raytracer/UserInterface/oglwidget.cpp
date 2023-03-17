@@ -1,23 +1,20 @@
 #include "oglwidget.h"
 
-OglWidget::OglWidget()
-: QOpenGLWidget(), context(nullptr), program(nullptr), shader(nullptr), texture(nullptr) { }
+OglWidget::OglWidget() : QOpenGLWidget(), context( nullptr ), program( nullptr ), shader( nullptr ), texture( nullptr ) {}
 
 OglWidget::~OglWidget() {
-    makeCurrent();
+  makeCurrent();
 
-    delete texture;
-    delete shader;
-    delete program;
+  delete texture;
+  delete shader;
+  delete program;
 
-    vbo.destroy();
-    vao.destroy();
-    doneCurrent();
+  vbo.destroy();
+  vao.destroy();
+  doneCurrent();
 }
 
-void OglWidget::initializeGL() {
-    initializeOpenGLFunctions();
-}
+void OglWidget::initializeGL() { initializeOpenGLFunctions(); }
 
 //        glClearColor(1, 0, 0, 1);
 
@@ -34,10 +31,10 @@ void OglWidget::initializeGL() {
 
 // void OglWidget::paintGL();
 
-void OglWidget::cleanup() { }
+void OglWidget::cleanup() {}
 //        makeCurrent();
 //        delete texture;
 //        texture = nullptr;
-    // ...
+// ...
 //        doneCurrent();
 //}

@@ -17,30 +17,26 @@
 #include "Utilities/ShadeRec.h"
 #include "Samplers/Sampler.h"
 
-
 class BRDF {
 public:
-    BRDF(void);
+  BRDF( void );
 
-    virtual BRDF* clone(void)const = 0;
+  virtual BRDF *clone( void ) const = 0;
 
-    BRDF(const BRDF& brdf);
-    BRDF&
-    operator= (const BRDF& rhs);
+  BRDF( const BRDF &brdf );
+  BRDF &operator=( const BRDF &rhs );
 
-    virtual ~BRDF(void);
+  virtual ~BRDF( void );
 
-    void set_sampler(Sampler* sPtr);
+  void set_sampler( Sampler *sPtr );
 
-    virtual RGBColor f(       const ShadeRec& sr, const Vector3D& wo, const Vector3D& wi) const;
-    virtual RGBColor sample_f(const ShadeRec& sr, const Vector3D& wo, Vector3D& wi) const;
-    virtual RGBColor sample_f(const ShadeRec& sr, const Vector3D& wo, Vector3D& wi, float& pdf) const;
-    virtual RGBColor rho(     const ShadeRec& sr, const Vector3D& wo) const;
+  virtual RGBColor f( const ShadeRec &sr, const Vector3D &wo, const Vector3D &wi ) const;
+  virtual RGBColor sample_f( const ShadeRec &sr, const Vector3D &wo, Vector3D &wi ) const;
+  virtual RGBColor sample_f( const ShadeRec &sr, const Vector3D &wo, Vector3D &wi, float &pdf ) const;
+  virtual RGBColor rho( const ShadeRec &sr, const Vector3D &wo ) const;
 
 protected:
-
-    Sampler* sampler_ptr;		// for indirect illumination
+  Sampler *sampler_ptr;    // for indirect illumination
 };
 
 #endif
-

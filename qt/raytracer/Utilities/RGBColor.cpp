@@ -7,13 +7,11 @@
 //	: r(0.0), g(0.0), b(0.0)
 //{}
 
-
 //// -------------------------------------------------------- constructor
 
 //RGBColor::RGBColor(float c)
 //	: r(c), g(c), b(c)
 //{}
-								
 
 //// -------------------------------------------------------- constructor
 
@@ -21,19 +19,16 @@
 //	: r(_r), g(_g), b(_b)
 //{}
 
-
 //// -------------------------------------------------------- copy constructor
 
 //RGBColor::RGBColor(const RGBColor& c)
 //	: r(c.r), g(c.g), b(c.b)
 //{}
-		
 
 //// -------------------------------------------------------- destructor
 
 //RGBColor::~RGBColor()
 //{}
-
 
 //// --------------------------------------------------------assignment operator
 
@@ -46,7 +41,6 @@
 
 //	return (*this);
 //}
- 
 
 //// -------------------------------------------------------- powc
 //// raise each component to the specified power
@@ -56,4 +50,3 @@
 //RGBColor::powc(float p) const {
 //	return (RGBColor(pow(r, p), pow(g, p), pow(b, p)));
 //}
-

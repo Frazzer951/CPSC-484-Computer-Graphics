@@ -3,7 +3,6 @@
 ////	This C++ code is licensed under the GNU General Public License Version 2.
 ////	See the file COPYING.txt for the full license.
 
-
 //#include "Whitted.h"
 //#include "World/World.h"
 //#include "Utilities/ShadeRec.h"
@@ -15,18 +14,15 @@
 //	: Tracer()
 //{}
 
-
 //// -------------------------------------------------------------------- constructor
-		
+
 //Whitted::Whitted(World* _worldPtr)
 //	: Tracer(_worldPtr)
 //{}
 
-
 //// -------------------------------------------------------------------- destructor
 
 //Whitted::~Whitted(void) {}
-
 
 //// -------------------------------------------------------------------- trace_ray
 
@@ -36,7 +32,7 @@
 //		return(black);
 //	else {
 //		ShadeRec sr(world_ptr->hit_objects(ray));
-					
+
 //		if (sr.hit_an_object) {
 //			sr.depth = depth;
 //			sr.ray = ray;

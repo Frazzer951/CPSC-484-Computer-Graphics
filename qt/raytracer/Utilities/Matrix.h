@@ -5,30 +5,24 @@
 // Matrix is a 4 x 4 square matrix that is used to represent affine transformations
 // we don't need a general m x n matrix
 
-
 //=====================================
 // Matrix
 //=====================================
 //
 struct Matrix {
-    Matrix(void);
+  Matrix( void );
 
-    Matrix(const Matrix& mat);
-    Matrix& operator= (const Matrix& rhs);
+  Matrix( const Matrix &mat );
+  Matrix &operator=( const Matrix &rhs );
 
-    ~Matrix ();
+  ~Matrix();
 
+  Matrix operator*( const Matrix &mat ) const;
+  Matrix operator/( const double d );
 
-    Matrix operator*(const Matrix& mat) const;
-    Matrix operator/(const double d);
+  void set_identity();
 
-    void set_identity();
-
-
-    double	m[4][4];
+  double m[4][4];
 };
 
-
 #endif
-
-

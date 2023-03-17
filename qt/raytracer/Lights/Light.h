@@ -7,22 +7,21 @@
 
 struct ShadeRec;
 
-
 //=====================================
 // Light
 //=====================================
 //
 class Light {
 public:
-    Light();
-    virtual ~Light();
+  Light();
+  virtual ~Light();
 
-    Light(const Light& ls);
-    Light& operator= (const Light& rhs);
-    virtual Light* clone() const = 0;
+  Light( const Light &ls );
+  Light         &operator=( const Light &rhs );
+  virtual Light *clone() const = 0;
 
-    virtual Vector3D get_direction(ShadeRec& sr) = 0;
-    virtual RGBColor L(ShadeRec& sr);
+  virtual Vector3D get_direction( ShadeRec &sr ) = 0;
+  virtual RGBColor L( ShadeRec &sr );
 };
 
 #endif

@@ -6,10 +6,8 @@
 ////	This C++ code is licensed under the GNU General Public License Version 2.
 ////	See the file COPYING.txt for the full license.
 
-
 //#include "BRDFs/Phong.h"
 //#include "BRDFs/PerfectSpecular.h"
-
 
 //class Reflective: public Phong {
 //public:
@@ -29,14 +27,12 @@
 //    void set_cr(const float r, const float g, const float b);
 //    void set_cr(const float c);
 
-
 //    virtual RGBColor shade(ShadeRec& s);
 //    virtual RGBColor area_light_shade(ShadeRec& sr);
 
 //private:
 //    PerfectSpecular* reflective_brdf;
 //};
-
 
 //// ---------------------------------------------------------------- set_kr
 

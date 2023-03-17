@@ -8,26 +8,25 @@
 #include <QOpenGLShader>
 #include <QOpenGLTexture>
 
-
 class OglWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 public:
-    OglWidget();
-    ~OglWidget();
+  OglWidget();
+  ~OglWidget();
 
-    void initializeGL();
-    // void paintGL();
-    void cleanup();
+  void initializeGL();
+  // void paintGL();
+  void cleanup();
 
 protected:
-    QOpenGLContext* context;
+  QOpenGLContext *context;
 
 private:
-    QOpenGLVertexArrayObject vao;
-    QOpenGLBuffer vbo;
+  QOpenGLVertexArrayObject vao;
+  QOpenGLBuffer            vbo;
 
-    QOpenGLShaderProgram* program;
-    QOpenGLShader* shader;
-    QOpenGLTexture* texture;
+  QOpenGLShaderProgram *program;
+  QOpenGLShader        *shader;
+  QOpenGLTexture       *texture;
 };
 
-#endif // OGLWIDGET_H
+#endif    // OGLWIDGET_H
