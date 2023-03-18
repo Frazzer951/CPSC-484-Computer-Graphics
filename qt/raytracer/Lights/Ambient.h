@@ -15,7 +15,7 @@ public:
   Ambient &operator=( const Ambient &rhs );
   virtual ~Ambient();
 
-  virtual Light *clone() const;
+  virtual Ambient *clone() const;
 
   void scale_radiance( const float b );
 
@@ -28,6 +28,8 @@ public:
   virtual RGBColor L( ShadeRec &s );
 
 private:
+  void copy( const Ambient &other );
+
   float    ls;
   RGBColor color;
 };

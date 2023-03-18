@@ -4,6 +4,8 @@
 
 QRandomGenerator gen;
 
+void set_rand_seed( int seed_val ) { return gen.seed( seed_val ); }
+
 int rand_int( void ) { return gen.bounded( INT_MAX ); }
 int rand_int( int high ) { return gen.bounded( high ); }
 int rand_int( int low, int high ) {

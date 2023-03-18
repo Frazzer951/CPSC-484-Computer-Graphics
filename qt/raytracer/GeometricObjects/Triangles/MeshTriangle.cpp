@@ -5,8 +5,9 @@
 
 // the copy constructor and assignment operator do not clone the mesh
 
-#include "Utilities/Constants.h"
 #include "MeshTriangle.h"
+
+#include "Utilities/Constants.h"
 #include "Utilities/Maths.h"
 
 // ----------------------------------------------------------------  default constructor
@@ -100,20 +101,20 @@ bool MeshTriangle::shadow_hit( const Ray &ray, double &tmin ) const {
   double e1   = d * m - b * n - c * p;
   double beta = e1 * inv_denom;
 
-  if ( beta < 0.0 ) return ( false );
+  if ( beta < 0.0 ) { return ( false ); }
 
-  double r = r = e * l - h * i;
+  double r     = e * l - h * i;
   double e2    = a * n + d * q + c * r;
   double gamma = e2 * inv_denom;
 
-  if ( gamma < 0.0 ) return ( false );
+  if ( gamma < 0.0 ) { return ( false ); }
 
-  if ( beta + gamma > 1.0 ) return ( false );
+  if ( beta + gamma > 1.0 ) { return ( false ); }
 
   double e3 = a * p - b * r + d * s;
   double t  = e3 * inv_denom;
 
-  if ( t < kEpsilon ) return ( false );
+  if ( t < kEpsilon ) { return ( false ); }
 
   tmin = t;
 

@@ -7,6 +7,9 @@
 //
 #include "Samplers/Sampler.h"
 
+const int VIEWPLANE_HRES = 500;
+const int VIEWPLANE_VRES = 500;
+
 struct ViewPlane {
   ViewPlane();
 
@@ -35,7 +38,8 @@ struct ViewPlane {
   float inv_gamma;            // the inverse of the gamma correction factor
   bool  show_out_of_gamut;    // display red if RGBColor out of gamut
 
-  static constexpr int max_depth = 10;    // based on code won't compile without this
+  static int  max_depth;
+  static void set_max_depth( int max );
 
   Sampler *sampler_ptr;    // ptr to current Sampler object
 };

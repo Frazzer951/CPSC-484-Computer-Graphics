@@ -32,6 +32,8 @@ public:
   virtual RGBColor area_light_shade( ShadeRec &sr );
 
 private:
+  void copy( const Matte &other );
+
   Lambertian *ambient_brdf;
   Lambertian *diffuse_brdf;
 };

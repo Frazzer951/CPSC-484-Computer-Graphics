@@ -17,11 +17,9 @@ AreaLighting::AreaLighting( void ) : Tracer() {}
 AreaLighting::AreaLighting( World *_worldPtr ) : Tracer( _worldPtr ) {}
 
 // -------------------------------------------------------------------- destructor
-
 AreaLighting::~AreaLighting( void ) {}
 
 // -------------------------------------------------------------------- trace_ray
-
 // The statement sr.ray = ray; is required for specular shading, computing the reflected and
 // transmitted ray directions, and for rendering single sided emissive materials with area lights
 

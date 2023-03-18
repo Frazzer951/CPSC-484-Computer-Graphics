@@ -1,32 +1,49 @@
-//#ifndef __EMISSIVE__H__
-//#define __EMISSIVE__H__
+#ifndef EMISSIVE_HXX
+#define EMISSIVE_HXX
 
-//#include "Utilities/RGBColor.h"
-//#include "Utilities/ShadeRec.h"
+#include "Material.h"
 
-//class Emissive: public Material {
-//public:
-//  Emissive(void);
+class Emissive : public Material {
+public:
+  Emissive( void );
+  Emissive( const Emissive &e );
+  Emissive         &operator=( const Emissive &rhs );
+  virtual Emissive *clone( void ) const;
+  virtual ~Emissive( void );
 
-//  virtual Emissive* clone() = 0;
+  void             scale_radiance( const float _ls );
+  void             set_ce( const RGBColor &c );
+  void             set_ce( const float r, const float g, const float b );
+  void             set_ce( const float c );
+  virtual RGBColor get_Le( ShadeRec &sr ) const;
+  virtual RGBColor shade( ShadeRec &sr );
+  virtual RGBColor area_light_shade( ShadeRec &sr );
 
-//  Emissive(const Emissive& other);
-//  Emissive& operator=(const Emissive& other);
+private:
+  void copy( const Emissive &other );
 
-//  virtual ~Emissive();
+  float    ls;    // radiance scaling factor
+  RGBColor ce;    // color
+};
 
-//  void scale_radiance(const float _ls);
-//  void set_ce(const float r, const float g, const float b);
+inline void Emissive::scale_radiance( const float _ls ) { ls = _ls; }
 
-//  virtual RGBColor get_Le(ShadeRec& sr) const;
-//  virtual RGBColor shade(ShadeRec& sr);
-//  virtual RGBColor area_light_shade(ShadeRec& sr);
+inline void Emissive::set_ce( const RGBColor &c ) {
+  ce.r = c.r;
+  ce.g = c.g;
+  ce.b = c.b;
+}
 
-//private:
-//  void copy(const Emissive& other);
+inline void Emissive::set_ce( const float r, const float g, const float b ) {
+  ce.r = r;
+  ce.g = g;
+  ce.b = b;
+}
 
-//  float ls;
-//  RGBColor ce;
-//};
+inline void Emissive::set_ce( const float c ) {
+  ce.r = c;
+  ce.g = c;
+  ce.b = c;
+}
 
-//#endif
+#endif    // EMISSIVE_HXX

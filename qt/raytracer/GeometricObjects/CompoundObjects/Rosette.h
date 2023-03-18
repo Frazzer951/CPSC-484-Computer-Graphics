@@ -46,11 +46,11 @@
 //    void  construct_rosette(void);
 
 //private:
-//    double		num_rings;		// maximum of 6
-//    double		hole_radius;
-//    double		ring_width;
-//    double		rb;				// bevel radius
-//    double		y0, y1;			// y axis extents
+//    double	num_rings;		// maximum of 6
+//    double	hole_radius;
+//    double	ring_width;
+//    double	rb;				// bevel radius
+//    double	y0, y1;			// y axis extents
 
 //    static const int num_wedges[6];  // number of wedges in each ring
 //};

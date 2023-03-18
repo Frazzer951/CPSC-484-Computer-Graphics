@@ -37,6 +37,9 @@ public:
   std::vector<std::vector<int>> vertex_faces;     // the triangles shared by each vertex
   int                           num_vertices;     // number of vertices
   int                           num_triangles;    // number of triangles
+
+private:
+  void copy( const Mesh &other );
 };
 
 #endif

@@ -10,12 +10,12 @@
 // ----------------------------------------------------------------  default constructor
 
 SmoothTriangle::SmoothTriangle( void ) :
-    GeometricObject(), v0( 0.0 ), v1( 0, 0, 1 ), v2( 1, 0, 0 ), n0( 0, 1, 0 ), n1( 0, 1, 0 ), n2( 0, 1, 0 ) {}
+    GeometricObject(), n0( 0, 1, 0 ), n1( 0, 1, 0 ), n2( 0, 1, 0 ), v0( 0.0 ), v1( 0, 0, 1 ), v2( 1, 0, 0 ) {}
 
 // ---------------------------------------------------------------- constructor
 
 SmoothTriangle::SmoothTriangle( const Point3D &a, const Point3D &b, const Point3D &c ) :
-    GeometricObject(), v0( a ), v1( b ), v2( c ), n0( 0, 1, 0 ), n1( 0, 1, 0 ), n2( 0, 1, 0 ) {}
+    GeometricObject(), n0( 0, 1, 0 ), n1( 0, 1, 0 ), n2( 0, 1, 0 ), v0( a ), v1( b ), v2( c ) {}
 
 // ---------------------------------------------------------------- clone
 
@@ -24,19 +24,19 @@ SmoothTriangle *SmoothTriangle::clone( void ) const { return ( new SmoothTriangl
 // ---------------------------------------------------------------- copy constructor
 
 SmoothTriangle::SmoothTriangle( const SmoothTriangle &st ) :
-    GeometricObject( st ), v0( st.v1 ), v1( st.v1 ), v2( st.v2 ), n0( st.n0 ), n1( st.n1 ), n2( st.n2 ) {}
+    GeometricObject( st ), n0( st.n0 ), n1( st.n1 ), n2( st.n2 ), v0( st.v1 ), v1( st.v1 ), v2( st.v2 ) {}
 
 // ---------------------------------------------------------------- assignment operator
 
 SmoothTriangle &SmoothTriangle::operator=( const SmoothTriangle &rhs ) {
   if ( this == &rhs ) return ( *this );
 
-  v0 = rhs.v0;
-  v1 = rhs.v1;
-  v2 = rhs.v2;
   n0 = rhs.n0;
   n1 = rhs.n1;
   n2 = rhs.n2;
+  v0 = rhs.v0;
+  v1 = rhs.v1;
+  v2 = rhs.v2;
 
   return ( *this );
 }

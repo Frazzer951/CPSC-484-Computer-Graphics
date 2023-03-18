@@ -1,5 +1,7 @@
 #include "Checker3D.h"
 
+#include "Checker3D.h"
+
 Checker3D::Checker3D( void ) : Texture(), size( 1.0 ), color1( 1.0 ), color2( 0.0 ) {}
 
 Checker3D::Checker3D( const Checker3D &other ) : Checker3D() { copy( other ); }

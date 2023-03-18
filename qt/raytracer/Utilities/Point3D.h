@@ -10,7 +10,6 @@
 //=====================================
 #include "Matrix.h"
 #include "Vector3D.h"
-#include <iostream>
 
 struct Point3D {
 public:
@@ -34,10 +33,6 @@ public:
 
   double d_squared( const Point3D &p ) const;
   double distance( const Point3D &p ) const;
-
-  friend std::ostream &operator<<( std::ostream &os, const Point3D &pt ) {
-    return os << "Point3D(" << pt.x << "," << pt.y << "," << pt.z << ")";
-  }
 };
 
 // inlined member functions

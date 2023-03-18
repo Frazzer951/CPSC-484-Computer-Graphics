@@ -8,13 +8,34 @@
 
 // ---------------------------------------------------------------------- default constructor
 
-GlossySpecular::GlossySpecular( void ) : ks( 0.0 ), cs( 1.0 ), sampler( NULL ) {}
+GlossySpecular::GlossySpecular( void ) : BRDF(), ks( 0.0 ), cs( 1.0 ), sampler( NULL ) {}
+
 // ---------------------------------------------------------------------- destructor
+GlossySpecular::GlossySpecular( const GlossySpecular &other ) : GlossySpecular() { copy( other ); }
 
-GlossySpecular::~GlossySpecular( void ) {}
+GlossySpecular &GlossySpecular::operator=( const GlossySpecular &other ) {
+  if ( this != &other ) { copy( other ); }
+  return ( *this );
+}
+
+void GlossySpecular::copy( const GlossySpecular &other ) {
+  BRDF::operator=( other );
+
+  ks  = other.ks;
+  cs  = other.cs;
+  exp = other.exp;
+
+  Sampler *psamp = other.sampler;
+  sampler        = psamp ? psamp->clone() : NULL;
+}
+
+GlossySpecular::~GlossySpecular( void ) {
+  if ( sampler ) { delete sampler; }
+}
+
 // ---------------------------------------------------------------------- clone
-
 GlossySpecular *GlossySpecular::clone( void ) const { return ( new GlossySpecular( *this ) ); }
+
 // ---------------------------------------------------------------------- set_sampler
 // this allows any type of sampling to be specified in the build functions
 

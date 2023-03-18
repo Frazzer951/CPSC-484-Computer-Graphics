@@ -15,7 +15,6 @@ OglWidget::~OglWidget() {
 }
 
 void OglWidget::initializeGL() { initializeOpenGLFunctions(); }
-
 //        glClearColor(1, 0, 0, 1);
 
 //        vao.create();

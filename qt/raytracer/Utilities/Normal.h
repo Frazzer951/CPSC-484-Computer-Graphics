@@ -15,10 +15,10 @@ struct Normal {
   Normal( double a );
   Normal( double _x, double _y, double _z );
 
-  Normal( const Normal &n );
+  Normal( const Normal &other );
   Normal( const Vector3D &v );
 
-  Normal &operator=( const Normal &n );
+  Normal &operator=( const Normal &other );
   Normal &operator=( const Vector3D &v );
   Normal &operator=( const Point3D &p );
   ~Normal();
@@ -41,6 +41,9 @@ struct Normal {
   void          normalize();
 
   double x, y, z;
+
+private:
+  void copy( const Normal &other );
 };
 
 #endif

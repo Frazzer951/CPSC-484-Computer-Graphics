@@ -18,24 +18,26 @@ BBox::BBox( double _x0, double _x1, double _y0, double _y1, double _z0, double _
 BBox::BBox( const Point3D p0, const Point3D p1 ) : x0( p0.x ), x1( p1.x ), y0( p0.y ), y1( p1.y ), z0( p0.z ), z1( p1.z ) {}
 // --------------------------------------------------------------------- copy constructor
 
-BBox::BBox( const BBox &bbox ) : x0( bbox.x0 ), x1( bbox.x1 ), y0( bbox.y0 ), y1( bbox.y1 ), z0( bbox.z0 ), z1( bbox.z1 ) {}
+BBox::BBox( const BBox &other ) : BBox() { copy( other ); }
 // --------------------------------------------------------------------- assignment operator
 
-BBox &BBox::operator=( const BBox &rhs ) {
-  if ( this == &rhs ) return ( *this );
-
-  x0 = rhs.x0;
-  x1 = rhs.x1;
-  y0 = rhs.y0;
-  y1 = rhs.y1;
-  z0 = rhs.z0;
-  z1 = rhs.z1;
-
+BBox &BBox::operator=( const BBox &other ) {
+  if ( this != &other ) { copy( other ); }
   return ( *this );
+}
+
+void BBox::copy( const BBox &other ) {
+  x0 = other.x0;
+  x1 = other.x1;
+  y0 = other.y0;
+  y1 = other.y1;
+  z0 = other.z0;
+  z1 = other.z1;
 }
 // --------------------------------------------------------------------- destructor
 
 BBox::~BBox( void ) {}
+
 // --------------------------------------------------------------------- hit
 
 bool BBox::hit( const Ray &ray ) const {

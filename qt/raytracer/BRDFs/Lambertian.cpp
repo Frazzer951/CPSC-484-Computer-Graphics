@@ -7,26 +7,30 @@
 #include "Utilities/Constants.h"
 
 // ---------------------------------------------------------------------- default constructor
-
 Lambertian::Lambertian( void ) : BRDF(), kd( 0.0 ), cd( 0.0 ) {}
+
 // ---------------------------------------------------------------------- copy constructor
-Lambertian::Lambertian( const Lambertian &lamb ) : BRDF( lamb ), kd( lamb.kd ), cd( lamb.cd ) {}
+Lambertian::Lambertian( const Lambertian &other ) : Lambertian() { copy( other ); }
+
 // ---------------------------------------------------------------------- assignment operator
-Lambertian &Lambertian::operator=( const Lambertian &rhs ) {
-  if ( this == &rhs ) return ( *this );
-  BRDF::operator=( rhs );
-
-  kd = rhs.kd;
-  cd = rhs.cd;
-
+Lambertian &Lambertian::operator=( const Lambertian &other ) {
+  if ( this == &other ) { copy( other ); }
   return ( *this );
 }
-// ---------------------------------------------------------------------- destructor
 
+void Lambertian::copy( const Lambertian &other ) {
+  BRDF::operator=( other );
+
+  kd = other.kd;
+  cd = other.cd;
+}
+
+// ---------------------------------------------------------------------- destructor
 Lambertian::~Lambertian( void ) {}
 // ---------------------------------------------------------------------- clone
 
 Lambertian *Lambertian::clone( void ) const { return ( new Lambertian( *this ) ); }
+
 // ---------------------------------------------------------------------- f
 // there is no sampling here
 

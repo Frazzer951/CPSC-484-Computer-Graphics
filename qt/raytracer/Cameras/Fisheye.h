@@ -1,37 +1,33 @@
-#ifndef __FISHEYE__
-#define __FISHEYE__
+#ifndef FISHEYE_H
+#define FISHEYE_H
 
-// 	Copyright (C) Kevin Suffern 2000-2007.
-//	This C++ code is for non-commercial purposes only.
-//	This C++ code is licensed under the GNU General Public License Version 2.
-//	See the file COPYING.txt for the full license.
-
+#include "Camera.h"
 #include "Utilities/Point2D.h"
-#include "World/World.h"    // we can #include "World.h" here
 
 class Fisheye : public Camera {
 public:
-  Fisheye();
-  //  Fisheye(const Pinhole& ph);
-  //  virtual Camera* clone(void) const;
-  //  Fisheye&
-  //  operator= (const Pinhole& rhs);
-  //  virtual ~Fisheye();
+  Fisheye( void );
+  Fisheye( const Fisheye &other );
+  Fisheye         &operator=( const Fisheye &other );
+  virtual Fisheye *clone( void ) const;
+  virtual ~Fisheye();
 
-  void set_view_distance( const float vpd );
-  void set_zoom( const float zoom_factor );
+  Vector3D     ray_direction( const Point2D &pp, const int hres, const int vres, const float s, float &r_squared );
+  //    virtual void render_scene(const World& w);
+  virtual void render_scene( const World &w, float x = 0.0, int offset = 0 );
 
-  //  Vector3D get_direction(const Point2D& p) const;
-  virtual void render_scene( const World &w );
+  void set_fov( float psi );
+  void set_rectangular( bool r );
 
 private:
-  float d;       // view plane distance
-  float zoom;    // zoom factor
+  void copy( const Fisheye &other );
+
+  float psi_max;        // in degrees
+  bool  rectangular;    // render corners or not
 };
 
-//-------------------------------------------------------------------------- set_vpd
-inline void Fisheye::set_view_distance( float _d ) { d = _d; }
-//-------------------------------------------------------------------------- set_zoom
-inline void Fisheye::set_zoom( float zoom_factor ) { zoom = zoom_factor; }
+inline void Fisheye::set_fov( float psi ) { psi_max = 0.5 * psi; }
 
-#endif
+inline void Fisheye::set_rectangular( bool r ) { rectangular = r; }
+
+#endif    // FISHEYE_H

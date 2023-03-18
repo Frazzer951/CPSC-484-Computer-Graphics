@@ -43,6 +43,19 @@ public:
   void set_camera( Camera *c_ptr ) { camera_ptr = c_ptr; }
 
   void build();
+  void check() {
+    if ( camera_ptr == nullptr ) {
+      qDebug( "World doesn't have a camera\n" );
+      throw new std::logic_error( "World doesn't have a camera\n" );
+    }
+    if ( tracer_ptr == nullptr ) {
+      qDebug( "World doesn't have a ray tracer\n" );
+      throw new std::logic_error( "World doesn't have a ray tracer\n" );
+    }
+    if ( ambient_ptr == nullptr ) { qDebug( "World has no ambient light...\n" ); }
+    if ( lights.empty() ) { qDebug( "World has no lights...\n" ); }
+    if ( objects.empty() ) { qDebug( "World has no objects to display...\n" ); }
+  }
   void render_scene() const;
   void render_perspective() const;
 
@@ -51,33 +64,18 @@ public:
 
   void     display_pixel( const int row, const int column, const RGBColor &pixel_color ) const;
   ShadeRec hit_objects( const Ray &ray );
-  // next function ONLY in chapter 3:  bare-bones ray tracing
-  //    ShadeRec hit_bare_bones_objects(const Ray& ray);
 
-  //private:
-  void delete_objects();
-  void delete_lights();
-  void add_sphere_helper( RGBColor color, Point3D pt, double radius );
-  void add_bb_helper( RGBColor color, Point3D pt1, Point3D pt2, double r = 0.1 );
-  void add_bb_helper( RGBColor color, Point3D pt1, double dx = 1, double dy = 1, double dz = 1, double r = 0.1 );
-  void add_rect_helper( RGBColor color, Point3D pt, Vector3D pt1, Vector3D pt2, Normal n );
-  void add_triangle_helper( RGBColor color, Point3D pt0, Point3D pt1, Point3D pt2 );
+  ShadeRec hit_bare_bones_objects( const Ray &ray );    // chapter 3 only
 
-  void build_spheres( void );
-  //    void init_cameras();
-  void init_cameras( Point3D eye, Point3D lookat, double view_distance, Point3D up );
   void init_viewplane( void );
-  void init_light( void );
+  void init_ambient_light( double radiance = 0.2 );
   void init_plane( void );
-  void init_environment( Point3D eye = Point3D( -0.5, 0, 70 ), Point3D lookat = Point3D( -0.5, 0, 10 ),
-                         double view_distance = 800.0, Point3D up = Point3D( 0, 1, 0 ) );
 
   void set_material( GeometricObject *geo, RGBColor color );
 
-  void checkerboard_row( RGBColor color1, RGBColor color2, int y, int xmin, int xmax, int z );
-  void build_checkerboard( RGBColor c1, RGBColor c2, int xmin = -10, int ymin = -10, int xmax = 10, int ymax = 10, int z = 0 );
-  void build_practical();
-  void build_city( void );
+private:
+  void delete_objects();
+  void delete_lights();
 
 public:
   ViewPlane vp;

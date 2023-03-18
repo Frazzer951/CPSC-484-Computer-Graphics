@@ -4,6 +4,8 @@
 // replaces rand_int(), rand_float(), and rand_double()
 //   with QRandomGenerator
 
+void set_rand_seed( int seed_val );
+
 int rand_int( void );
 int rand_int( int low, int high );
 

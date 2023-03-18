@@ -1,40 +1,34 @@
-//#include "Emissive.h"
-//#include "Utilities/RGBColor.h"
+#include "Emissive.h"
+#include "Matte.h"
 
-//RGBColor black(0, 0, 0);
-//RGBColor white(255, 255, 255);
+Emissive::Emissive( void ) : Material(), ls( 1.0 ), ce( 1.0 ) {}
 
-//Emissive::Emissive(void)
-//: ls(1), ce(white) { }
+Emissive::Emissive( const Emissive &other ) : Emissive() { copy( other ); }
 
-//Emissive*
-//Emissive::clone(void) const {
-//    return (new Emissive(*this));
-//}
+Emissive &Emissive::operator=( const Emissive &other ) {
+  if ( this != &other ) { copy( other ); }
+  return *this;
+}
 
-//Emissive::Emissive(const Emissive& o) { copy(o); }
-//Emissive& Emissive::operator=(const Emissive& o) {
-//  if (this != &o) { copy(o); }
-//  return *this;
-//}
+void Emissive::copy( const Emissive &other ) {
+  Material::operator=( other );
 
-//Emissive::~Emissive() { }
+  ls = other.ls;
+  ce = other.ce;
+}
 
-//void Emissive::scale_radiance(const float _ls) { ls = _ls; }
+Emissive *Emissive::clone( void ) const { return new Emissive( *this ); }
 
-//void Emissive::set_ce(const float r, const float g, const float b) {
-//  ce = RGBColor(r, g, b);
-//}
+Emissive::~Emissive( void ) {}
 
-//RGBColor Emissive::get_Le(ShadeRec& ) const { return black; }
+RGBColor Emissive::get_Le( ShadeRec & /*sr*/ ) const { return ls * ce; }
 
-//RGBColor Emissive::shade(ShadeRec& ) { return black; }
-
-//RGBColor Emissive::area_light_shade(ShadeRec& sr) {
-//  if (-sr.normal.dot(sr.ray.d) > 0.0) { return ls * ce;
-//  } else {
-//    return black;
-//  }
-//}
-
-//void Emissive::copy(const Emissive& o) {  ls = o.ls; ce = o.ce; }
+RGBColor Emissive::shade( ShadeRec &sr ) { return sr.color; }
+#include <QDebug>
+RGBColor Emissive::area_light_shade( ShadeRec &sr ) {
+  //qDebug() << "Emissive::area_light_shade";
+  if ( -sr.normal.dot( sr.ray.d ) > 0.0 )
+    return ls * ce;
+  else
+    return black;
+}

@@ -2,27 +2,29 @@
 
 // ---------------------------------------------------------------------- default constructor
 
-Ambient::Ambient() : Light(), ls( 1.0 ), color( 1.0 ) {}
+Ambient::Ambient() : Light(), ls( 1.0 ), color( 1.0 ) { set_shadows( cast_shadows() ); }
 // ---------------------------------------------------------------------- copy constructor
 
-Ambient::Ambient( const Ambient &a ) : Light( a ), ls( a.ls ), color( a.color ) {}
+Ambient::Ambient( const Ambient &other ) : Ambient() { copy( other ); }
+
 // ---------------------------------------------------------------------- clone
-
-Light *Ambient::clone() const { return ( new Ambient( *this ) ); }
-// ---------------------------------------------------------------------- assignment operator
-
-Ambient &Ambient::operator=( const Ambient &rhs ) {
-  if ( this == &rhs ) { return ( *this ); }
-  Light::operator=( rhs );
-
-  ls    = rhs.ls;
-  color = rhs.color;
-
+Ambient &Ambient::operator=( const Ambient &other ) {
+  if ( this != &other ) { copy( other ); }
   return ( *this );
 }
-// ---------------------------------------------------------------------- destructor
 
+void Ambient::copy( const Ambient &other ) {
+  Ambient::operator=( other );
+
+  ls    = other.ls;
+  color = other.color;
+  set_shadows( cast_shadows() );
+}
+
+// ---------------------------------------------------------------------- destructor
 Ambient::~Ambient() {}
+
+Ambient *Ambient::clone() const { return ( new Ambient( *this ) ); }
 
 void Ambient::scale_radiance( const float b ) { ls = b; }
 

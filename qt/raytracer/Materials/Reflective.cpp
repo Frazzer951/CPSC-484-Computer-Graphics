@@ -1,77 +1,63 @@
-//// 	Copyright (C) Kevin Suffern 2000-2007.
-////	This C++ code is for non-commercial purposes only.
-////	This C++ code is licensed under the GNU General Public License Version 2.
-////	See the file COPYING.txt for the full license.
+// 	Copyright (C) Kevin Suffern 2000-2007.
+//	This C++ code is for non-commercial purposes only.
+//	This C++ code is licensed under the GNU General Public License Version 2.
+//	See the file COPYING.txt for the full license.
 
-//#include "Reflective.h"
+#include "Reflective.h"
+#include "Phong.h"
 
-//// ---------------------------------------------------------------- default constructor
+// ---------------------------------------------------------------- default constructor
+Reflective::Reflective( void ) : Phong(), reflective_brdf( new PerfectSpecular ) {}
 
-//Reflective::Reflective (void)
-//	:	Phong(),
-//		reflective_brdf(new PerfectSpecular)
-//{}
+// ---------------------------------------------------------------- copy constructor
+Reflective::Reflective( const Reflective &other ) : Reflective() { copy( other ); }
 
-//// ---------------------------------------------------------------- copy constructor
+// ---------------------------------------------------------------- assignment operator
+Reflective &Reflective::operator=( const Reflective &other ) {
+  if ( this != &other ) { copy( other ); }
+  return ( *this );
+}
 
-//Reflective::Reflective(const Reflective& rm)
-//	: 	Phong(rm) {
+// ---------------------------------------------------------------- assignment operator
+void Reflective::copy( const Reflective &other ) {
+  Phong::operator=( other );
 
-//	if(rm.reflective_brdf)
-//		reflective_brdf = rm.reflective_brdf->clone();
-//	else
-//		reflective_brdf = NULL;
-//}
+  PerfectSpecular const *p = other.reflective_brdf;
+  reflective_brdf          = p ? p->clone() : NULL;
+}
 
-//// ---------------------------------------------------------------- assignment operator
+// ---------------------------------------------------------------- clone
+Reflective *Reflective::clone( void ) const { return ( new Reflective( *this ) ); }
 
-//Reflective&
-//Reflective::operator= (const Reflective& rhs) {
-//	if (this == &rhs)
-//		return (*this);
+// ---------------------------------------------------------------- destructor
+Reflective::~Reflective( void ) {
+  if ( reflective_brdf ) { delete reflective_brdf; }
+}
 
-//	Phong::operator=(rhs);
+// ------------------------------------------------------------------------------------ shade
+RGBColor Reflective::shade( ShadeRec &sr ) {
+  RGBColor L( Phong::shade( sr ) );    // Direct illumination
 
-//	if (reflective_brdf) {
-//		delete reflective_brdf;
-//		reflective_brdf = NULL;
-//	}
+  Vector3D wo = -sr.ray.d;
+  Vector3D wi;
+  RGBColor fr = reflective_brdf->sample_f( sr, wo, wi );
+  Ray      reflected_ray( sr.hit_point, wi );
 
-//	if (rhs.reflective_brdf)
-//		reflective_brdf = rhs.reflective_brdf->clone();
+  L += fr * sr.w.tracer_ptr->trace_ray( reflected_ray, sr.depth + 1 ) * ( sr.normal.dot( wi ) );
 
-//	return (*this);
-//}
+  return ( L );
+}
 
-//// ---------------------------------------------------------------- clone
+RGBColor Reflective::area_light_shade( ShadeRec &sr ) {
+  //qDebug() << "Reflective::area_light_shade";
+  RGBColor L( Phong::shade( sr ) );    // Direct illumination
 
-//Reflective*
-//Reflective::clone(void) const {
-//	return (new Reflective(*this));
-//}
+  Vector3D wo = -sr.ray.d;
+  Vector3D wi;
+  RGBColor fr = reflective_brdf->sample_f( sr, wo, wi );
+  Ray      reflected_ray( sr.hit_point, wi );
 
-//// ---------------------------------------------------------------- destructor
+  L += fr * sr.w.tracer_ptr->trace_ray( reflected_ray, sr.depth + 1 ) * ( sr.normal.dot( wi ) );
 
-//Reflective::~Reflective(void) {
-//	if (reflective_brdf) {
-//		delete reflective_brdf;
-//		reflective_brdf = NULL;
-//	}
-//}
-
-//// ------------------------------------------------------------------------------------ shade
-
-//RGBColor
-//Reflective::shade(ShadeRec& sr) {
-//	RGBColor L(Phong::shade(sr));  // direct illumination
-
-//	Vector3D wo = -sr.ray.d;
-//	Vector3D wi;
-//	RGBColor fr = reflective_brdf->sample_f(sr, wo, wi);
-//	Ray reflected_ray(sr.hit_point, wi);
-//	reflected_ray.depth = sr.depth + 1;
-
-//	L += fr * sr.w.tracer_ptr->trace_ray(reflected_ray, sr.depth + 1) * (sr.normal * wi);
-
-//	return (L);
-//}
+  return L;
+}

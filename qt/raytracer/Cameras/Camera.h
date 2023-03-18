@@ -5,8 +5,19 @@
 
 #include "Utilities/Point3D.h"
 #include "Utilities/Vector3D.h"
+#include "Utilities/RGBColor.h"
+#include "Utilities/Constants.h"
 
 struct World;    // can't #include "World" here because World contains a camera pointer
+
+//struct RowColPixel {
+//    RowColPixel() : RowColPixel(0, 0, black) { }
+//    RowColPixel(int row, int col, const RGBColor& color)
+//        : r(row), c(col), L(color) { }
+//    int r;
+//    int c;
+//    RGBColor L;
+//};
 
 //=====================================
 // Camera
@@ -21,11 +32,13 @@ protected:
   Camera &operator=( const Camera &camera );
 
 public:
-  virtual ~Camera() {}
+  virtual ~Camera();
 
   virtual Camera *clone() const = 0;
 
-  virtual void render_scene( const World &w ) = 0;
+  //    virtual void render_scene(const World& w) = 0;
+  virtual void render_scene( const World &w, float x, int offset ) = 0;
+  virtual void render_stereo( const World &w, float x, int offset ) { render_scene( w, x, offset ); }
 
   void set_eye( const Point3D &p ) { eye = p; }
   void set_eye( const float x, const float y, const float z ) {
@@ -47,13 +60,15 @@ public:
     up.y = y;
     up.z = z;
   }
-  Vector3D get_up_vector() const { return up; }
 
   void set_roll( const float r ) { ra = r; }
 
   void set_exposure_time( const float exposure ) { exposure_time = exposure; }
 
   void compute_uvw();
+
+private:
+  void copy( const Camera &other );
 
 protected:
   Point3D  eye;        // eye point

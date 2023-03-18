@@ -3,6 +3,8 @@
 
 class Material;
 
+#include <memory>
+
 #include "Utilities/BBox.h"
 #include "Utilities/Constants.h"
 #include "Utilities/RGBColor.h"
@@ -29,10 +31,11 @@ public:
   virtual bool hit( const Ray &ray, double &t, ShadeRec &s ) const = 0;
   virtual bool shadow_hit( const Ray &ray, double &tmin ) const    = 0;
 
-  virtual void                           // This needs to be virtual so that it can be overridden in Compound
-      set_material( Material *mPtr );    // It therefore shouldn't be inlined
+  virtual void                                           // This needs to be virtual so that it can be overridden in Compound
+      set_material( std::shared_ptr<Material> mPtr );    // It therefore shouldn't be inlined
+  //    set_material(Material* mPtr); 			// It therefore shouldn't be inlined
 
-  Material *get_material( void ) const;
+  std::shared_ptr<Material> get_material( void ) const;
 
   // The following three functions are only required for Chapter 3
   void set_color( const RGBColor &c );
@@ -55,9 +58,9 @@ public:
   virtual Normal get_normal( const Point3D &p );
 
 protected:
-  mutable Material *material_ptr;    // mutable allows the const functions Compound::hit,
-                                     //     Instance::hit, and RegularGrid::hit to assign to material_ptr
-  RGBColor          color;           // only used for Bare Bones ray tracing
+  mutable std::shared_ptr<Material> material_ptr;    // mutable allows the const functions Compound::hit,
+                                                     //     Instance::hit, and RegularGrid::hit to assign to material_ptr
+  RGBColor                          color;           // only used for Bare Bones ray tracing
 
   GeometricObject &operator=( const GeometricObject &rhs );
 

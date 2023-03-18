@@ -4,24 +4,28 @@
 
 Camera::Camera() :
     eye( 0, 0, 500 ), lookat( 0 ), ra( 0 ), u( 1, 0, 0 ), v( 0, 1, 0 ), w( 0, 0, 1 ), up( 0, 1, 0 ), exposure_time( 1.0 ) {}
+
 // ----------------------------------------------------------------- copy constructor
-Camera::Camera( const Camera &c ) :
-    eye( c.eye ), lookat( c.lookat ), ra( c.ra ), u( c.u ), v( c.v ), w( c.w ), up( c.up ), exposure_time( c.exposure_time ) {}
-// ----------------------------------------------------------------- assignment operator
-Camera &Camera::operator=( const Camera &rhs ) {
-  if ( this == &rhs ) return ( *this );
+Camera::Camera( const Camera &other ) : Camera() { copy( other ); }
 
-  eye           = rhs.eye;
-  lookat        = rhs.lookat;
-  ra            = rhs.ra;
-  u             = rhs.u;
-  v             = rhs.v;
-  w             = rhs.w;
-  up            = rhs.up;
-  exposure_time = rhs.exposure_time;
-
+Camera &Camera::operator=( const Camera &other ) {
+  if ( this != &other ) { copy( other ); }
   return ( *this );
 }
+
+void Camera::copy( const Camera &other ) {
+  eye           = other.eye;
+  lookat        = other.lookat;
+  ra            = other.ra;
+  u             = other.u;
+  v             = other.v;
+  w             = other.w;
+  up            = other.up;
+  exposure_time = other.exposure_time;
+}
+
+Camera::~Camera() {}
+
 //-------------------------------------------------------------- compute_uvw
 // This computes an orthornormal basis given the view point, lookat point, and up vector
 void Camera::compute_uvw( void ) {

@@ -1,37 +1,43 @@
-#ifndef __THINLENS__
-#define __THINLENS__
+#ifndef THINLENS_H
+#define THINLENS_H
 
-// 	Copyright (C) Kevin Suffern 2000-2007.
-//	This C++ code is for non-commercial purposes only.
-//	This C++ code is licensed under the GNU General Public License Version 2.
-//	See the file COPYING.txt for the full license.
-
-#include "Utilities/Point2D.h"
-#include "World/World.h"    // we can #include "World.h" here
+#include "Camera.h"
+#include "Samplers/Sampler.h"
 
 class ThinLens : public Camera {
 public:
-  ThinLens();
-  //  ThinLens(const Pinhole& ph);
-  //  virtual Camera* clone(void) const;
-  //  ThinLens&
-  //  operator= (const Pinhole& rhs);
-  //  virtual ~ThinLens();
+  ThinLens( void );
+  ThinLens( const ThinLens &other );
+  virtual ThinLens *clone( void ) const;
+  ThinLens         &operator=( const ThinLens &other );
+  virtual ~ThinLens( void );
 
-  void set_view_distance( const float vpd );
-  void set_zoom( const float zoom_factor );
+  void set_lens_radius( float lr );
+  void set_view_distance( float new_d );
+  void set_focal_distance( float new_f );
+  void set_zoom( float z );
+  void set_sampler( Sampler *sp );
 
-  //  Vector3D get_direction(const Point2D& p) const;
-  virtual void render_scene( const World &w );
+  Vector3D     ray_direction( const Point2D &pixel_point, const Point2D &lens_point ) const;
+  //  virtual void render_scene(const World& w);
+  virtual void render_scene( const World &w, float x = 0.0, int offset = 0 );
 
 private:
-  float d;       // view plane distance
-  float zoom;    // zoom factor
+  void copy( const ThinLens &other );
+
+  float    lens_radius;    // lens radius
+  float    d;              // view plane distance
+  float    f;              // focal plane
+  float    zoom;           // zoom factor
+  Sampler *sampler_ptr;    // sampler object
 };
 
-//-------------------------------------------------------------------------- set_vpd
-inline void ThinLens::set_view_distance( float _d ) { d = _d; }
-//-------------------------------------------------------------------------- set_zoom
-inline void ThinLens::set_zoom( float zoom_factor ) { zoom = zoom_factor; }
+inline void ThinLens::set_lens_radius( float lr ) { lens_radius = lr; }
 
-#endif
+inline void ThinLens::set_view_distance( float new_d ) { d = new_d; }
+
+inline void ThinLens::set_focal_distance( float new_f ) { f = new_f; }
+
+inline void ThinLens::set_zoom( float z ) { zoom = z; }
+
+#endif    // THINLENS_H

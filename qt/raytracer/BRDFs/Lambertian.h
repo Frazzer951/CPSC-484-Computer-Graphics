@@ -14,13 +14,10 @@
 class Lambertian : public BRDF {
 public:
   Lambertian( void );
-
-  virtual Lambertian *clone( void ) const;
-
   Lambertian( const Lambertian &lamb );
   Lambertian &operator=( const Lambertian &rhs );
-
   virtual ~Lambertian( void );
+  virtual Lambertian *clone( void ) const;
 
   virtual RGBColor f( const ShadeRec &sr, const Vector3D &wo, const Vector3D &wi ) const;
   virtual RGBColor sample_f( const ShadeRec &sr, const Vector3D &wo, Vector3D &wi, float &pdf ) const;
@@ -35,6 +32,8 @@ public:
   void set_cd( const float c );
 
 private:
+  void copy( const Lambertian &other );
+
   float    kd;
   RGBColor cd;
 };

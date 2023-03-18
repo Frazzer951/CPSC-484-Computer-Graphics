@@ -32,8 +32,10 @@ public:
 
   virtual BBox get_bounding_box( void );
 
-  virtual Material *get_material( void ) const;
-  virtual void      set_material( Material *materialPtr );
+  // virtual Material* get_material(void) const;
+  // virtual void set_material(Material* materialPtr);
+  virtual std::shared_ptr<Material> get_material( void ) const;
+  virtual void                      set_material( std::shared_ptr<Material> materialPtr );
 
   virtual bool hit( const Ray &ray, double &tmin, ShadeRec &sr ) const;
   virtual bool shadow_hit( const Ray &ray, double &tmin ) const;

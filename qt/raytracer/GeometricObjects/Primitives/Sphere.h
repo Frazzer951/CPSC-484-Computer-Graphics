@@ -12,8 +12,8 @@ public:
   Sphere();
   Sphere( Point3D pt, double r );
 
-  Sphere( const Sphere &s );
-  Sphere &operator=( const Sphere &s );
+  Sphere( const Sphere &other );
+  Sphere &operator=( const Sphere &other );
   virtual ~Sphere();
 
   virtual Sphere *clone() const;
@@ -26,6 +26,8 @@ public:
   virtual bool shadow_hit( const Ray &ray, double &tmin ) const;
 
 private:
+  void copy( const Sphere &other );
+
   Point3D                 center;
   double                  radius;
   static constexpr double kEpsilon = 0.001;    // for shadows and secondary rays

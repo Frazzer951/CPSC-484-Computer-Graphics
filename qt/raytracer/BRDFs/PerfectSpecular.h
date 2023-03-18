@@ -15,9 +15,9 @@
 class PerfectSpecular : public BRDF {
 public:
   PerfectSpecular( void );
-
-  ~PerfectSpecular( void );
-
+  PerfectSpecular( const PerfectSpecular &other );
+  PerfectSpecular &operator=( const PerfectSpecular &other );
+  virtual ~PerfectSpecular( void );
   virtual PerfectSpecular *clone( void ) const;
 
   void set_kr( const float k );
@@ -33,6 +33,8 @@ public:
   virtual RGBColor rho( const ShadeRec &sr, const Vector3D &wo ) const;
 
 private:
+  void copy( const PerfectSpecular &other );
+
   float    kr;    // reflection coefficient
   RGBColor cr;    // the reflection colour
 };

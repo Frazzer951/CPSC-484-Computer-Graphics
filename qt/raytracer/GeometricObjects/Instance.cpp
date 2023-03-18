@@ -167,12 +167,13 @@ void Instance::compute_bounding_box( void ) {
 BBox Instance::get_bounding_box( void ) { return ( bbox ); }
 //---------------------------------------------------------------- get_material
 
-Material *Instance::get_material( void ) const { return ( material_ptr ); }
+//Material*
+std::shared_ptr<Material> Instance::get_material( void ) const { return ( material_ptr ); }
 //---------------------------------------------------------------- set_material
 // Here, material_ptr is GeometricObject::material_ptr
 
-void Instance::set_material( Material *m_ptr ) { material_ptr = m_ptr; }
-//----------------------------------------------------------------------------------------- hit
+void Instance::set_material( std::shared_ptr<Material> m_ptr ) { material_ptr = m_ptr; }
+//
 
 bool Instance::hit( const Ray &ray, double &t, ShadeRec &sr ) const {
   Ray inv_ray( ray );
@@ -191,11 +192,29 @@ bool Instance::hit( const Ray &ray, double &t, ShadeRec &sr ) const {
   return ( false );
 }
 //-------------------------------------------------------------------------------- scale
-bool Instance::shadow_hit( const Ray &, double & ) const {
-  if ( !shadows ) { return false; }
+//bool
+//Instance::shadow_hit(const Ray&, double&) const {
+//    if (!shadows) { return false; }
 
-  // TODO: implement shadow_hit testing
-  return false;
+//    // TODO: implement shadow_hit testing
+//    return false;
+//}
+
+bool Instance::shadow_hit( const Ray &ray, double &tmin ) const {
+  if ( !shadows ) { return false; }
+  // Obtain updated ray matrix values
+  Ray inv_ray( ray );
+  inv_ray.o = inv_matrix * inv_ray.o;
+  inv_ray.d = inv_matrix * inv_ray.d;
+  // Check if Geometric Object Instance had a shadow hit
+  if ( object_ptr->shadow_hit( inv_ray, tmin ) ) {
+    if ( object_ptr->get_material() ) { material_ptr = object_ptr->get_material(); }
+    // If not applied to texture then apply shadow hit to Geometric Object Instance
+    if ( !transform_the_texture ) { object_ptr->shadow_hit( ray, tmin ); }
+    return ( true );
+  }
+  // No shadow hit, return false
+  return ( false );
 }
 
 void Instance::scale( const Vector3D &s ) {

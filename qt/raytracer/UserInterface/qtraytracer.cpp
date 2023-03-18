@@ -46,8 +46,8 @@ void pixels_rendered( int pixelsRendered ) {
 ///********************* RenderThread *******************************************/
 ///******************************************************************************/
 
-constexpr int      renderNewPixelEvent_ID = 1234;
-const QEvent::Type renderNewPixelEvent    = (QEvent::Type) renderNewPixelEvent_ID;
+constexpr int renderNewPixelEvent_ID = 1234;
+//const QEvent::Type renderNewPixelEvent = (QEvent::Type)renderNewPixelEvent_ID;
 
 class RenderNewPixelEvent : public QEvent {
 public:
@@ -78,7 +78,7 @@ void RenderThread::started() {
   timer->start();
   //    print_timer_now(*timer);
   //    world->render_scene(); //for bare bones ray tracer only
-  world->camera_ptr->render_scene( *world );
+  world->camera_ptr->render_scene( *world, 0, 0 );
 }
 void RenderThread::finished() {
   //    qDebug() << __PRETTY_FUNCTION__;
@@ -91,20 +91,23 @@ void RenderThread::setPixel( int x, int y, int red, int green, int blue ) {
   RenderPixel *px = new RenderPixel( x, y, red, green, blue );
   pixels->push_back( px );
 
-  if ( ++rendered % 10 == 0 ) {
-    notifyCanvas( px );
-    //        usleep(300);
-  }
+  //    if (++rendered % 10 == 0) {
+  ++rendered;
+  notifyCanvas( px );
+  //        usleep(5);
+  //}
+  //        usleep(50);
+  //    }
 }
 void RenderThread::notifyCanvas( RenderPixel *px ) {
   //    qDebug() << __PRETTY_FUNCTION__;
   //    QSize oldSize(canvas->size());
-  //    QSize newSize(400, 400);
+  //    QSize newSize(500, 500);
   //    QResizeEvent* size_event = new QResizeEvent(newSize, oldSize);
   //    qDebug() << "rendered: " << rendered;
 
   RenderNewPixelEvent *rnpe = new RenderNewPixelEvent( px );
-  QApplication::postEvent( canvas, rnpe, Qt::HighEventPriority * 1000 );
+  QApplication::postEvent( canvas, rnpe, Qt::HighEventPriority * 5000 );
 
   //    QApplication::postEvent(canvas, size_event, Qt::HighEventPriority * 1000);
 }
@@ -118,12 +121,12 @@ RenderCanvas::RenderCanvas( QWindow * ) :
   //    connect(&updateTimer, &QTimer::timeout, this, &RenderCanvas::onTimerUpdate);
   pixels                      = new QVector<RenderPixel *>();
   QVector<RenderPixel *> *&px = pixels;
-  pixmap                      = QPixmap( 400, 400 );
+  pixmap                      = QPixmap( 500, 500 );
   if ( pixmap.isNull() ) {
     qDebug() << "Pixmap creation failed";
     QApplication::exit();
   }
-  for ( int i = 0; i < 10; ++i ) { px->push_back( new RenderPixel( 50 * i, 399, 255, 255, 0 ) ); }
+  //    for (int i = 0; i < 10; ++i) { px->push_back(new RenderPixel(50 * i, 399, 255, 255, 0)); }
   //    bool success = image.load("maze.png", "PNG");
 
   update();
@@ -175,7 +178,7 @@ void RenderCanvas::paintGL() {
 }
 void RenderCanvas::paintEvent( QPaintEvent * ) {
   //        qDebug() << __PRETTY_FUNCTION__;
-  static bool saved = false;
+  //    static bool saved = false;
   if ( pixelsRendered == pixels->length() ) {
     qDebug() << "nothing to paint";
     return;

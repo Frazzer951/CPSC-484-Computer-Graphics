@@ -3,11 +3,13 @@
 #include "Samplers/MultiJittered.h"
 #include "Samplers/Regular.h"
 
+int ViewPlane::max_depth = 10;
+
 // ---------------------------------------------------------------- default constructor
 
 ViewPlane::ViewPlane() :
-    hres( 400 ), vres( 400 ), s( 1.0 ), num_samples( 1 ), gamma( 1.0 ), inv_gamma( 1.0 ), show_out_of_gamut( false ),
-    sampler_ptr( nullptr ) {}
+    hres( VIEWPLANE_HRES ), vres( VIEWPLANE_VRES ), s( 1.0 ), num_samples( 1 ), gamma( 1.0 ), inv_gamma( 1.0 ),
+    show_out_of_gamut( false ), sampler_ptr( nullptr ) {}
 // ---------------------------------------------------------------- copy constructor
 
 ViewPlane::ViewPlane( const ViewPlane &vp ) :
@@ -50,3 +52,5 @@ void ViewPlane::set_sampler( Sampler *sp ) {
   num_samples = sp->get_num_samples();
   sampler_ptr = sp;
 }
+
+void ViewPlane::set_max_depth( int max ) { max_depth = max; }

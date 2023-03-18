@@ -1,10 +1,18 @@
+
 // 	Copyright (C) Kevin Suffern 2000-2007.
 //	This C++ code is for non-commercial purposes only.
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
 #include "Utilities/Constants.h"
-#include "ConvexPartSphere.h"
+#include "GeometricObjects/PartObjects/ConvexPartSphere.h"
+#include "Materials/Material.h"
+#include <math.h>
+
+// 	Copyright (C) Kevin Suffern 2000-2007.
+//	This C++ code is for non-commercial purposes only.
+//	This C++ code is licensed under the GNU General Public License Version 2.
+//	See the file COPYING.txt for the full license.
 
 // ----------------------------------------------------------------  default constructor
 // a default ConvexPartSphere is a whole sphere
@@ -19,11 +27,10 @@ ConvexPartSphere::ConvexPartSphere( void ) :
 // ---------------------------------------------------------------- donstructor
 
 ConvexPartSphere::ConvexPartSphere( const Point3D c, const double r,
-                                    const double azimuth_min,    // in degrees
-                                    const double azimuth_max,    // in degrees
-                                    const double polar_min,      // in degrees measured from top
-                                    const double polar_max )     // in degrees measured from top
-    :
+                                    const double azimuth_min,     // in degrees
+                                    const double azimuth_max,     // in degrees
+                                    const double polar_min,       // in degrees measured from top
+                                    const double polar_max ) :    // in degrees measured from top
     GeometricObject(),
     center( c ), radius( r ), phi_min( azimuth_min * PI_ON_180 ),    // in radians
     phi_max( azimuth_max * PI_ON_180 ),                              // in radians
@@ -39,7 +46,7 @@ ConvexPartSphere::ConvexPartSphere( const Point3D c, const double r ) :
 
 // ---------------------------------------------------------------- clone
 
-ConvexPartSphere *ConvexPartSphere::clone( void ) const { return ( new ConvexPartSphere( *this ) ); }
+ConvexPartSphere *ConvexPartSphere::clone( void ) const { return new ConvexPartSphere( *this ); }
 
 // ---------------------------------------------------------------- copy constructor
 
@@ -51,7 +58,7 @@ ConvexPartSphere::ConvexPartSphere( const ConvexPartSphere &ps ) :
 // ---------------------------------------------------------------- assignment operator
 
 ConvexPartSphere &ConvexPartSphere::operator=( const ConvexPartSphere &rhs ) {
-  if ( this == &rhs ) return ( *this );
+  if ( this == &rhs ) return *this;
 
   GeometricObject::operator=( rhs );
 
@@ -64,12 +71,14 @@ ConvexPartSphere &ConvexPartSphere::operator=( const ConvexPartSphere &rhs ) {
   cos_theta_min = rhs.cos_theta_min;
   cos_theta_max = rhs.cos_theta_max;
 
-  return ( *this );
+  return *this;
 }
 
 // ---------------------------------------------------------------- destructor
 
-ConvexPartSphere::~ConvexPartSphere( void ) {}
+ConvexPartSphere::~ConvexPartSphere( void ) {
+  //  delete material_ptr;
+}
 
 // ------------------------------------------------------------------------------ hit
 
@@ -82,7 +91,7 @@ bool ConvexPartSphere::hit( const Ray &ray, double &tmin, ShadeRec &sr ) const {
   double   disc = b * b - 4.0 * a * c;
 
   if ( disc < 0.0 )
-    return ( false );
+    return false;
   else {
     double e     = sqrt( disc );
     double denom = 2.0 * a;
@@ -98,7 +107,7 @@ bool ConvexPartSphere::hit( const Ray &ray, double &tmin, ShadeRec &sr ) const {
         tmin               = t;
         sr.normal          = ( temp + t * ray.d ) / radius;    // points outwards
         sr.local_hit_point = ray.o + tmin * ray.d;
-        return ( true );
+        return true;
       }
     }
 
@@ -114,18 +123,57 @@ bool ConvexPartSphere::hit( const Ray &ray, double &tmin, ShadeRec &sr ) const {
         tmin               = t;
         sr.normal          = ( temp + t * ray.d ) / radius;    // points outwards
         sr.local_hit_point = ray.o + tmin * ray.d;
-        return ( true );
+        return true;
       }
     }
   }
 
-  return ( false );
-}
-
-bool ConvexPartSphere::shadow_hit( const Ray &, double & ) const {
-  if ( !shadows ) { return false; }
-
-  // TODO: implement shadow_hit testing
   return false;
 }
-// ---------------------------------------------------------------- sample
+
+bool ConvexPartSphere::shadow_hit( const Ray &ray, double &tmin ) const {
+  if ( !shadows ) return false;
+
+  double   t;
+  Vector3D temp = ray.o - center;
+  double   a    = ray.d.dot( ray.d );
+  double   b    = 2.0 * temp.dot( ray.d );
+  double   c    = temp.dot( temp ) - radius * radius;
+  double   disc = b * b - 4.0 * a * c;
+
+  if ( disc < 0.0 )
+    return false;
+  else {
+    double e     = sqrt( disc );
+    double denom = 2.0 * a;
+    t            = ( -b - e ) / denom;    // smaller root
+
+    if ( t > kEpsilon ) {
+      Vector3D hit = ray.o + t * ray.d - center;
+
+      double phi = atan2( hit.x, hit.z );
+      if ( phi < 0.0 ) phi += TWO_PI;
+
+      if ( hit.y <= radius * cos_theta_min && hit.y >= radius * cos_theta_max && phi >= phi_min && phi <= phi_max ) {
+        tmin = t;
+        return true;
+      }
+    }
+
+    t = ( -b + e ) / denom;    // larger root
+
+    if ( t > kEpsilon ) {
+      Vector3D hit = ray.o + t * ray.d - center;
+
+      double phi = atan2( hit.x, hit.z );
+      if ( phi < 0.0 ) phi += TWO_PI;
+
+      if ( hit.y <= radius * cos_theta_min && hit.y >= radius * cos_theta_max && phi >= phi_min && phi <= phi_max ) {
+        tmin = t;
+        return true;
+      }
+    }
+  }
+
+  return false;
+}

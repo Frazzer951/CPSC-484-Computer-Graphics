@@ -1,6 +1,8 @@
 #ifndef __MATERIAL__
 #define __MATERIAL__
 
+#include <memory>
+
 #include "World/World.h"    // required for the shade function in all derived classes
 #include "Utilities/RGBColor.h"
 #include "Utilities/ShadeRec.h"
@@ -16,7 +18,7 @@ public:
   Material( const Material & );
 
 protected:
-  Material &operator=( const Material &rhs );    // does nothing
+  Material &operator=( const Material &other );    // does nothing
 
 public:
   virtual ~Material();

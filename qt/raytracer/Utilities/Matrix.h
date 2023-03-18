@@ -11,10 +11,8 @@
 //
 struct Matrix {
   Matrix( void );
-
   Matrix( const Matrix &mat );
   Matrix &operator=( const Matrix &rhs );
-
   ~Matrix();
 
   Matrix operator*( const Matrix &mat ) const;
@@ -23,6 +21,9 @@ struct Matrix {
   void set_identity();
 
   double m[4][4];
+
+private:
+  void copy( const Matrix &other );
 };
 
 #endif

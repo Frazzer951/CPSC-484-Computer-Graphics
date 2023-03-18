@@ -46,4 +46,4 @@ public:
   virtual bool shadow_hit( const Ray &ray, double &tmin ) const;
 };
 
-#endif
+#endif    // __CONVEX__PART__SPHERE__

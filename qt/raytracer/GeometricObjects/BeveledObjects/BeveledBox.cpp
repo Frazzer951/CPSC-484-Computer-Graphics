@@ -7,7 +7,7 @@
 
 #include "BeveledBox.h"
 #include "GeometricObjects/Primitives/OpenCylinder.h"
-#include "GeometricObjects/Primitives/Rect.h"
+#include "GeometricObjects/Primitives/Rectangle.h"
 #include "GeometricObjects/Primitives/Sphere.h"
 #include "GeometricObjects/Instance.h"
 
@@ -146,33 +146,36 @@ BeveledBox::BeveledBox( void ) : Compound(), p0( -1.0 ), p1( 1.0 ), rb( 0.1 ), b
 
   // the faces
   // bottom face: -ve y
-  Rect *bottom_face = new Rect( Point3D( p0.x + rb, p0.y, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
-                                Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ), Normal( 0, -1, 0 ) );
+  Rectangle *bottom_face =
+      new Rectangle( Point3D( p0.x + rb, p0.y, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
+                     Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ), Normal( 0, -1, 0 ) );
   objects.push_back( bottom_face );
 
   // bottom face: +ve y
-  Rect *top_face = new Rect( Point3D( p0.x + rb, p1.y, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
-                             Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ), Normal( 0, 1, 0 ) );
+  Rectangle *top_face = new Rectangle( Point3D( p0.x + rb, p1.y, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
+                                       Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ), Normal( 0, 1, 0 ) );
   objects.push_back( top_face );
 
   // back face: -ve z
-  Rect *back_face = new Rect( Point3D( p0.x + rb, p0.y + rb, p0.z ), Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ),
-                              Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 0, 0, -1 ) );
+  Rectangle *back_face = new Rectangle( Point3D( p0.x + rb, p0.y + rb, p0.z ), Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ),
+                                        Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 0, 0, -1 ) );
   objects.push_back( back_face );
 
   // front face: +ve z
-  Rect *front_face = new Rect( Point3D( p0.x + rb, p0.y + rb, p1.z ), Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ),
-                               Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 0, 0, 1 ) );
+  Rectangle *front_face =
+      new Rectangle( Point3D( p0.x + rb, p0.y + rb, p1.z ), Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ),
+                     Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 0, 0, 1 ) );
   objects.push_back( front_face );
 
   // left face: -ve x
-  Rect *left_face = new Rect( Point3D( p0.x, p0.y + rb, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
-                              Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( -1, 0, 0 ) );
+  Rectangle *left_face = new Rectangle( Point3D( p0.x, p0.y + rb, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
+                                        Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( -1, 0, 0 ) );
   objects.push_back( left_face );
 
   // right face: +ve x
-  Rect *right_face = new Rect( Point3D( p1.x, p0.y + rb, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
-                               Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 1, 0, 0 ) );
+  Rectangle *right_face =
+      new Rectangle( Point3D( p1.x, p0.y + rb, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
+                     Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 1, 0, 0 ) );
   objects.push_back( right_face );
 }
 // ------------------------------------------------------------------------------ constructor
@@ -312,33 +315,36 @@ BeveledBox::BeveledBox( const Point3D &min_corner, const Point3D &max_corner, co
   // the faces
 
   // bottom face: -ve y
-  Rect *bottom_face = new Rect( Point3D( p0.x + rb, p0.y, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
-                                Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ), Normal( 0, -1, 0 ) );
+  Rectangle *bottom_face =
+      new Rectangle( Point3D( p0.x + rb, p0.y, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
+                     Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ), Normal( 0, -1, 0 ) );
   objects.push_back( bottom_face );
 
   // bottom face: +ve y
-  Rect *top_face = new Rect( Point3D( p0.x + rb, p1.y, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
-                             Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ), Normal( 0, 1, 0 ) );
+  Rectangle *top_face = new Rectangle( Point3D( p0.x + rb, p1.y, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
+                                       Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ), Normal( 0, 1, 0 ) );
   objects.push_back( top_face );
 
   // back face: -ve z
-  Rect *back_face = new Rect( Point3D( p0.x + rb, p0.y + rb, p0.z ), Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ),
-                              Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 0, 0, -1 ) );
+  Rectangle *back_face = new Rectangle( Point3D( p0.x + rb, p0.y + rb, p0.z ), Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ),
+                                        Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 0, 0, -1 ) );
   objects.push_back( back_face );
 
   // front face: +ve z
-  Rect *front_face = new Rect( Point3D( p0.x + rb, p0.y + rb, p1.z ), Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ),
-                               Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 0, 0, 1 ) );
+  Rectangle *front_face =
+      new Rectangle( Point3D( p0.x + rb, p0.y + rb, p1.z ), Vector3D( ( p1.x - rb ) - ( p0.x + rb ), 0, 0 ),
+                     Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 0, 0, 1 ) );
   objects.push_back( front_face );
 
   // left face: -ve x
-  Rect *left_face = new Rect( Point3D( p0.x, p0.y + rb, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
-                              Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( -1, 0, 0 ) );
+  Rectangle *left_face = new Rectangle( Point3D( p0.x, p0.y + rb, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
+                                        Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( -1, 0, 0 ) );
   objects.push_back( left_face );
 
   // right face: +ve x
-  Rect *right_face = new Rect( Point3D( p1.x, p0.y + rb, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
-                               Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 1, 0, 0 ) );
+  Rectangle *right_face =
+      new Rectangle( Point3D( p1.x, p0.y + rb, p0.z + rb ), Vector3D( 0, 0, ( p1.z - rb ) - ( p0.z + rb ) ),
+                     Vector3D( 0, ( p1.y - rb ) - ( p0.y + rb ), 0 ), Normal( 1, 0, 0 ) );
   objects.push_back( right_face );
 }
 
@@ -377,9 +383,12 @@ bool BeveledBox::hit( const Ray &ray, double &tmin, ShadeRec &sr ) const {
 }
 
 // ----------------------------------------------------------------
-bool BeveledBox::shadow_hit( const Ray &, double & ) const {
-  if ( !shadows ) { return false; }
+bool BeveledBox::shadow_hit( const Ray &ray, double &tmin ) const {
+  if ( !shadows ) return false;
 
-  // TODO: implement shadow_hit testing
-  return false;
+  if ( bbox.hit( ray ) ) {
+    return Compound::shadow_hit( ray, tmin );
+  } else {
+    return false;
+  }
 }

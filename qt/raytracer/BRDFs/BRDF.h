@@ -20,13 +20,10 @@
 class BRDF {
 public:
   BRDF( void );
-
-  virtual BRDF *clone( void ) const = 0;
-
-  BRDF( const BRDF &brdf );
-  BRDF &operator=( const BRDF &rhs );
-
+  BRDF( const BRDF &other );
+  BRDF &operator=( const BRDF &other );
   virtual ~BRDF( void );
+  virtual BRDF *clone( void ) const = 0;
 
   void set_sampler( Sampler *sPtr );
 
@@ -34,6 +31,9 @@ public:
   virtual RGBColor sample_f( const ShadeRec &sr, const Vector3D &wo, Vector3D &wi ) const;
   virtual RGBColor sample_f( const ShadeRec &sr, const Vector3D &wo, Vector3D &wi, float &pdf ) const;
   virtual RGBColor rho( const ShadeRec &sr, const Vector3D &wo ) const;
+
+private:
+  void copy( const BRDF &other );
 
 protected:
   Sampler *sampler_ptr;    // for indirect illumination

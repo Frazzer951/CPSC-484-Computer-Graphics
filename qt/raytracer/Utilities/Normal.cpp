@@ -41,14 +41,15 @@ Normal operator*( double k, const Normal &n ) { return n * k; }
 //// ----------------------------------------------------------- operator=
 //// assignment operator
 
-Normal &Normal::operator=( const Normal &rhs ) {
-  if ( this == &rhs ) return ( *this );
-
-  x = rhs.x;
-  y = rhs.y;
-  z = rhs.z;
-
+Normal &Normal::operator=( const Normal &other ) {
+  if ( this != &other ) { copy( other ); }
   return ( *this );
+}
+
+void Normal::copy( const Normal &other ) {
+  x = other.x;
+  y = other.y;
+  z = other.z;
 }
 
 // ------------------------------------------------------------ operator=

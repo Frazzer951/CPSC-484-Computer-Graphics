@@ -15,10 +15,8 @@ public:
   BBox( double x0, double x1, double y0, double y1, double z0, double z1 );
 
   BBox( const Point3D p0, const Point3D p1 );
-
   BBox( const BBox &bbox );
   BBox &operator=( const BBox &rhs );
-
   ~BBox( void );
 
   bool hit( const Ray &ray ) const;
@@ -26,6 +24,9 @@ public:
   bool inside( const Point3D &p ) const;
 
   double x0, x1, y0, y1, z0, z1;
+
+private:
+  void copy( const BBox &other );
 };
 
 #endif

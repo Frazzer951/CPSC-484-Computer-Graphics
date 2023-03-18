@@ -1,37 +1,33 @@
-#ifndef __SPHERICAL__
-#define __SPHERICAL__
+#ifndef SPHERICAL_H
+#define SPHERICAL_H
 
-// 	Copyright (C) Kevin Suffern 2000-2007.
-//	This C++ code is for non-commercial purposes only.
-//	This C++ code is licensed under the GNU General Public License Version 2.
-//	See the file COPYING.txt for the full license.
-
+#include "Camera.h"
 #include "Utilities/Point2D.h"
-#include "World/World.h"    // we can #include "World.h" here
 
 class Spherical : public Camera {
 public:
-  Spherical();
-  //  Spherical(const Pinhole& ph);
-  //  virtual Camera* clone(void) const;
-  //  Spherical&
-  //  operator= (const Pinhole& rhs);
-  //  virtual ~Spherical();
+  Spherical( void );
+  Spherical( const Spherical &s );
+  Spherical         &operator=( const Spherical &rhs );
+  virtual Spherical *clone( void ) const;
+  virtual ~Spherical( void );
 
-  void set_view_distance( const float vpd );
-  void set_zoom( const float zoom_factor );
+  Vector3D     ray_direction( const Point2D &pp, const int hres, const int vres, const float s );
+  //  virtual void render_scene(const World& w);
+  virtual void render_scene( const World &w, float x = 0.0, int offset = 0 );
 
-  //  Vector3D get_direction(const Point2D& p) const;
-  virtual void render_scene( const World &w );
+  void set_horizontal_fov( float hfov );
+  void set_vertical_fov( float vfov );
 
 private:
-  float d;       // view plane distance
-  float zoom;    // zoom factor
+  void copy( const Spherical &other );
+
+  float psi_max;       // in degrees
+  float lambda_max;    // in degrees
 };
 
-//-------------------------------------------------------------------------- set_vpd
-inline void Spherical::set_view_distance( float _d ) { d = _d; }
-//-------------------------------------------------------------------------- set_zoom
-inline void Spherical::set_zoom( float zoom_factor ) { zoom = zoom_factor; }
+inline void Spherical::set_horizontal_fov( float hfov ) { lambda_max = 0.5 * hfov; }
 
-#endif
+inline void Spherical::set_vertical_fov( float vfov ) { psi_max = 0.5 * vfov; }
+
+#endif    // SPHERICAL_H

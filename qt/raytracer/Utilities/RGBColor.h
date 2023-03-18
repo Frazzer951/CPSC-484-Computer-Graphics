@@ -2,7 +2,6 @@
 #define __RGB_COLOR__
 
 #include <math.h>
-#include <iostream>
 
 //=====================================
 // RGBColor
@@ -56,10 +55,6 @@ struct RGBColor {
   // used for color filtering in Chapter 28
   RGBColor powc( float p ) const { return ( RGBColor( pow( r, p ), pow( g, p ), pow( b, p ) ) ); }
   float    average() const { return 0.333333333333 * ( r + g + b ); }
-
-  friend std::ostream &operator<<( std::ostream &os, const RGBColor &rgb ) {
-    return os << "RGBColor(" << rgb.r << "," << rgb.g << "," << rgb.b << ")";
-  }
 
   float r, g, b;
 };

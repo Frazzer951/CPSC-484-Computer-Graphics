@@ -3,45 +3,55 @@
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-#include <vector>
-
 #include "Utilities/Constants.h"
 #include "Compound.h"
+#include "Materials/Material.h"
 
 // ----------------------------------------------------------------  default constructor
 
 Compound::Compound( void ) : GeometricObject() {}
+
 // ---------------------------------------------------------------- clone
 
-Compound *Compound::clone( void ) const { return ( new Compound( *this ) ); }
+Compound *Compound::clone( void ) const { return new Compound( *this ); }
+
 // ---------------------------------------------------------------- copy constructor
 
 Compound::Compound( const Compound &c ) : GeometricObject( c ) { copy_objects( c.objects ); }
+
 // ---------------------------------------------------------------- assignment operator
 
 Compound &Compound::operator=( const Compound &rhs ) {
-  if ( this == &rhs ) return ( *this );
+  if ( this == &rhs ) return *this;
 
   GeometricObject::operator=( rhs );
 
   copy_objects( rhs.objects );
 
-  return ( *this );
+  return *this;
 }
+
 // ---------------------------------------------------------------- destructor
 
 Compound::~Compound( void ) { delete_objects(); }
-// ---------------------------------------------------------------- add_object
 
+// ---------------------------------------------------------------- add_object
 void Compound::add_object( GeometricObject *object_ptr ) { objects.push_back( object_ptr ); }
+
 //------------------------------------------------------------------ set_material
 // sets the same material on all objects
 
-void Compound::set_material( Material *material_ptr ) {
+void
+    //Compound::set_material(Material* mPtr) {
+    Compound::set_material( std::shared_ptr<Material> mPtr ) {
   int num_objects = objects.size();
 
-  for ( int j = 0; j < num_objects; j++ ) { objects[j]->set_material( material_ptr ); }
+  for ( int j = 0; j < num_objects; j++ ) {
+    objects[j]->set_material( mPtr );
+    //        objects[j]->set_material(std::shared_ptr<Material>(mPtr->clone()));
+  }
 }
+
 //------------------------------------------------------------------ delete_objects
 // Deletes the objects in the objects array, and erases the array.
 // The array still exists, because it'ss an automatic variable, but it's empty
@@ -56,14 +66,16 @@ void Compound::delete_objects( void ) {
 
   objects.erase( objects.begin(), objects.end() );
 }
+
 //------------------------------------------------------------------ copy_objects
 
 void Compound::copy_objects( const std::vector<GeometricObject *> &rhs_ojects ) {
   delete_objects();
   int num_objects = rhs_ojects.size();
 
-  for ( int j = 0; j < num_objects; j++ ) { objects.push_back( rhs_ojects[j]->clone() ); }
+  for ( int j = 0; j < num_objects; j++ ) objects.push_back( rhs_ojects[j]->clone() );
 }
+
 //------------------------------------------------------------------ hit
 
 bool Compound::hit( const Ray &ray, double &tmin, ShadeRec &sr ) const {
@@ -89,13 +101,22 @@ bool Compound::hit( const Ray &ray, double &tmin, ShadeRec &sr ) const {
     sr.local_hit_point = local_hit_point;
   }
 
-  return ( hit );
+  return hit;
 }
 
-// ----------------------------------------------------------------
-bool Compound::shadow_hit( const Ray &, double & ) const {
-  if ( !shadows ) { return false; }
+bool Compound::shadow_hit( const Ray &ray, double &tmin ) const {
+  if ( !shadows ) return false;
 
-  // TODO: implement shadow_hit testing
-  return false;
+  double t        = kHugeValue;
+  tmin            = kHugeValue;
+  int num_objects = objects.size();
+
+  bool hit = false;
+  for ( int j = 0; j < num_objects; j++ )
+    if ( objects[j]->shadow_hit( ray, t ) && ( t < tmin ) ) {
+      tmin = t;
+      hit  = true;
+    }
+
+  return hit;
 }

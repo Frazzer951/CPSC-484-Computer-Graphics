@@ -13,10 +13,10 @@
 class GlossySpecular : public BRDF {
 public:
   GlossySpecular( void );
-
+  GlossySpecular( const GlossySpecular &other );
+  GlossySpecular &operator=( const GlossySpecular &other );
+  virtual ~GlossySpecular( void );
   virtual GlossySpecular *clone( void ) const;
-
-  ~GlossySpecular( void );
 
   virtual RGBColor f( const ShadeRec &sr, const Vector3D &wo, const Vector3D &wi ) const;
   virtual RGBColor sample_f( const ShadeRec &sr, const Vector3D &wo, Vector3D &wi, float &pdf ) const;
@@ -35,6 +35,8 @@ public:
   void set_normal( const Normal &n );
 
 private:
+  void copy( const GlossySpecular &other );
+
   float    ks;
   RGBColor cs;         // specular color
   float    exp;        // specular exponent

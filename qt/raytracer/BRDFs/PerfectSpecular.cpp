@@ -9,14 +9,29 @@
 
 PerfectSpecular::PerfectSpecular( void ) : BRDF(), kr( 0.0 ), cr( 1.0 ) {}
 
-// ---------------------------------------------------------- destructor
+PerfectSpecular::PerfectSpecular( const PerfectSpecular &other ) : PerfectSpecular() { copy( other ); }
 
+PerfectSpecular &PerfectSpecular::operator=( const PerfectSpecular &other ) {
+  if ( this != &other ) { copy( other ); }
+  return ( *this );
+}
+
+// ---------------------------------------------------------- destructor
 PerfectSpecular::~PerfectSpecular( void ) {}
+
+void PerfectSpecular::copy( const PerfectSpecular &other ) {
+  BRDF::operator=( other );
+
+  kr = other.kr;
+  cr = other.cr;
+}
+
 // ---------------------------------------------------------------------- clone
 PerfectSpecular *PerfectSpecular::clone( void ) const { return ( new PerfectSpecular( *this ) ); }
 
 // ---------------------------------------------------------- f
 RGBColor PerfectSpecular::f( const ShadeRec &, const Vector3D &, const Vector3D & ) const { return ( black ); }
+
 // ---------------------------------------------------------- sample_f
 // this computes wi: the direction of perfect mirror reflection
 // it's called from from the functions Reflective::shade and Transparent::shade.

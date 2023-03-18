@@ -15,12 +15,10 @@
 class Directional : public Light {
 public:
   Directional();
-
   Directional( const Directional &dl );
   Directional &operator=( const Directional &rhs );
-
   virtual ~Directional();
-  virtual Light *clone() const;
+  virtual Directional *clone() const;
 
   void scale_radiance( const float b );
 
@@ -34,7 +32,11 @@ public:
 
   virtual RGBColor L( ShadeRec &sr );
 
+  virtual bool in_shadow( const Ray &ray, const ShadeRec &sr ) const;
+
 private:
+  void copy( const Directional &other );
+
   float    ls;
   RGBColor color;
   Vector3D dir;    // direction the light comes from

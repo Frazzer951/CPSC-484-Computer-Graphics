@@ -1,56 +1,54 @@
 
-//#ifndef __AREA_LIGHT__
-//#define __AREA_LIGHT__
+#ifndef __AREA_LIGHT__
+#define __AREA_LIGHT__
 
-//// 	Copyright (C) Kevin Suffern 2000-2007.
-////	This C++ code is for non-commercial purposes only.
-////	This C++ code is licensed under the GNU General Public License Version 2.
-////	See the file COPYING.txt for the full license.
+// 	Copyright (C) Kevin Suffern 2000-2007.
+//	This C++ code is for non-commercial purposes only.
+//	This C++ code is licensed under the GNU General Public License Version 2.
+//	See the file COPYING.txt for the full license.
 
-//#include "Utilities/RGBColor.h"
-//#include "Utilities/Vector3D.h"
-//#include "Utilities/Point3D.h"
-//#include "Utilities/Normal.h"
-//#include "Lights/Light.h"
-//#include "Materials/Material.h"
-//#include "GeometricObjects/GeometricObject.h"
+#include "Utilities/RGBColor.h"
+#include "Utilities/Vector3D.h"
+#include "Utilities/Point3D.h"
+#include "Utilities/Normal.h"
+#include "Lights/Light.h"
+#include "Materials/Material.h"
+#include "GeometricObjects/GeometricObject.h"
 
-//class AreaLight: public Light {
-//public:
-//    AreaLight(void);
+class AreaLight : public Light {
+public:
+  AreaLight( void );
+  AreaLight( const AreaLight &al );
+  AreaLight &operator=( const AreaLight &rhs );
+  virtual ~AreaLight( void );
+  virtual AreaLight *clone( void ) const;
 
-//    virtual AreaLight* 	clone(void);
+  void set_object( GeometricObject *obj_ptr );
 
-//    AreaLight(const AreaLight& al);
-//    AreaLight&
-//    operator= (const AreaLight& rhs);
+  virtual Vector3D get_direction( ShadeRec &s );
+  virtual RGBColor L( ShadeRec &sr );
 
-//    virtual ~AreaLight(void);
+  virtual bool in_shadow( const Ray &ray, const ShadeRec &sr ) const;
 
-//    void set_object(GeometricObject* obj_ptr);
+  virtual float G( const ShadeRec &sr ) const;
+  virtual float pdf( ShadeRec &sr ) const;
 
-//    virtual Vector3D get_direction(ShadeRec& s);
-//    virtual RGBColor L(ShadeRec& sr);
+private:
+  void copy( const AreaLight &other );
 
-//    virtual bool in_shadow(const Ray& ray, const ShadeRec& sr) const;
+  GeometricObject          *object_ptr;
+  //    Material* material_ptr;
+  std::shared_ptr<Material> material_ptr;    // will be an emissive material
+  Point3D                   sample_point;
+  Normal                    light_normal;    // assigned in get_direction - which therefore can't be const for any light
+  Vector3D                  wi;              // unit direction from hit point being shaded to sample point on light surface
+};
 
-//    virtual float G(const ShadeRec& sr) const;
-//    virtual float pdf(ShadeRec& sr) const;
+// --------------------------------------------------------------- set_object
 
-//private:
-//    GeometricObject* 	object_ptr;
-//    Material* 			material_ptr;	 // will be an emissive material
-//    Point3D				sample_point;
-//    Normal				light_normal;    // assigned in get_direction - which therefore can't be const for any light
-//    Vector3D			wi;			     // unit direction from hit point being shaded to sample point on light surface
-//};
+inline void AreaLight::set_object( GeometricObject *obj_ptr ) {
+  object_ptr   = obj_ptr;
+  material_ptr = object_ptr->get_material();
+}
 
-//// --------------------------------------------------------------- set_object
-
-//inline void
-//AreaLight::set_object(GeometricObject* obj_ptr) {
-//    object_ptr = obj_ptr;
-//    material_ptr = object_ptr->get_material();
-//}
-
-//#endif
+#endif

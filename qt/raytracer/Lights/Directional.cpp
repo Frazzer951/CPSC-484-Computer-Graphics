@@ -2,30 +2,27 @@
 
 // ---------------------------------------------------------------------- default constructor
 
-Directional::Directional() : Light(), ls( 1.0 ), color( 1.0 ), dir( 0, 1, 0 ) {}
+Directional::Directional() : Light(), ls( 1.0 ), color( 1.0 ), dir( 0, 1, 0 ) { set_shadows( true ); }
 
-// ---------------------------------------------------------------------- dopy constructor
+Directional::Directional( const Directional &pl ) : Directional() { copy( pl ); }
 
-Directional::Directional( const Directional &dl ) : Light( dl ), ls( dl.ls ), color( dl.color ), dir( dl.dir ) {}
-// ---------------------------------------------------------------------- clone
-
-Light *Directional::clone() const { return ( new Directional( *this ) ); }
-// ---------------------------------------------------------------------- assignment operator
-
-Directional &Directional::operator=( const Directional &rhs ) {
-  if ( this == &rhs ) return ( *this );
-
-  Light::operator=( rhs );
-
-  ls    = rhs.ls;
-  color = rhs.color;
-  dir   = rhs.dir;
-
-  return ( *this );
+Directional &Directional::operator=( const Directional &other ) {
+  if ( this != &other ) { copy( other ); }
+  return *this;
 }
 
-// ---------------------------------------------------------------------- destructor
+void Directional::copy( const Directional &other ) {
+  Light::operator=( other );
 
+  ls    = other.ls;
+  color = other.color;
+  dir   = other.dir;
+  set_shadows( other.cast_shadows() );
+}
+
+Directional *Directional::clone() const { return ( new Directional( *this ) ); }
+
+// ---------------------------------------------------------------------- destructor
 Directional::~Directional() {}
 
 void Directional::scale_radiance( const float b ) { ls = b; }
@@ -50,6 +47,16 @@ void Directional::set_direction( float dx, float dy, float dz ) {
   dir.y = dy;
   dir.z = dz;
   dir.normalize();
+}
+
+bool Directional::in_shadow( const Ray &ray, const ShadeRec &sr ) const {
+  double t;
+  int    num_objects = sr.w.objects.size();
+
+  for ( int j = 0; j < num_objects; j++ ) {
+    if ( sr.w.objects[j]->shadow_hit( ray, t ) ) return true;
+  }
+  return false;
 }
 
 // ---------------------------------------------------------------------- get_direction

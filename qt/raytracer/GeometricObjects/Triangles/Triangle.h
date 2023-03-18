@@ -14,7 +14,6 @@ class Triangle : public GeometricObject {
 public:
   Triangle( void );
   Triangle( const Point3D &a, const Point3D &b, const Point3D &c );
-
   virtual Triangle *clone( void ) const;
   Triangle( const Triangle &triangle );
   Triangle &operator=( const Triangle &rhs );

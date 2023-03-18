@@ -1,56 +1,51 @@
-//#ifndef __REFLECTIVE__
-//#define __REFLECTIVE__
+#ifndef __REFLECTIVE__
+#define __REFLECTIVE__
 
-//// 	Copyright (C) Kevin Suffern 2000-2007.
-////	This C++ code is for non-commercial purposes only.
-////	This C++ code is licensed under the GNU General Public License Version 2.
-////	See the file COPYING.txt for the full license.
+// 	Copyright (C) Kevin Suffern 2000-2007.
+//	This C++ code is for non-commercial purposes only.
+//	This C++ code is licensed under the GNU General Public License Version 2.
+//	See the file COPYING.txt for the full license.
 
-//#include "BRDFs/Phong.h"
-//#include "BRDFs/PerfectSpecular.h"
+#include "Materials/Phong.h"
+#include "BRDFs/PerfectSpecular.h"
 
-//class Reflective: public Phong {
-//public:
-//    Reflective(void);
+class Reflective : public Phong {
+public:
+  Reflective( void );
 
-//    virtual Reflective*	 clone(void) const;
+  virtual Reflective *clone( void ) const;
 
-//    Reflective(const Reflective& rm);
-//    Reflective&
-//    operator= (const Reflective& rhs);
+  Reflective( const Reflective &rm );
+  Reflective &operator=( const Reflective &rhs );
 
-//    ~Reflective(void);
+  ~Reflective( void );
 
-//    void set_kr(const float k);
-//    void set_cr(const RGBColor& c);
+  void set_kr( const float k );
+  void set_cr( const RGBColor &c );
 
-//    void set_cr(const float r, const float g, const float b);
-//    void set_cr(const float c);
+  void set_cr( const float r, const float g, const float b );
+  void set_cr( const float c );
 
-//    virtual RGBColor shade(ShadeRec& s);
-//    virtual RGBColor area_light_shade(ShadeRec& sr);
+  virtual RGBColor shade( ShadeRec &sr );
+  virtual RGBColor area_light_shade( ShadeRec &sr );
 
-//private:
-//    PerfectSpecular* reflective_brdf;
-//};
+private:
+  void copy( const Reflective &other );
 
-//// ---------------------------------------------------------------- set_kr
+  PerfectSpecular *reflective_brdf;
+};
 
-//inline void
-//Reflective::set_kr(const float k) { reflective_brdf->set_kr(k); }
-//// ---------------------------------------------------------------- set_cr
+// ---------------------------------------------------------------- set_kr
 
-//inline void
-//Reflective::set_cr(const RGBColor& c) { reflective_brdf->set_cr(c); }
-//// ---------------------------------------------------------------- set_cr
+inline void Reflective::set_kr( const float k ) { reflective_brdf->set_kr( k ); }
+// ---------------------------------------------------------------- set_cr
 
-//inline void
-//Reflective::set_cr(const float r, const float g, const float b) {
-//	reflective_brdf->set_cr(r, g, b);
-//}
-//// ---------------------------------------------------------------- set_cr
+inline void Reflective::set_cr( const RGBColor &c ) { reflective_brdf->set_cr( c ); }
+// ---------------------------------------------------------------- set_cr
 
-//inline void
-//Reflective::set_cr(const float c) { reflective_brdf->set_cr(c); }
+inline void Reflective::set_cr( const float r, const float g, const float b ) { reflective_brdf->set_cr( r, g, b ); }
+// ---------------------------------------------------------------- set_cr
 
-//#endif
+inline void Reflective::set_cr( const float c ) { reflective_brdf->set_cr( c ); }
+
+#endif

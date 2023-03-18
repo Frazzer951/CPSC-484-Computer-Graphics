@@ -32,8 +32,26 @@ bool Plane::hit( const Ray &ray, double &tmin, ShadeRec &sr ) const {
 }
 
 bool Plane::shadow_hit( const Ray &ray, double &tmin ) const {
-  if ( !shadows ) { return false; }
+  if ( !shadows ) return false;
 
-  // TODO: implement shadow_hit testing
-  return false;
+  float t = ( a - ray.o ).dot( n ) / ( ray.d.dot( n ) );
+
+  if ( t > kEpsilon ) {
+    tmin = t;
+    return true;
+  } else {
+    return false;
+  }
 }
+
+//bool
+//Plane::shadow_hit(const Ray& ray, float& tmin) const {
+//    float t = (a - ray.o) * n / (ray.d * n);
+
+//    if (t > kEpsilon) {
+//        tmin = t;
+//        return (true);
+//    }
+//    else
+//        return (false);
+//}
