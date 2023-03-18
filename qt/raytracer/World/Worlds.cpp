@@ -63,6 +63,7 @@ RGBColor darkGreen( 0.0, 0.81, 0.41 );
 
 RGBColor cyan( 0, 1, 1 );
 RGBColor blue_green( 0.1, 1, 0.5 );
+RGBColor blue( 0, 1, 1 );
 
 RGBColor lightLightBlue( 0.4, 0.64, 0.82 );
 RGBColor lightBlue( 0.1, 0.4, 0.8 );
@@ -600,4 +601,83 @@ void build_mcdonalds_world( World *w ) {
   w->init_plane();
 
   build_mcdonalds( w );
+}
+
+void build_discussion( World *w ) {
+  //plane
+  float    ka = 0.25;
+  float    kd = 0.75;
+  RGBColor grey( 0.25 );
+
+  std::shared_ptr<Phong> phong_ptr36 = std::make_shared<Phong>();
+  phong_ptr36->set_ka( ka );
+  phong_ptr36->set_kd( kd );
+  phong_ptr36->set_cd( grey );
+  phong_ptr36->set_ks( 0.25 );
+  phong_ptr36->set_exp( 1.5 );
+
+  //build
+  std::shared_ptr<Reflective> reflect1 = std::make_shared<Reflective>();
+  reflect1->set_kr( 2.5 );
+  reflect1->set_ka( 1.25 );
+  reflect1->set_kd( 1.75 );
+  reflect1->set_cd( black );
+
+  Sphere *sphere2 = new Sphere( Point3D( -4, 0, 15 ), 5 );
+  sphere2->set_material( reflect1 );
+  w->add_object( sphere2 );
+
+  RingDims rd = RingDims( 0, 1, 6.5, 8 );
+  build_ring_helper( w, Point3D( 0, -8, 2.5 ), blue, rd, 70, phong_ptr36 );
+  build_ring_helper( w, Point3D( 0, 0, 0.5 ), blue, rd, 90, phong_ptr36 );
+  build_ring_helper( w, Point3D( 0, 8, 2.5 ), blue, rd, 110, phong_ptr36 );
+
+  for ( int i = 0; i < 5; i++ ) { add_bb_helper( w, orange, Point3D( -4, -6 + ( i * 3 ) - 0.5, 0 ), 1, 1, 6 ); }
+
+  build_cone_helper( w, Point3D( -6, -2.5, 0 ), darkBlue, 4.0, 1.5 );
+  build_cone_helper( w, Point3D( -6, 2.5, 0 ), darkBlue, 4.0, 1.5 );
+
+  //  build_cone_helper( w, Point3D( 2, -2.5, 0 ), darkBlue, 5.0, 1.5 );
+  //  build_cylinder_helper( w, Point3D( -2.5, -1, 0 ), green, 0.0, 3.0, 1.0 );
+  //  add_triangle_helper( w, red, Point3D( -2.8, 2.5, 2.5 ), Point3D( -2.5, -7.5, 0.5 ), Point3D( -0.5, -3, 1.5 ) );
+
+  add_checkerboard( w, cyan, orange, 1 );
+}
+
+void build_discussion_world( World *w ) {
+  //camera
+  Pinhole *ptr = new Pinhole;
+  ptr->set_eye( -20, 0, 5 );
+  ptr->set_lookat( 0, 0, 5 );
+  ptr->set_view_distance( 200 );
+  ptr->set_up_vector( 0, 0, 1 );
+  ptr->compute_uvw();
+  w->set_camera( ptr );
+
+  //viewplane
+  int num_samples = 25;
+  w->vp.set_hres( VIEWPLANE_HRES );
+  w->vp.set_vres( VIEWPLANE_VRES );
+  w->vp.set_sampler( new Jittered( num_samples ) );
+  w->vp.set_pixel_size( 0.5 );
+  w->vp.set_samples( num_samples );
+
+  //lights
+  Ambient *ambient_ptr = new Ambient;
+  ambient_ptr->scale_radiance( 0.2 );
+  w->set_ambient_light( ambient_ptr );
+  w->background_color = black;    //RGBColor(0.9, 0.9, 0.9);
+  w->tracer_ptr       = new RayCast( w );
+
+  Directional *lt = new Directional();
+  lt->set_shadows( true );
+  lt->set_direction( -30, 7, 10 );
+  lt->scale_radiance( 8.5 );
+  w->add_light( lt );
+
+  w->tracer_ptr = new RayCast( w );
+
+  w->init_plane();
+
+  build_discussion( w );
 }

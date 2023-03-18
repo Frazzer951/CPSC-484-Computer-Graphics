@@ -51,4 +51,7 @@ void build_five_reflective_transparent_spheres( World *w );
 
 void build_sundial( World *w, double radius );
 
+void build_discussion( World *w );
+void build_discussion_world( World *w );
+
 #endif    // WORLDS_H
