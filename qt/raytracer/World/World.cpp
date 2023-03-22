@@ -308,10 +308,10 @@ void World::build() {
   //  build_sphere_triangle_box_world( this, A );
   //  build_olympic_rings_world( this );    // TODO:  fill in code in Worlds.cpp, , adjust lights and cameras, and run
 
-  //  build_figure_10_10( this, A );    //  to generate 10.10a, b or c    --- thin lens
+  build_figure_10_10( this, A );    //  to generate 10.10a, b or c    --- thin lens
 
   //  build_mcdonalds_world( this );
-  build_discussion_world( this );
+  //  build_discussion_world( this );
 
   check();    // checks for valid camera, viewplane, lights, plane...
 }

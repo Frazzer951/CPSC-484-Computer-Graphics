@@ -63,7 +63,7 @@ RGBColor darkGreen( 0.0, 0.81, 0.41 );
 
 RGBColor cyan( 0, 1, 1 );
 RGBColor blue_green( 0.1, 1, 0.5 );
-RGBColor blue( 0, 1, 1 );
+RGBColor blue( 0, 0, 1 );
 
 RGBColor lightLightBlue( 0.4, 0.64, 0.82 );
 RGBColor lightBlue( 0.1, 0.4, 0.8 );
@@ -368,8 +368,8 @@ void thin_lens_helper( World *w, const Point3D &p1, const Point3D &p2, const RGB
 void build_thinlens( World *w, double focal_distance ) {
   int num_samples = 100;
 
-  w->vp.set_hres( 400 );
-  w->vp.set_vres( 300 );
+  w->vp.set_hres( 500 );    // 400
+  w->vp.set_vres( 500 );    // 300
   w->vp.set_pixel_size( 0.05 );
   w->vp.set_sampler( new MultiJittered( num_samples ) );
   w->vp.set_max_depth( 0 );
@@ -469,6 +469,18 @@ void build_ring_helper( World *w, const Point3D &posn, const RGBColor &color, co
   Instance *isring = new Instance( new ThickRing( rd.bottom, rd.top, rd.inner, rd.outer ) );
   isring->rotate_y( 0 );
   isring->rotate_z( r );
+  isring->translate( posn );
+  isring->set_material( m_ptr );
+  w->set_material( isring, color );
+  w->add_object( isring );
+}
+
+void build_ring_helper( World *w, const Point3D &posn, const RGBColor &color, const RingDims &rd, double rx, double ry,
+                        double rz, std::shared_ptr<Material> m_ptr ) {
+  Instance *isring = new Instance( new ThickRing( rd.bottom, rd.top, rd.inner, rd.outer ) );
+  isring->rotate_x( rx );
+  isring->rotate_y( ry );
+  isring->rotate_z( rz );
   isring->translate( posn );
   isring->set_material( m_ptr );
   w->set_material( isring, color );
@@ -680,4 +692,65 @@ void build_discussion_world( World *w ) {
   w->init_plane();
 
   build_discussion( w );
+}
+
+void build_olympic_rings( World *w ) {
+  float    ka = 0.25;
+  float    kd = 0.75;
+  RGBColor grey( 0.25 );
+
+  std::shared_ptr<Phong> phong_ptr36 = std::make_shared<Phong>();
+  phong_ptr36->set_ka( ka );
+  phong_ptr36->set_kd( kd );
+  phong_ptr36->set_cd( grey );
+  phong_ptr36->set_ks( 0.25 );
+  phong_ptr36->set_exp( 1.5 );
+
+  RingDims rd = RingDims( 0, 1, 4.5, 6 );
+  // top
+  build_ring_helper( w, Point3D( -13, 0, 20 ), RGBColor( 0.04, 0.52, 0.79 ), rd, 0, 0, -7.75, phong_ptr36 );    // blue
+  build_ring_helper( w, Point3D( 0.0, 0, 20 ), RGBColor( 0.00, 0.00, 0.00 ), rd, 0, 0, -7.75, phong_ptr36 );    // black
+  build_ring_helper( w, Point3D( +13, 0, 20 ), RGBColor( 0.91, 0.10, 0.13 ), rd, 0, 0, -7.75, phong_ptr36 );    // red
+  // bottom
+  build_ring_helper( w, Point3D( -6.5, 0, 15 ), RGBColor( 1.00, 0.84, 0.00 ), rd, -4.5, 0, 5, phong_ptr36 );    // yellow
+  build_ring_helper( w, Point3D( +6.5, 0, 15 ), RGBColor( 0.14, 0.68, 0.29 ), rd, -4.5, 0, 5, phong_ptr36 );    // green
+  add_checkerboard( w, white, black, 1 );
+}
+
+void build_olympic_rings_world( World *w ) {
+  //camera
+  Pinhole *ptr = new Pinhole;
+  ptr->set_eye( 0, -40, 10 );
+  ptr->set_lookat( 0, 0, 10 );
+  ptr->set_view_distance( 200 );
+  ptr->set_up_vector( 0, 0, 1 );
+  ptr->compute_uvw();
+  w->set_camera( ptr );
+
+  //viewplane
+  int num_samples = 25;
+  w->vp.set_hres( VIEWPLANE_HRES );
+  w->vp.set_vres( VIEWPLANE_VRES );
+  w->vp.set_sampler( new Jittered( num_samples ) );
+  w->vp.set_pixel_size( 0.5 );
+  w->vp.set_samples( num_samples );
+
+  //lights
+  Ambient *ambient_ptr = new Ambient;
+  ambient_ptr->scale_radiance( 0.2 );
+  w->set_ambient_light( ambient_ptr );
+  w->background_color = RGBColor( 0.9, 0.9, 0.9 );
+  w->tracer_ptr       = new RayCast( w );
+
+  Directional *lt = new Directional();
+  lt->set_shadows( true );
+  lt->set_direction( 7, -30, 10 );
+  lt->scale_radiance( 8.5 );
+  w->add_light( lt );
+
+  w->tracer_ptr = new RayCast( w );
+
+  w->init_plane();
+
+  build_olympic_rings( w );
 }
