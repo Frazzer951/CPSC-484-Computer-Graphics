@@ -464,23 +464,12 @@ void build_cylinder_helper( World *w, const Point3D &posn, const RGBColor &color
   w->add_object( iscylinder );
 }
 
-void build_ring_helper( World *w, const Point3D &posn, const RGBColor &color, const RingDims &rd, int r,
-                        std::shared_ptr<Material> m_ptr ) {
+void build_ring_helper( World *w, const Point3D &posn, const RGBColor &color, const RingDims &rd, double rot_x, double rot_y,
+                        double rot_z, std::shared_ptr<Material> m_ptr ) {
   Instance *isring = new Instance( new ThickRing( rd.bottom, rd.top, rd.inner, rd.outer ) );
-  isring->rotate_y( 0 );
-  isring->rotate_z( r );
-  isring->translate( posn );
-  isring->set_material( m_ptr );
-  w->set_material( isring, color );
-  w->add_object( isring );
-}
-
-void build_ring_helper( World *w, const Point3D &posn, const RGBColor &color, const RingDims &rd, double rx, double ry,
-                        double rz, std::shared_ptr<Material> m_ptr ) {
-  Instance *isring = new Instance( new ThickRing( rd.bottom, rd.top, rd.inner, rd.outer ) );
-  isring->rotate_x( rx );
-  isring->rotate_y( ry );
-  isring->rotate_z( rz );
+  isring->rotate_x( rot_x );
+  isring->rotate_y( rot_y );
+  isring->rotate_z( rot_z );
   isring->translate( posn );
   isring->set_material( m_ptr );
   w->set_material( isring, color );
@@ -566,15 +555,15 @@ void build_mcdonalds( World *w ) {
   w->add_object( sphere2 );
 
   RingDims rd = RingDims( 1, 2, 6.5, 8 );
-  build_ring_helper( w, Point3D( -2, 0, -0.5 ), yellow, rd, 50, phong_ptr36 );
-  build_ring_helper( w, Point3D( -12, 6, 1 ), yellow, rd, 45, phong_ptr36 );
+  build_ring_helper( w, Point3D( -2, 0, -0.5 ), yellow, rd, 0, 0, 50, phong_ptr36 );
+  build_ring_helper( w, Point3D( -12, 6, 1 ), yellow, rd, 0, 0, 45, phong_ptr36 );
   add_bb_helper( w, orange, Point3D( 0, 6, 0 ), Point3D( 3, 7, 6 ) );
   build_cone_helper( w, Point3D( -2, 3.5, 0 ), cyan, 4.0, 1.5 );
   build_cone_helper( w, Point3D( 2, -2.5, 0 ), darkBlue, 5.0, 1.5 );
   build_cylinder_helper( w, Point3D( -2.5, -1, 0 ), green, 0.0, 3.0, 1.0 );
   add_triangle_helper( w, red, Point3D( -2.8, 2.5, 2.5 ), Point3D( -2.5, -7.5, 0.5 ), Point3D( -0.5, -3, 1.5 ) );
 
-  add_checkerboard( w, red, white, 1 );
+  add_checkerboard( w, white, darkBlue, 1 );
 }
 
 void build_mcdonalds_world( World *w ) {
@@ -640,9 +629,9 @@ void build_discussion( World *w ) {
   w->add_object( sphere2 );
 
   RingDims rd = RingDims( 0, 1, 6.5, 8 );
-  build_ring_helper( w, Point3D( 0, -8, 2.5 ), blue, rd, 70, phong_ptr36 );
-  build_ring_helper( w, Point3D( 0, 0, 0.5 ), blue, rd, 90, phong_ptr36 );
-  build_ring_helper( w, Point3D( 0, 8, 2.5 ), blue, rd, 110, phong_ptr36 );
+  build_ring_helper( w, Point3D( 0, -8, 2.5 ), blue, rd, 0, 0, 70, phong_ptr36 );
+  build_ring_helper( w, Point3D( 0, 0, 0.5 ), blue, rd, 0, 0, 90, phong_ptr36 );
+  build_ring_helper( w, Point3D( 0, 8, 2.5 ), blue, rd, 0, 0, 110, phong_ptr36 );
 
   for ( int i = 0; i < 5; i++ ) { add_bb_helper( w, orange, Point3D( -4, -6 + ( i * 3 ) - 0.5, 0 ), 1, 1, 6 ); }
 
