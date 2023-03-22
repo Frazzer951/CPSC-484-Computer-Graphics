@@ -12,6 +12,8 @@ void add_sphere_helper( World *w, RGBColor color, Point3D pt, double radius );
 
 void add_bb_helper( World *w, RGBColor color, Point3D p0, Point3D p1, double r = 0.1 );
 void add_bb_helper( World *w, RGBColor color, Point3D p0, double dx, double dy, double dz );
+void add_bb_helper( World *w, RGBColor color, Point3D p0, double dx, double dy, double dz, double rot_x, double rot_y,
+                    double rot_z, double radius = 0.1 );
 void add_rect_helper( World *w, RGBColor color, Point3D pt, Vector3D pt1, Vector3D pt2, Normal n );
 void add_triangle_helper( World *w, RGBColor color, Point3D pt0, Point3D pt1, Point3D pt2 );
 

@@ -6,6 +6,7 @@
 #include "GeometricObjects/Primitives/Rectangle.h"
 #include "GeometricObjects/BeveledObjects/BeveledBox.h"
 #include "GeometricObjects/Triangles/Triangle.h"
+#include "GeometricObjects/Instance.h"
 
 #include "World/World_builder.h"
 #include "Textures/Checker3D.h"
@@ -104,6 +105,18 @@ void add_bb_helper( World *w, RGBColor color, Point3D p0, Point3D p1, double r )
 
 void add_bb_helper( World *w, RGBColor color, Point3D p0, double dx, double dy, double dz ) {
   add_bb_helper( w, color, p0, Point3D( p0.x + dx, p0.y + dy, p0.z + dz ) );
+}
+
+void add_bb_helper( World *w, RGBColor color, Point3D p0, double dx, double dy, double dz, double rot_x, double rot_y,
+                    double rot_z, double radius ) {
+  BeveledBox *bb      = new BeveledBox( Point3D( 0 ), Point3D( dx, dy, dz ), radius );
+  Instance   *bev_box = new Instance( bb );
+  bev_box->rotate_x( rot_x );
+  bev_box->rotate_y( rot_y );
+  bev_box->rotate_z( rot_z );
+  bev_box->translate( p0 );
+  w->set_material( bev_box, color );
+  w->add_object( bev_box );
 }
 
 void add_rect_helper( World *w, RGBColor color, Point3D pt, Vector3D pt1, Vector3D pt2, Normal n ) {

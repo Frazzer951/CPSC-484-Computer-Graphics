@@ -54,4 +54,7 @@ void build_sundial( World *w, double radius );
 void build_discussion( World *w );
 void build_discussion_world( World *w );
 
+void build_stonehenge( World *w );
+void build_stonehenge_world( World *w );
+
 #endif    // WORLDS_H

@@ -310,8 +310,9 @@ void World::build() {
 
   //  build_figure_10_10( this, A );    //  to generate 10.10a, b or c    --- thin lens
 
-  build_mcdonalds_world( this );
+  //  build_mcdonalds_world( this );
   //  build_discussion_world( this );
+  build_stonehenge_world( this );
 
   check();    // checks for valid camera, viewplane, lights, plane...
 }
