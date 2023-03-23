@@ -749,6 +749,7 @@ void build_stonehenge( World *w ) {
   float    ka = 0.25;
   float    kd = 0.75;
   RGBColor grey( 0.25 );
+  RGBColor light_grey( 0.75 );
 
   std::shared_ptr<Phong> phong_ptr36 = std::make_shared<Phong>();
   phong_ptr36->set_ka( ka );
@@ -770,23 +771,48 @@ void build_stonehenge( World *w ) {
     double x         = radius * std::cos( angle );
     double y         = radius * std::sin( angle );
 
-    add_bb_helper( w, grey, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
+    add_bb_helper( w, light_grey, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
   }
   RingDims rd = RingDims( 0, 2, radius, radius + depth );
-  build_ring_helper( w, Point3D( 0, 0, height ), grey, rd, 90, 0, 0, phong_ptr36 );
+  build_ring_helper( w, Point3D( 0, 0, height ), light_grey, rd, 90, 0, 0, phong_ptr36 );
 
   // inner ring
   number = 31;
-  radius = 27.0;
+  radius = 30.0;
   theta  = 2 * M_PI / number;
-  width = 1, depth = 1, height = 3;
+  width = 2, depth = 1, height = 5;
   for ( int i = 0; i < number; i++ ) {
     double angle     = theta * i;
     double angle_deg = qRadiansToDegrees( angle );
     double x         = radius * std::cos( angle );
     double y         = radius * std::sin( angle );
 
-    add_bb_helper( w, grey, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
+    add_bb_helper( w, light_grey, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
+  }
+
+  // inner inner ring
+  number = 16;
+  radius = 20.0;
+  theta  = 2 * M_PI / number;
+  width = 4, depth = 2, height = 10;
+  for ( int i = 0; i < 10; i++ ) {
+    double angle     = theta * i;
+    double angle_deg = qRadiansToDegrees( angle );
+    double x         = radius * std::cos( angle );
+    double y         = radius * std::sin( angle );
+
+    add_bb_helper( w, light_grey, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
+  }
+  // horizontal on center middle ring
+  number = 8;
+  theta  = 2 * M_PI / number;
+  width = 2, depth = 2, height = 12;
+  for ( int i = 0; i < 5; i++ ) {
+    double angle     = theta * i;
+    double angle_deg = qRadiansToDegrees( angle );
+    double x         = radius * std::cos( angle );
+    double y         = radius * std::sin( angle );
+    add_bb_helper( w, light_grey, Point3D( x, y, 10 ), depth, height, width, 0, 0, angle_deg + 15 );
   }
 
   add_checkerboard( w, green, darkGreen, 0.5 );
@@ -795,9 +821,10 @@ void build_stonehenge( World *w ) {
 void build_stonehenge_world( World *w ) {
   //camera
   Pinhole *ptr = new Pinhole;
-  ptr->set_eye( -70, -70, 60 );
-  ptr->set_lookat( 0, 0, 0 );
-  ptr->set_view_distance( 300 );
+  ptr->set_eye( -70, -30, 75 );
+  // ptr->set_eye( 0, 0, 75 );
+  ptr->set_lookat( 0.1, 0.1, 0 );
+  ptr->set_view_distance( 250 );
   ptr->set_up_vector( 0, 0, 1 );
   ptr->compute_uvw();
   w->set_camera( ptr );
@@ -812,14 +839,14 @@ void build_stonehenge_world( World *w ) {
 
   //lights
   Ambient *ambient_ptr = new Ambient;
-  ambient_ptr->scale_radiance( 0.2 );
+  ambient_ptr->scale_radiance( 0.4 );    // 0.2
   w->set_ambient_light( ambient_ptr );
   w->background_color = black;    //RGBColor(0.9, 0.9, 0.9);
   w->tracer_ptr       = new RayCast( w );
 
   Directional *lt = new Directional();
   lt->set_shadows( true );
-  lt->set_direction( 30, 10, 10 );
+  lt->set_direction( 60, -45, 10 );
   lt->scale_radiance( 8.5 );
   w->add_light( lt );
 
