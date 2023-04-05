@@ -256,10 +256,14 @@ void build_practical( World *w ) {
   add_checkerboard( w, lightGrey, white, 1 );
 }
 void build_practical_world( World *w, double distance ) {
-  Pinhole *camera = new Pinhole;
+  //  Pinhole *camera = new Pinhole;
+  Fisheye *camera = new Fisheye;
+  camera->set_fov( 180 );
+  camera->set_rectangular( true );
+
   camera->set_eye( -6, -5, 9 );
   camera->set_lookat( -1, 0, 7 );
-  camera->set_view_distance( distance );    // camera->set_view_distance(800.0);
+  // camera->set_view_distance( distance );    // camera->set_view_distance(800.0);
   camera->set_up_vector( 1, 1, 1 );
   camera->compute_uvw();
   w->set_camera( camera );
