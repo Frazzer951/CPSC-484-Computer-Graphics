@@ -7,8 +7,8 @@
 //
 #include "Samplers/Sampler.h"
 
-const int VIEWPLANE_HRES = 1000;    // 500
-const int VIEWPLANE_VRES = 1000;    // 500
+const int VIEWPLANE_HRES = 500;    // 1000;    // 500
+const int VIEWPLANE_VRES = 500;    // 1000;    // 500
 
 struct ViewPlane {
   ViewPlane();
