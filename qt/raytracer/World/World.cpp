@@ -99,7 +99,7 @@ void World::render_scene() const {
           pp.x = vp.s * ( c - 0.5 * vp.hres + sp.x );    // jittered sampling
           pp.y = vp.s * ( r - 0.5 * vp.vres + sp.y );
 
-          ray.o       = Point3D( pp.x, pp.y, zw );
+          ray.o        = Point3D( pp.x, pp.y, zw );
           pixel_color += tracer_ptr->trace_ray( ray );
         }
       }
@@ -303,7 +303,7 @@ void World::init_ambient_light( double radiance ) {
 void World::build() {
   //  build_sphere_world( this );
   //  build_city_world( this );
-  build_practical_world( this );
+  //  build_practical_world( this );
 
   //  build_sphere_triangle_box_world( this, A );
   //  build_olympic_rings_world( this );    // TODO:  fill in code in Worlds.cpp, , adjust lights and cameras, and run
@@ -313,6 +313,8 @@ void World::build() {
   //  build_mcdonalds_world( this );
   //  build_discussion_world( this );
   //  build_stonehenge_world( this );
+
+  build_figure_12_world( this, 12 );
 
   check();    // checks for valid camera, viewplane, lights, plane...
 }

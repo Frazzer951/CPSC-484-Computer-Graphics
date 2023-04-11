@@ -57,4 +57,7 @@ void build_discussion_world( World *w );
 void build_stonehenge( World *w );
 void build_stonehenge_world( World *w );
 
+void build_figure_12( World *w, int number );
+void build_figure_12_world( World *w, int number );
+
 #endif    // WORLDS_H

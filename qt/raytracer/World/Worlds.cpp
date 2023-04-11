@@ -82,7 +82,7 @@ RGBColor darkBlack( 0, 0, 0 );
 struct ColorCenterRadius {
   RGBColor color;
   Point3D  center;
-  int      radius;
+  double   radius;
 };
 
 void build_spheres_helper( World *w, const std::vector<ColorCenterRadius> &spheres ) {
@@ -886,4 +886,91 @@ void build_stonehenge_world( World *w ) {
   w->init_plane();
 
   build_stonehenge( w );
+}
+
+void build_figure_12( World *w, int number ) {
+  qDebug() << "just inside build_figure_12 number is" << number;
+
+  if ( number < 12 || number > 14 ) { throw new std::invalid_argument( "Invalid figure requested\n" ); }
+
+  if ( number == 12 ) {
+    std::vector<ColorCenterRadius> spheres = {
+      { cyan, Point3D( 0, 0, 35 ), 0.75 },
+      { brown, Point3D( 0 ), 2 },
+      { yellow, Point3D( 1.5, 0, -80 ), 2 }
+    };
+
+    qDebug() << "just before build_spheres_helper()";
+    build_spheres_helper( w, spheres );
+    qDebug() << "at end if build_spheres_helper()";
+  } else if ( number == 13 ) {
+    //    Phong *phong_ptr = new Phong;
+    //    phong_ptr->set_cd( 0.7 );
+    //    phong_ptr->set_ka( 0.3 );
+    //    phong_ptr->set_kd( 1 );
+    //    phong_ptr->set_ks( 0.3 );
+    //    phong_ptr->set_exp( 50 );
+
+    //    Point3D p0( -1.0 );
+    //    Point3D p1( 1.0 );
+    //    float   bevel_radius = 0.04;
+
+    //    WireframeBox *box_ptr = new WireframeBox( p0, p1, bevel_radius );
+    //    box_ptr->set_material( phong_ptr );
+    //    add_object( box_ptr );
+  }
+}
+
+void build_figure_12_world( World *w, int number ) {
+  //camera
+  float vpd = 100;    // view plane distance for 200 x 200 pixel images
+
+  Pinhole *left_camera_ptr = new Pinhole;
+  left_camera_ptr->set_view_distance( vpd );
+
+  Pinhole *right_camera_ptr = new Pinhole;
+  right_camera_ptr->set_view_distance( vpd );
+
+  StereoCamera *stereo_ptr = new StereoCamera;
+  stereo_ptr->set_left_camera( left_camera_ptr );
+  stereo_ptr->set_right_camera( right_camera_ptr );
+  stereo_ptr->use_parallel_viewing();
+  //  stereo_ptr->use_transverse_viewing();
+  stereo_ptr->set_pixel_gap( 5 );    // in pixels
+  stereo_ptr->set_eye( 5, 0, 100 );
+  stereo_ptr->set_lookat( 0 );
+  stereo_ptr->compute_uvw();
+  stereo_ptr->set_stereo_angle( 0.75 );    // in degrees
+  stereo_ptr->setup_cameras();
+  w->set_camera( stereo_ptr );
+
+  //viewplane
+  int num_samples = 25;
+  w->vp.set_hres( 250 );    // VIEWPLANE_HRES
+  w->vp.set_vres( 250 );    // VIEWPLANE_VRES
+  w->vp.set_sampler( new Jittered( num_samples ) );
+  w->vp.set_pixel_size( 0.05 );    // 0.05
+  w->vp.set_samples( num_samples );
+
+  //lights
+  Ambient *ambient_ptr = new Ambient;
+  ambient_ptr->scale_radiance( 0.2 );
+  w->set_ambient_light( ambient_ptr );
+  w->background_color = black;    //RGBColor(0.9, 0.9, 0.9);
+
+  Directional *lt = new Directional();
+  lt->set_shadows( true );
+  lt->set_direction( 100, 100, 100 );    // -10, -10, 36
+  lt->scale_radiance( 6.5 );
+  w->add_light( lt );
+
+  //  PointLight *light_ptr = new PointLight;
+  //  light_ptr->set_shadows( true );
+  //  light_ptr->set_location( 100, 100, 100 );
+  //  light_ptr->scale_radiance( 3 );
+  //  w->add_light( light_ptr );
+
+  w->tracer_ptr = new RayCast( w );
+
+  build_figure_12( w, number );
 }
