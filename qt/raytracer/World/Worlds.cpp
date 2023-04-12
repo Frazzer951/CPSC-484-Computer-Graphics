@@ -1,47 +1,4 @@
-﻿#include "World/World.h"
-#include "World_builder.h"
-#include "Materials/Reflective.h"
-#include "Materials/Transparent.h"
-
-#include "Cameras/Fisheye.h"
-#include "Cameras/Pinhole.h"
-#include "Cameras/StereoCamera.h"
-#include "Cameras/ThinLens.h"
-
-#include "GeometricObjects/Instance.h"
-
-#include "GeometricObjects/BeveledObjects/BeveledBox.h"
-
-#include "GeometricObjects/CompoundObjects/Box.h"
-#include "GeometricObjects/CompoundObjects/Grid.h"
-#include "GeometricObjects/CompoundObjects/RoundRimmedBowl.h"
-#include "GeometricObjects/CompoundObjects/SolidCylinder.h"
-#include "GeometricObjects/CompoundObjects/SolidCone.h"
-#include "GeometricObjects/CompoundObjects/ThickRing.h"
-
-#include "GeometricObjects/PartObjects/ConvexPartSphere.h"
-
-#include "GeometricObjects/Triangles/Triangle.h"
-
-#include "GeometricObjects/Primitives/Plane.h"
-#include "GeometricObjects/Primitives/Torus.h"
-
-#include "Lights/Directional.h"
-#include "Lights/PointLight.h"
-
-#include "Materials/Matte.h"
-#include "Materials/SV_Matte.h"
-#include "Materials/Reflective.h"
-
-#include "Textures/Checker3D.h"
-#include "Textures/ImageTexture.h"
-
-#include "Samplers/MultiJittered.h"
-#include "Samplers/Jittered.h"
-
-#include "Tracers/RayCast.h"
-
-#include "World/Worlds.h"
+﻿#include "World/Worlds.h"
 
 RGBColor lightRed( 1, 0.4, 0.4 );
 RGBColor darkRed( 0.9, 0.1, 0.1 );
@@ -74,9 +31,13 @@ RGBColor darkPurple( 0.5, 0, 1 );
 
 RGBColor lightLightGrey( 0.9 );
 RGBColor lightGrey( 0.7 );
+RGBColor darkGrey( 0.3 );
+RGBColor darkBlueGrey( 0.3, 0.3, 0.5 );
 RGBColor grey( 0.25 );
 RGBColor darkDarkGrey( 0.2, 0.2, 0.2 );
 
+RGBColor darkBrown( 0.18, 0.15, 0.14 );
+RGBColor mediumBrown( 0.4, 0.302, 0.243 );
 RGBColor darkBlack( 0, 0, 0 );
 
 struct ColorCenterRadius {
@@ -147,11 +108,20 @@ void build_sphere_world( World *w ) {
 
   w->init_viewplane();
 
-  w->init_ambient_light();
+  //    w->init_ambient_light();
+  //    Directional* lt = new Directional();
+  ////    lt->set_shadows(true);
+  //    lt->set_shadows(false);
+  //    lt->set_direction(300, 100, 200);
+  //    lt->scale_radiance(7.0);
+  //    w->add_light(lt);
+
+  w->init_ambient_light();    // from practical world
   Directional *lt = new Directional();
-  lt->set_shadows( true );
-  lt->set_direction( 300, 100, 200 );
-  lt->scale_radiance( 7.0 );
+  //    lt->set_shadows(true);
+  lt->set_shadows( false );
+  lt->set_direction( 10, -30, 10 );
+  lt->scale_radiance( 8.5 );
   w->add_light( lt );
 
   w->tracer_ptr = new RayCast( w );
@@ -168,7 +138,7 @@ struct ColorBottomTop {
 };
 
 void build_city_helper( World *w, const std::vector<ColorBottomTop> &buildings ) {
-  for ( const ColorBottomTop &bldg : buildings ) { add_bb_helper( w, bldg.color, bldg.bottom, bldg.top ); }
+  for ( const ColorBottomTop &bldg : buildings ) { add_bb_helper( w, bldg.color, bldg.bottom, bldg.top, Vector3D() ); }
 }
 void build_city( World *w ) {
   std::vector<ColorBottomTop> buildings = {
@@ -234,10 +204,11 @@ void build_city_world( World *w, double distance ) {
   build_city( w );
 }
 
-#define SPACING 5
+#define SPACING 3
 #define SIDE    1
+#define HEIGHT  6
 
-void add_checkerboard( World *w, const RGBColor &c1, const RGBColor &c2, double size ) {
+void add_checkerboard( World *w, const RGBColor &c1, const RGBColor &c2, int size ) {
   Plane *plane = new Plane( Point3D( -30, -30, 0 ), Normal( 0, 0, 1 ) );
   build_checkerboard( plane, c1, c2, size );
   w->add_object( plane );
@@ -245,25 +216,27 @@ void add_checkerboard( World *w, const RGBColor &c1, const RGBColor &c2, double 
 
 void build_practical( World *w ) {
   for ( int i = 0; i < 60; i += SPACING ) {
-    add_bb_helper( w, orange, Point3D( i, 0, 0 ), SIDE, SIDE, 4 );
-    add_bb_helper( w, orange, Point3D( 0, 3 * SPACING + i, 0 ), SIDE, SIDE, 4 );
+    add_bb_helper( w, orange, Point3D( i, 0, 0 ), SIDE, SIDE, HEIGHT, Vector3D() );
+    add_bb_helper( w, orange, Point3D( 0, 3 * SPACING + i, 0 ), SIDE, SIDE, HEIGHT, Vector3D() );
 
-    add_bb_helper( w, cyan, Point3D( i, SPACING, 0 ), SIDE, SIDE, 8 );
+    add_bb_helper( w, cyan, Point3D( i, SPACING, 0 ), SIDE, SIDE, 2 * HEIGHT, Vector3D() );
 
-    add_bb_helper( w, green, Point3D( i, 2 * SPACING, 0 ), SIDE, SIDE, 16 );
+    add_bb_helper( w, green, Point3D( i, 2 * SPACING, 0 ), SIDE, SIDE, 4 * HEIGHT, Vector3D() );
   }
 
-  add_checkerboard( w, lightGrey, white, 1 );
+  add_checkerboard( w, lightGrey, white, 2 );
 }
 void build_practical_world( World *w, double distance ) {
-  //  Pinhole *camera = new Pinhole;
+  //    Pinhole* camera = new Pinhole;
   Fisheye *camera = new Fisheye;
-  camera->set_fov( 180 );
+  camera->set_fov( 270 );
   camera->set_rectangular( true );
 
-  camera->set_eye( -6, -5, 9 );
-  camera->set_lookat( -1, 0, 7 );
-  // camera->set_view_distance( distance );    // camera->set_view_distance(800.0);
+  //    camera->set_eye(-6, -5, 2 * HEIGHT);
+  camera->set_eye( -6, -6, 1.5 * HEIGHT );
+  camera->set_lookat( 0, 0, HEIGHT );
+  //    camera->set_lookat(-1, 0, 7);
+  //    camera->set_view_distance(distance);    // camera->set_view_distance(800.0);
   camera->set_up_vector( 1, 1, 1 );
   camera->compute_uvw();
   w->set_camera( camera );
@@ -273,6 +246,7 @@ void build_practical_world( World *w, double distance ) {
   w->init_ambient_light();
   Directional *lt = new Directional();
   lt->set_shadows( true );
+  //    lt->set_shadows(false);
   lt->set_direction( 10, -30, 10 );
   lt->scale_radiance( 8.5 );
   w->add_light( lt );
@@ -286,9 +260,9 @@ void build_practical_world( World *w, double distance ) {
 
 void build_sphere_triangle_box( World *w ) {
   //  add_sphere_helper( w, lightGreen, Point3D( 1.7, -0.2, 1.7 ), SIDE / 2.5 );
-  //  add_bb_helper( w, orange, Point3D( 2, 0, 0 ), 0.75 * SIDE, SIDE, 2.5 );
+  //  add_bb_helper( w, orange, Point3D( 2, 0, 0 ), 0.75 * SIDE, SIDE, 2.5, Vector3D() );
   add_sphere_helper( w, lightGreen, Point3D( -0.45, -0.4, 1.45 ), 0.5 );
-  add_bb_helper( w, orange, Point3D( 0.2, -0.2, 0 ), 0.7, 1.0, 2 );
+  add_bb_helper( w, orange, Point3D( 0.2, -0.2, 0 ), 0.7, 1.0, 2, Vector3D() );
 
   std::shared_ptr<Phong> phong = std::make_shared<Phong>();
   phong->set_cd( cyan );
@@ -481,11 +455,11 @@ void build_ring_helper( World *w, const Point3D &posn, const RGBColor &color, co
 }
 
 void build_axis( World *w, double length, double width ) {
-  add_bb_helper( w, red, Point3D( 0, 0, 0 ), length, width, width );
+  add_bb_helper( w, red, Point3D( 0, 0, 0 ), length, width, width, Vector3D() );
   add_triangle_helper( w, red, Point3D( length, 0, 1.2 * width ), Point3D( length, 0, -0.6 * width ),
                        Point3D( length + 1.2 * width, 0, 0.6 * width ) );
 
-  add_bb_helper( w, darkBlue, Point3D( 0, 0, 0 ), width, length, width );
+  add_bb_helper( w, darkBlue, Point3D( 0, 0, 0 ), width, length, width, Vector3D() );
   add_triangle_helper( w, darkBlue, Point3D( 0, length, 1.2 * width ), Point3D( 0, length, -0.6 * width ),
                        Point3D( 0, length + 1.2 * width, 0.6 * width ) );
 }
@@ -500,37 +474,33 @@ Instance *add_torus_helper( World *w, const RGBColor &color, double a, double b,
   return istorus;
 }
 
+Instance *build_partannulus_helper( World *w, const RGBColor &color, double i_r, double o_r, double azimuth_min,
+                                    double azimuth_max, Point3D location, Point3D scale, Vector3D rotation,
+                                    std::shared_ptr<Material> m_ptr, bool up = true ) {
+  Instance *is_part_annulus = new Instance( new PartAnnulus( location.y, i_r, o_r, azimuth_min, azimuth_max, up ) );
+  w->set_material( is_part_annulus, color );
+
+  is_part_annulus->rotate_x( rotation.x );
+  is_part_annulus->rotate_y( rotation.x );
+  is_part_annulus->rotate_z( rotation.z );
+
+  is_part_annulus->scale( scale );
+
+  is_part_annulus->translate( location );
+
+  w->set_material( is_part_annulus, color );
+  w->add_object( is_part_annulus );
+  return is_part_annulus;
+}
+
+Disk *build_disk_helper( World *w, const RGBColor &color, Point3D center, Normal normal, double radius ) {
+  Disk *disk = new Disk( center, normal, radius );
+  w->set_material( disk, color );
+  w->add_object( disk );
+  return disk;
+}
+
 void build_mcdonalds( World *w ) {
-  //    //camera
-  //    Pinhole* ptr = new Pinhole;
-  //    ptr->set_eye(-2, -12, 14);        // overhead
-  //    ptr->set_lookat(0, 10, -10);     // overhead
-  //    ptr->set_view_distance(200);    // overhead
-  //    ptr->set_up_vector(0, 0, 1);
-  //    ptr->compute_uvw();
-  //    w->set_camera(ptr);
-
-  //    //viewplane
-  //    int num_samples = 25;
-  //    w->vp.set_hres(VIEWPLANE_HRES);
-  //    w->vp.set_vres(VIEWPLANE_VRES);
-  //    w->vp.set_sampler(new Jittered(num_samples));
-  //    w->vp.set_pixel_size(0.5);
-  //    w->vp.set_samples(num_samples);
-
-  //    //lights
-  //    Ambient* ambient_ptr = new Ambient;
-  //    ambient_ptr->scale_radiance(0.2);
-  //    w->set_ambient_light(ambient_ptr);
-  //    w->background_color =  black;//RGBColor(0.9, 0.9, 0.9);
-  //    w->tracer_ptr = new RayCast(w);
-
-  //    Directional* lt = new Directional();
-  //    lt->set_shadows(true);
-  //    lt->set_direction(-30, 7, 10);
-  //    lt->scale_radiance(8.5);
-  //    w->add_light(lt);
-
   //plane
   float    ka = 0.25;
   float    kd = 0.75;
@@ -561,19 +531,20 @@ void build_mcdonalds( World *w ) {
   RingDims rd = RingDims( 1, 2, 6.5, 8 );
   build_ring_helper( w, Point3D( -2, 0, -0.5 ), yellow, rd, 0, 0, 50, phong_ptr36 );
   build_ring_helper( w, Point3D( -12, 6, 1 ), yellow, rd, 0, 0, 45, phong_ptr36 );
-  add_bb_helper( w, orange, Point3D( 0, 6, 0 ), Point3D( 3, 7, 6 ) );
+  add_bb_helper( w, orange, Point3D( 0, 6, 0 ), Point3D( 3, 7, 6 ), Vector3D() );
   build_cone_helper( w, Point3D( -2, 3.5, 0 ), cyan, 4.0, 1.5 );
   build_cone_helper( w, Point3D( 2, -2.5, 0 ), darkBlue, 5.0, 1.5 );
   build_cylinder_helper( w, Point3D( -2.5, -1, 0 ), green, 0.0, 3.0, 1.0 );
   add_triangle_helper( w, red, Point3D( -2.8, 2.5, 2.5 ), Point3D( -2.5, -7.5, 0.5 ), Point3D( -0.5, -3, 1.5 ) );
 
-  add_checkerboard( w, red, white, 1 );
+  add_checkerboard( w, white, darkBlue, 3 );
 }
 
 void build_mcdonalds_world( World *w ) {
   //camera
   Pinhole *ptr = new Pinhole;
-  ptr->set_eye( -2, -12, 14 );      // overhead
+  ptr->set_eye( -2, -12, 14 );    // overhead
+  // ptr->set_eye(-2, -30, 14);     // overhead
   ptr->set_lookat( 0, 10, -10 );    // overhead
   ptr->set_view_distance( 200 );    // overhead
   ptr->set_up_vector( 0, 0, 1 );
@@ -637,7 +608,7 @@ void build_discussion( World *w ) {
   build_ring_helper( w, Point3D( 0, 0, 0.5 ), blue, rd, 0, 0, 90, phong_ptr36 );
   build_ring_helper( w, Point3D( 0, 8, 2.5 ), blue, rd, 0, 0, 110, phong_ptr36 );
 
-  for ( int i = 0; i < 5; i++ ) { add_bb_helper( w, orange, Point3D( -4, -6 + ( i * 3 ) - 0.5, 0 ), 1, 1, 6 ); }
+  for ( int i = 0; i < 5; i++ ) { add_bb_helper( w, orange, Point3D( -4, -6 + ( i * 3 ) - 0.5, 0 ), 1, 1, 6, Vector3D() ); }
 
   build_cone_helper( w, Point3D( -6, -2.5, 0 ), darkBlue, 4.0, 1.5 );
   build_cone_helper( w, Point3D( -6, 2.5, 0 ), darkBlue, 4.0, 1.5 );
@@ -748,6 +719,46 @@ void build_olympic_rings_world( World *w ) {
   build_olympic_rings( w );
 }
 
+void add_bb_facing_center_at_offset_rotation( World *w, const RGBColor &color, double radius, double theta, double z,
+                                              double dx, double dy, double dz, double rotation_y, double offset_rotation ) {
+  double x             = radius * cos( qDegreesToRadians( theta ) );
+  double y             = radius * sin( qDegreesToRadians( theta ) );
+  double perpendicular = theta + 90;
+  add_bb_helper( w, color, Point3D( x, y, z ), dx, dy, dz, Vector3D( 0, rotation_y, perpendicular - offset_rotation ) );
+  //    qDebug() << "in add_bb_facing_center_at(), theta is: " << theta;
+}
+
+void add_bb_facing_center_at( World *w, const RGBColor &color, double radius, double theta, double z, double dx, double dy,
+                              double dz, double rotation_y ) {
+  double x             = radius * cos( qDegreesToRadians( theta ) );
+  double y             = radius * sin( qDegreesToRadians( theta ) );
+  double perpendicular = theta + 90;
+  add_bb_helper( w, color, Point3D( x, y, z ), dx, dy, dz, Vector3D( 0, rotation_y, perpendicular ) );
+}
+
+double add_double_bb_facing_center_at( World *w, const RGBColor &color, double radius, double theta, double dtheta, double dx,
+                                       double dy, double dz ) {
+  add_bb_facing_center_at( w, color, radius, theta, 4, dx, dy, dz, 0 );
+  //    add_bb_facing_center_at(w, darkBlue, radius, theta + dtheta, 4, dx, dy, dz, 0);
+  //    qDebug() << "in triple, dx: " << dx << ", dy: " << dy << "dz: " << dz;
+  add_bb_facing_center_at( w, mediumBrown, radius, theta + dtheta / 2, 8 / 9.0 * dz, dy, dy, 8 * dz / 9.0, 90 );
+  return theta;
+}
+
+double add_triple_bb_facing_center_at( World *w, const RGBColor &color, double radius, double theta, double dtheta, double dx,
+                                       double dy, double dz ) {
+  add_bb_facing_center_at( w, color, radius, theta, 4, dx, dy, dz, 0 );
+  add_bb_facing_center_at( w, color, radius, theta + dtheta, 4, dx, dy, dz, 0 );
+  //    qDebug() << "in triple, dx: " << dx << ", dy: " << dy << "dz: " << dz;
+  add_bb_facing_center_at( w, mediumBrown, radius, theta + dtheta / 2, 4 / 5.0 * dz, dy, dy, 5 * dz / 9.0, 90 );
+  return theta + dtheta;
+}
+
+#define ROCKS  8
+#define RADIUS 10
+
+//#define ROCKS 32
+
 void build_stonehenge( World *w ) {
   //plane
   float    ka = 0.25;
@@ -762,103 +773,172 @@ void build_stonehenge( World *w ) {
   phong_ptr36->set_ks( 0.25 );
   phong_ptr36->set_exp( 1.5 );
 
-  // build
+  //  // build
 
-  // Outer Ring
-  int    number = 32;
-  double radius = 40.0;
-  double theta  = 2 * M_PI / number;
-  double width = 4, depth = 2, height = 10;
-  for ( int i = 0; i < number; i++ ) {
-    double angle     = theta * i;
-    double angle_deg = qRadiansToDegrees( angle );
-    double x         = radius * std::cos( angle );
-    double y         = radius * std::sin( angle );
+  //  // Outer Ring
+  //  int    number = 32;
+  //  double radius = 40.0;
+  //  double theta  = 2 * M_PI / number;
+  //  double width = 4, depth = 2, height = 10;
+  //  for ( int i = 0; i < number; i++ ) {
+  //    double angle     = theta * i;
+  //    double angle_deg = qRadiansToDegrees( angle );
+  //    double x         = radius * std::cos( angle );
+  //    double y         = radius * std::sin( angle );
 
-    add_bb_helper( w, stone_color, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
+  //    add_bb_helper( w, stone_color, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
+  //  }
+
+  //  // Outer Ring Tops
+  //  number = 32;
+  //  theta  = 2 * M_PI / number;
+  //  width = 12, depth = 2, height = 2;
+  //  for ( int i = 0; i < number; i++ ) {
+  //    double angle     = theta * i;
+  //    double angle_deg = qRadiansToDegrees( angle );
+  //    double x         = radius * std::cos( angle );
+  //    double y         = radius * std::sin( angle );
+  //    add_bb_helper( w, stone_color, Point3D( x, y, 10 ), depth, width, height, 0, 0, angle_deg + 7.5 );
+  //  }
+
+  //  // Middle Ring
+  //  number = 31;
+  //  radius = 30.0;
+  //  theta  = 2 * M_PI / number;
+  //  width = 2, depth = 1, height = 5;
+  //  for ( int i = 0; i < number; i++ ) {
+  //    double angle     = theta * i;
+  //    double angle_deg = qRadiansToDegrees( angle );
+  //    double x         = radius * std::cos( angle );
+  //    double y         = radius * std::sin( angle );
+
+  //    add_bb_helper( w, stone_color, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
+  //  }
+
+  //  // Inner Arches
+  //  number = 16;
+  //  radius = 20.0;
+  //  theta  = 2 * M_PI / number;
+  //  width = 4, depth = 2, height = 10;
+  //  for ( int i = 0; i < 10; i++ ) {
+  //    double angle     = theta * i;
+  //    double angle_deg = qRadiansToDegrees( angle );
+  //    double x         = radius * std::cos( angle );
+  //    double y         = radius * std::sin( angle );
+
+  //    add_bb_helper( w, stone_color, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
+  //  }
+  //  // horizontal on center middle ring
+  //  number = 8;
+  //  theta  = 2 * M_PI / number;
+  //  width = 2, depth = 2, height = 12;
+  //  for ( int i = 0; i < 5; i++ ) {
+  //    double angle     = theta * i;
+  //    double angle_deg = qRadiansToDegrees( angle );
+  //    double x         = radius * std::cos( angle );
+  //    double y         = radius * std::sin( angle );
+  //    add_bb_helper( w, stone_color, Point3D( x, y, 10 ), depth, height, width, 0, 0, angle_deg + 15 );
+  //  }
+
+  //  // Inner Ring
+  //  number = 32;
+  //  radius = 17.0;
+  //  theta  = 2 * M_PI / number;
+  //  width = 1.5, depth = 1.5, height = 3;
+  //  for ( int i = 0; i < 20; i++ ) {
+  //    double angle     = theta * i;
+  //    double angle_deg = qRadiansToDegrees( angle );
+  //    double x         = radius * std::cos( angle );
+  //    double y         = radius * std::sin( angle );
+
+  //    add_bb_helper( w, stone_color, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
+  //  }
+
+  //  add_bb_helper( w, stone_color, Point3D( -7.5, +5, 0 ), 10, 5, 3, 0, 0, 15 );
+
+  //  add_checkerboard( w, green, darkGreen, 5 );    // 0.5
+
+  Plane *plane_ptr = new Plane( Point3D( 0, 0, -150 ), Normal( 0, 0, 1 ) );
+  plane_ptr->set_material( phong_ptr36 );
+  w->add_object( plane_ptr );
+
+  //    build_partannulus_helper(w, red, 4, 5,
+  //                               0, 180, Point3D(-2, -2, 10), Point3D(1, 1, 1), Vector3D(0, 45, 180), phong_ptr36);
+
+  //    build_cone_helper(w, Point3D(0, 0,0), green, 0.2, 0.1);
+
+  double height      = 16;
+  double radius      = 29.9;
+  double theta       = 0;
+  double delta_theta = 45;
+  double x           = 1.3;
+  double y           = 1;
+
+  while ( theta < 300 ) {
+    double x = RADIUS * cos( qDegreesToRadians( theta ) );
+    double y = RADIUS * sin( qDegreesToRadians( theta ) );
+    x        = abs( x ) < 0.001 ? 0 : x;
+    y        = abs( y ) < 0.001 ? 0 : y;
+    add_bb_facing_center_at( w, orange, RADIUS, theta, 0, 4, 2, 12, 0 );
+    theta += delta_theta;
   }
 
-  // Outer Ring Tops
-  number = 32;
-  theta  = 2 * M_PI / number;
-  width = 12, depth = 2, height = 2;
-  for ( int i = 0; i < number; i++ ) {
-    double angle     = theta * i;
-    double angle_deg = qRadiansToDegrees( angle );
-    double x         = radius * std::cos( angle );
-    double y         = radius * std::sin( angle );
-    add_bb_helper( w, stone_color, Point3D( x, y, 10 ), depth, width, height, 0, 0, angle_deg + 7.5 );
-  }
+  //    while (theta < 210) {
+  //        double x = RADIUS * cos(qDegreesToRadians(theta));
+  //        double y = RADIUS * sin(qDegreesToRadians(theta));
+  //        x = abs(x) < 0.001 ? 0 : x;
+  //        y = abs(y) < 0.001 ? 0 : y;
+  //        add_bb_facing_center_at(w, orange, RADIUS, theta, 0, 4, 2, 6, 0);
+  //        theta += delta_theta;
+  //    }
 
-  // Middle Ring
-  number = 31;
-  radius = 30.0;
-  theta  = 2 * M_PI / number;
-  width = 2, depth = 1, height = 5;
-  for ( int i = 0; i < number; i++ ) {
-    double angle     = theta * i;
-    double angle_deg = qRadiansToDegrees( angle );
-    double x         = radius * std::cos( angle );
-    double y         = radius * std::sin( angle );
+  //    while (theta < 600) {
+  //        add_bb_facing_center_at(w, darkBrown, 0.75 * radius, theta,  4, x, y, 3/15.0 * height, 0);
 
-    add_bb_helper( w, stone_color, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
-  }
+  //        theta = add_double_bb_facing_center_at(w, darkBrown, radius, theta, delta_theta, 4.2, 1.2, 0.7 * height);
+  //        theta += delta_theta;
+  //    }
 
-  // Inner Arches
-  number = 16;
-  radius = 20.0;
-  theta  = 2 * M_PI / number;
-  width = 4, depth = 2, height = 10;
-  for ( int i = 0; i < 10; i++ ) {
-    double angle     = theta * i;
-    double angle_deg = qRadiansToDegrees( angle );
-    double x         = radius * std::cos( angle );
-    double y         = radius * std::sin( angle );
+  //    theta = 75;
+  //    delta_theta = 20;
+  //    while (theta < 300) {
+  //        theta = add_triple_bb_facing_center_at(w, darkBrown, 0.5 * radius, theta, delta_theta, 3.5, 1.2, height);
+  //        theta += 1.5 * delta_theta;
+  //    }
 
-    add_bb_helper( w, stone_color, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
-  }
-  // horizontal on center middle ring
-  number = 8;
-  theta  = 2 * M_PI / number;
-  width = 2, depth = 2, height = 12;
-  for ( int i = 0; i < 5; i++ ) {
-    double angle     = theta * i;
-    double angle_deg = qRadiansToDegrees( angle );
-    double x         = radius * std::cos( angle );
-    double y         = radius * std::sin( angle );
-    add_bb_helper( w, stone_color, Point3D( x, y, 10 ), depth, height, width, 0, 0, angle_deg + 15 );
-  }
+  //    theta = 80;
+  //    delta_theta = 8 * 15/5.0;
+  //    while (theta < 300) {
+  //        add_bb_facing_center_at(w, darkBrown, 0.3 * radius, theta,  4, x, y, 3/15.0 * height, 0);
+  //        theta += delta_theta;
+  //    }
 
-  // Inner Ring
-  number = 32;
-  radius = 17.0;
-  theta  = 2 * M_PI / number;
-  width = 1.5, depth = 1.5, height = 3;
-  for ( int i = 0; i < 20; i++ ) {
-    double angle     = theta * i;
-    double angle_deg = qRadiansToDegrees( angle );
-    double x         = radius * std::cos( angle );
-    double y         = radius * std::sin( angle );
+  //    x = 4;
+  //    y = 2;
+  //    theta = 195;
+  //    add_bb_facing_center_at_offset_rotation(w, darkBrown, 0.1 * radius, theta,  4, x, y, 7/15.0 * height, 0, 60);
 
-    add_bb_helper( w, stone_color, Point3D( x, y, 0 ), depth, width, height, 0, 0, angle_deg );
-  }
+  add_checkerboard( w, darkGreen, lightGreen, 4 );
+}
 
-  add_bb_helper( w, stone_color, Point3D( -7.5, +5, 0 ), 10, 5, 3, 0, 0, 15 );
+void set_camera( World *w, Pinhole *pc, Point3D eye, Point3D lookat, double view_distance, Vector3D up ) {
+  pc->set_eye( eye );          // overhead
+  pc->set_lookat( lookat );    // overhead
 
-  add_checkerboard( w, green, darkGreen, 5 );    // 0.5
+  pc->set_view_distance( view_distance );    // overhead
+  pc->set_up_vector( up );
+  pc->compute_uvw();
+  w->set_camera( pc );
 }
 
 void build_stonehenge_world( World *w ) {
   //camera
   Pinhole *ptr = new Pinhole;
-  ptr->set_eye( -70, -30, 75 );
-  ptr->set_lookat( 0.1, 0.1, 0 );
-  //  ptr->set_eye( 0, 0, 75 );
-  //  ptr->set_lookat( 0, 0.1, 0 );
-  ptr->set_view_distance( 250 );
-  ptr->set_up_vector( 0, 0, 1 );
-  ptr->compute_uvw();
-  w->set_camera( ptr );
+  //    set_camera(w, ptr, Point3D(-22, -20, 24), Point3D(0, 1, -10), 150, Vector3D(0, 0, 1));
+  //    set_camera(w, ptr, Point3D(-20, -20, 8), Point3D(0, 1, -10), 200, Vector3D(0, 0, 1));
+  //    set_camera(w, ptr, Point3D(-25, -25, 1), Point3D(0, 1, 6), 200, Vector3D(0, 0, 1));
+  set_camera( w, ptr, Point3D( 8, 40, 34 ), Point3D( 1, 1, -2 ), 200, Vector3D( 0, 0, 1 ) );
+  //    set_camera(w, ptr, Point3D(8, 40, 64), Point3D(0, 10, -10), 200, Vector3D(0, 0, 1));
 
   //viewplane
   int num_samples = 25;
@@ -870,15 +950,17 @@ void build_stonehenge_world( World *w ) {
 
   //lights
   Ambient *ambient_ptr = new Ambient;
-  ambient_ptr->scale_radiance( 0.4 );    // 0.2
+  ambient_ptr->scale_radiance( 0.2 );
   w->set_ambient_light( ambient_ptr );
   w->background_color = black;    //RGBColor(0.9, 0.9, 0.9);
   w->tracer_ptr       = new RayCast( w );
 
   Directional *lt = new Directional();
   lt->set_shadows( true );
-  lt->set_direction( 60, -45, 10 );
-  lt->scale_radiance( 8.5 );
+  //    lt->set_direction(100, 100, 16);
+  lt->set_direction( 10, 10, 36 );
+  //    lt->scale_radiance(12.5);
+  lt->scale_radiance( 6.5 );
   w->add_light( lt );
 
   w->tracer_ptr = new RayCast( w );
@@ -919,6 +1001,16 @@ void build_figure_12( World *w, int number ) {
     //    box_ptr->set_material( phong_ptr );
     //    add_object( box_ptr );
   }
+
+  // int                            radius  = 5;
+  // int                            spacing = 2 * radius;
+  // std::vector<ColorCenterRadius> spheres = {
+  //   {  darkYellow,  Point3D( spacing,  spacing, 0 ),     radius},
+  //   {       brown,        Point3D( 0,        0, 0 ), 2 * radius},
+  //   {darkBlueGrey, Point3D( -spacing, -spacing, 0 ),     radius}
+  // };
+
+  // build_spheres_helper( w, spheres );
 }
 
 void build_figure_12_world( World *w, int number ) {

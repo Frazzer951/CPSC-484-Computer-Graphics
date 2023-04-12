@@ -1,5 +1,6 @@
 #include "Sphere.h"
 #include "Utilities/Maths.h"
+#include <QtDebug>
 
 //// ---------------------------------------------------------------- default constructor
 
@@ -70,8 +71,10 @@ bool Sphere::hit( const Ray &ray, double &tmin, ShadeRec &sr ) const {
 }
 
 bool Sphere::shadow_hit( const Ray &ray, double &tmin ) const {
-  //  if (!shadows)
-  //    return false;
+  if ( !shadows ) {
+    qDebug() << "shadows are off for sphere";
+    return false;
+  }
 
   double   t;
   Vector3D temp = ray.o - center;

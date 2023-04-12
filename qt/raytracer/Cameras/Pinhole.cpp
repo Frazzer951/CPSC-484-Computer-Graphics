@@ -47,7 +47,7 @@ void Pinhole::render_scene( const World &w, float x /* =0 */, int offset /* =0 *
   std::vector<Point2D> pixels;
 
   vp.s  /= zoom;
-  ray.o  = eye;
+  ray.o = eye;
 
   qDebug( "BUILDING RAYTRACED SCENE -- scene will appear pixel by pixel, randomly over entire image...\n" );
 
@@ -66,9 +66,9 @@ void Pinhole::render_scene( const World &w, float x /* =0 */, int offset /* =0 *
     int c = pt.x;
     for ( int p = 0; p < n; p++ )        // up pixel
       for ( int q = 0; q < n; q++ ) {    // across pixel
-        pp.x   = vp.s * ( c - 0.5 * vp.hres + ( q + 0.5 ) / n ) + x;
-        pp.y   = vp.s * ( r - 0.5 * vp.vres + ( p + 0.5 ) / n );
-        ray.d  = get_direction( pp );
+        pp.x  = vp.s * ( c - 0.5 * vp.hres + ( q + 0.5 ) / n ) + x;
+        pp.y  = vp.s * ( r - 0.5 * vp.vres + ( p + 0.5 ) / n );
+        ray.d = get_direction( pp );
         L     += w.tracer_ptr->trace_ray( ray, depth );
       }
 
