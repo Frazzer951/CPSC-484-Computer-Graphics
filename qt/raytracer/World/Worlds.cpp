@@ -423,20 +423,21 @@ void build_cone_helper( World *w, const Point3D &posn, const RGBColor &color, do
   w->add_object( iscone );
 }
 
-void build_cylinder_helper( World *w, const Point3D &posn, const RGBColor &color, double b, double t, double r ) {
+void build_cylinder_helper( World *w, const Point3D &posn, const RGBColor &color, double b, double t, double r,
+                            Vector3D rotation ) {
   Instance *iscylinder = new Instance( new SolidCylinder( b, t, r ) );
-  iscylinder->rotate_y( 0 );
-  iscylinder->rotate_z( 0 );
-  iscylinder->rotate_x( 90 );
+  iscylinder->rotate_x( rotation.x );
+  iscylinder->rotate_y( rotation.y );
+  iscylinder->rotate_z( rotation.z );
   iscylinder->translate( posn );
   //    iscylinder->set_material(m_ptr);
 
-  std::shared_ptr<Phong> phong = std::make_shared<Phong>();
-  phong->set_ka( 0.25 );
-  phong->set_kd( 0.75 );
-  phong->set_cd( green );
-  phong->set_ks( 0.25 );
-  phong->set_exp( 1.5 );
+  //  std::shared_ptr<Phong> phong = std::make_shared<Phong>();
+  //  phong->set_ka( 0.25 );
+  //  phong->set_kd( 0.75 );
+  //  phong->set_cd( green );
+  //  phong->set_ks( 0.25 );
+  //  phong->set_exp( 1.5 );
 
   w->set_material( iscylinder, color );
   w->add_object( iscylinder );
@@ -970,11 +971,40 @@ void build_stonehenge_world( World *w ) {
   build_stonehenge( w );
 }
 
+void build_wireframe_helper( World *w, Point3D blf, Point3D urb, RGBColor color ) {
+  double   radius = 0.05;
+  Vector3D diff   = urb - blf;
+
+  qDebug() << "blf.x:" << blf.x << "blf.y:" << blf.y << "blf.z:" << blf.z;
+  qDebug() << "urb.x:" << urb.x << "urb.y:" << urb.y << "urb.z:" << urb.z;
+  qDebug() << "diff.x:" << diff.x << "diff.y:" << diff.y << "diff.z:" << diff.z;
+
+  //  add_sphere_helper( w, cyan, bottom_left_front, 0.25 );
+  //  add_sphere_helper( w, green, upper_right_back, 0.25 );
+
+  build_cylinder_helper( w, blf, color, 0, diff.x, radius, Vector3D( 0, 0, -90 ) );
+  build_cylinder_helper( w, urb, color, -diff.x, 0, radius, Vector3D( 0, 0, -90 ) );
+  build_cylinder_helper( w, Point3D( blf.x, urb.y, blf.z ), color, 0, diff.x, radius, Vector3D( 0, 0, -90 ) );
+  build_cylinder_helper( w, Point3D( urb.x, blf.y, urb.z ), color, -diff.x, 0, radius, Vector3D( 0, 0, -90 ) );
+
+  build_cylinder_helper( w, blf, color, 0, diff.y, radius, Vector3D( 0, 0, 0 ) );
+  build_cylinder_helper( w, urb, color, -diff.y, 0, radius, Vector3D( 0, 0, 0 ) );
+  build_cylinder_helper( w, Point3D( urb.x, blf.y, blf.z ), color, 0, diff.y, radius, Vector3D( 0, 0, 0 ) );
+  build_cylinder_helper( w, Point3D( blf.x, urb.y, urb.z ), color, -diff.y, 0, radius, Vector3D( 0, 0, 0 ) );
+
+  build_cylinder_helper( w, blf, color, 0, diff.z, radius, Vector3D( 90, 0, 0 ) );
+  build_cylinder_helper( w, urb, color, -diff.z, 0, radius, Vector3D( 90, 0, 0 ) );
+  build_cylinder_helper( w, Point3D( blf.x, urb.y, blf.z ), color, 0, diff.z, radius, Vector3D( 90, 0, 0 ) );
+  build_cylinder_helper( w, Point3D( urb.x, blf.y, urb.z ), color, -diff.z, 0, radius, Vector3D( 90, 0, 0 ) );
+}
+
+void build_wireframe_helper( World *w, Point3D bottom_left_front, double width, double length, double height,
+                             RGBColor color ) {
+  Point3D &blf = bottom_left_front;
+  build_wireframe_helper( w, bottom_left_front, Point3D( blf.x + width, blf.y + length, blf.z + height ), color );
+}
+
 void build_figure_12( World *w, int number ) {
-  qDebug() << "just inside build_figure_12 number is" << number;
-
-  if ( number < 12 || number > 14 ) { throw new std::invalid_argument( "Invalid figure requested\n" ); }
-
   if ( number == 12 ) {
     std::vector<ColorCenterRadius> spheres = {
       { cyan, Point3D( 0, 0, 35 ), 0.75 },
@@ -985,37 +1015,25 @@ void build_figure_12( World *w, int number ) {
     qDebug() << "just before build_spheres_helper()";
     build_spheres_helper( w, spheres );
     qDebug() << "at end if build_spheres_helper()";
-  } else if ( number == 13 ) {
-    //    Phong *phong_ptr = new Phong;
-    //    phong_ptr->set_cd( 0.7 );
-    //    phong_ptr->set_ka( 0.3 );
-    //    phong_ptr->set_kd( 1 );
-    //    phong_ptr->set_ks( 0.3 );
-    //    phong_ptr->set_exp( 50 );
+  } else {
+    Point3D p0( -1.0 );
+    Point3D p1( 1.0 );
 
-    //    Point3D p0( -1.0 );
-    //    Point3D p1( 1.0 );
-    //    float   bevel_radius = 0.04;
-
-    //    WireframeBox *box_ptr = new WireframeBox( p0, p1, bevel_radius );
-    //    box_ptr->set_material( phong_ptr );
-    //    add_object( box_ptr );
+    build_wireframe_helper( w, p0, p1, grey );
   }
-
-  // int                            radius  = 5;
-  // int                            spacing = 2 * radius;
-  // std::vector<ColorCenterRadius> spheres = {
-  //   {  darkYellow,  Point3D( spacing,  spacing, 0 ),     radius},
-  //   {       brown,        Point3D( 0,        0, 0 ), 2 * radius},
-  //   {darkBlueGrey, Point3D( -spacing, -spacing, 0 ),     radius}
-  // };
-
-  // build_spheres_helper( w, spheres );
 }
 
 void build_figure_12_world( World *w, int number ) {
+  qDebug() << "just inside build_figure_12 number is" << number;
+  if ( number < 12 || number > 14 ) { throw new std::invalid_argument( "Invalid figure requested\n" ); }
+
   //camera
-  float vpd = 100;    // view plane distance for 200 x 200 pixel images
+  float vpd = 100;    // view plane distance for 200 x 200 pixel image
+  if ( number == 12 ) {
+    vpd = 100;
+  } else {
+    vpd = 10;
+  }
 
   Pinhole *left_camera_ptr = new Pinhole;
   left_camera_ptr->set_view_distance( vpd );
@@ -1029,10 +1047,21 @@ void build_figure_12_world( World *w, int number ) {
   stereo_ptr->use_parallel_viewing();
   //  stereo_ptr->use_transverse_viewing();
   stereo_ptr->set_pixel_gap( 5 );    // in pixels
-  stereo_ptr->set_eye( 5, 0, 100 );
-  stereo_ptr->set_lookat( 0 );
+  if ( number == 12 ) {
+    stereo_ptr->set_eye( 5, 0, 100 );
+    stereo_ptr->set_lookat( 0 );
+    stereo_ptr->set_stereo_angle( 0.75 );    // in degrees
+  } else if ( number == 13 ) {
+    stereo_ptr->set_eye( -2, 0, 5 );
+    stereo_ptr->set_lookat( 0.0 );
+    stereo_ptr->set_stereo_angle( 5.0 );    // in degrees
+  } else if ( number == 14 ) {
+    stereo_ptr->set_eye( 1.5, 1.75, 3 );
+    stereo_ptr->set_lookat( -0.1, -0.2, 0 );
+    stereo_ptr->set_stereo_angle( 5.0 );    // in degrees
+  }
+
   stereo_ptr->compute_uvw();
-  stereo_ptr->set_stereo_angle( 0.75 );    // in degrees
   stereo_ptr->setup_cameras();
   w->set_camera( stereo_ptr );
 
@@ -1046,21 +1075,23 @@ void build_figure_12_world( World *w, int number ) {
 
   //lights
   Ambient *ambient_ptr = new Ambient;
-  ambient_ptr->scale_radiance( 0.2 );
+  ambient_ptr->scale_radiance( 3 );    // 0.2
   w->set_ambient_light( ambient_ptr );
   w->background_color = black;    //RGBColor(0.9, 0.9, 0.9);
 
-  Directional *lt = new Directional();
-  lt->set_shadows( true );
-  lt->set_direction( 100, 100, 100 );    // -10, -10, 36
-  lt->scale_radiance( 6.5 );
-  w->add_light( lt );
-
-  //  PointLight *light_ptr = new PointLight;
-  //  light_ptr->set_shadows( true );
-  //  light_ptr->set_location( 100, 100, 100 );
-  //  light_ptr->scale_radiance( 3 );
-  //  w->add_light( light_ptr );
+  if ( number == 12 ) {
+    Directional *lt = new Directional();
+    lt->set_shadows( true );
+    lt->set_direction( 100, 100, 100 );
+    lt->scale_radiance( 6.5 );
+    w->add_light( lt );
+  } else {
+    Directional *lt = new Directional();
+    lt->set_shadows( true );
+    lt->set_direction( 20, 30, 40 );
+    lt->scale_radiance( 6.5 );
+    w->add_light( lt );
+  }
 
   w->tracer_ptr = new RayCast( w );
 

@@ -314,7 +314,7 @@ void World::build() {
   //  build_discussion_world( this );
   //  build_stonehenge_world( this );
 
-  build_figure_12_world( this, 12 );
+  build_figure_12_world( this, 13 );
 
   check();    // checks for valid camera, viewplane, lights, plane...
 }

@@ -52,7 +52,8 @@
 enum CHOICE { A, B, C, D, E, F };
 
 void build_cone_helper( World *w, const Point3D &posn, const RGBColor &color, double h, double r );
-void build_cylinder_helper( World *w, const Point3D &posn, const RGBColor &color, double b, double t, double r );
+void build_cylinder_helper( World *w, const Point3D &posn, const RGBColor &color, double b, double t, double r,
+                            Vector3D rotation = { 90, 0, 0 } );
 
 //void build_spheres( World *w );
 void build_sphere_world( World *w );
