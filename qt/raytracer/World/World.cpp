@@ -99,7 +99,7 @@ void World::render_scene() const {
           pp.x = vp.s * ( c - 0.5 * vp.hres + sp.x );    // jittered sampling
           pp.y = vp.s * ( r - 0.5 * vp.vres + sp.y );
 
-          ray.o       = Point3D( pp.x, pp.y, zw );
+          ray.o        = Point3D( pp.x, pp.y, zw );
           pixel_color += tracer_ptr->trace_ray( ray );
         }
       }
@@ -314,7 +314,7 @@ void World::build() {
   //  build_discussion_world( this );
   //  build_stonehenge_world( this );
 
-  build_figure_12_world( this, 13 );
+  build_figure_12_world( this, 12 );
 
   check();    // checks for valid camera, viewplane, lights, plane...
 }
