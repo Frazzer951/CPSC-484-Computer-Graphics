@@ -144,8 +144,8 @@ void Sampler::map_samples_to_unit_disk( void ) {
       }
     }
     phi               *= PI / 4.0;
-    disk_samples[j].x = r * cos( phi );
-    disk_samples[j].y = r * sin( phi );
+    disk_samples[j].x  = r * cos( phi );
+    disk_samples[j].y  = r * sin( phi );
   }
   samples.erase( samples.begin(), samples.end() );
 }

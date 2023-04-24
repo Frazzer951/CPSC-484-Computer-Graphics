@@ -232,7 +232,7 @@ void RenderCanvas::onRenderPause() {
     return;
   }
   updateTimer.stop();
-  timeRenderingThisPass = stopwatchTimer.restart();    // returns elapsed time and restarts the timer
+  timeRenderingThisPass  = stopwatchTimer.restart();    // returns elapsed time and restarts the timer
   totalTimeRendering    += timeRenderingThisPass;
 }
 void RenderCanvas::onRenderStart() {
@@ -276,7 +276,7 @@ void RenderCanvas::onRenderCompleted() {
     w = nullptr;
   }
   if ( !stopwatchTimer.isValid() ) { return; }
-  timeRenderingThisPass = stopwatchTimer.elapsed();
+  timeRenderingThisPass  = stopwatchTimer.elapsed();
   totalTimeRendering    += timeRenderingThisPass;
   stopwatchTimer.invalidate();
 }

@@ -258,17 +258,17 @@ template<typename T> int  vector3d<T>::dims() const { return dims_; }
 template<typename T> void vector3d<T>::dims( const int &dims ) { dims_ = dims; }
 
 template<typename T> vector3d<T> &vector3d<T>::operator+=( const vector3d<T> &v ) {
-  vector3d<T> &u = *this;
+  vector3d<T> &u  = *this;
   u[0]           += v[0];
   u[1]           += v[1];
   u[2]           += v[2];
-  u[3]           = v[3];
+  u[3]            = v[3];
   return *this;
 }
 template<typename T> vector3d<T> &vector3d<T>::operator-=( const vector3d<T> &v ) { return operator+=( -v ); }
 //---------------------------------------------------------------------
 template<typename T> vector3d<T> &vector3d<T>::operator+=( T k ) {
-  vector3d<T> &u = *this;
+  vector3d<T> &u  = *this;
   u.name_        += "+=" + std::to_string( k );
   u[0]           += k;
   u[1]           += k;
@@ -276,7 +276,7 @@ template<typename T> vector3d<T> &vector3d<T>::operator+=( T k ) {
   return *this;
 }
 template<typename T> vector3d<T> &vector3d<T>::operator-=( T k ) {
-  vector3d<T> &u = *this;
+  vector3d<T> &u  = *this;
   u.name_        += "-=" + std::to_string( k );
   u[0]           -= k;
   u[1]           -= k;
@@ -284,7 +284,7 @@ template<typename T> vector3d<T> &vector3d<T>::operator-=( T k ) {
   return *this;
 }
 template<typename T> vector3d<T> &vector3d<T>::operator*=( T k ) {
-  vector3d<T> &u = *this;
+  vector3d<T> &u  = *this;
   u.name_        += "*=" + std::to_string( k );
   u[0]           *= k;
   u[1]           *= k;
@@ -293,7 +293,7 @@ template<typename T> vector3d<T> &vector3d<T>::operator*=( T k ) {
 }
 template<typename T> vector3d<T> &vector3d<T>::operator/=( T k ) {
   if ( k == 0 ) { throw new std::invalid_argument( "divide by zero" ); }
-  vector3d<T> &u = *this;
+  vector3d<T> &u  = *this;
   u.name_        += "/=" + std::to_string( k );
   u[0]           /= k;
   u[1]           /= k;

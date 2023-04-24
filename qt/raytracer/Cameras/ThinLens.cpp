@@ -86,8 +86,8 @@ void ThinLens::render_scene( const World &w, float, int ) {
       dp = sampler_ptr->sample_unit_disk();
       lp = dp * lens_radius;
 
-      ray.o = eye + lp.x * u + lp.y * v;
-      ray.d = ray_direction( pp, lp );
+      ray.o  = eye + lp.x * u + lp.y * v;
+      ray.d  = ray_direction( pp, lp );
       L     += w.tracer_ptr->trace_ray( ray, depth );
     }
     L /= vp.num_samples;

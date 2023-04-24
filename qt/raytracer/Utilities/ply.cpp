@@ -922,19 +922,19 @@ void setup_other_props( PlyFile *, PlyElement *elem ) {
       if ( prop->is_list ) {
         /* pointer to list */
         if ( type_size == sizeof( void * ) ) {
-          prop->offset = size;
+          prop->offset  = size;
           size         += sizeof( void         *); /* always use size of a pointer here */
         }
 
         /* count of number of list elements */
         if ( type_size == ply_type_size[prop->count_external] ) {
-          prop->count_offset = size;
+          prop->count_offset  = size;
           size               += ply_type_size[prop->count_external];
         }
       }
       /* not list */
       else if ( type_size == ply_type_size[prop->external_type] ) {
-        prop->offset = size;
+        prop->offset  = size;
         size         += ply_type_size[prop->external_type];
       }
     }
@@ -1545,7 +1545,7 @@ char **get_words( FILE *fp, int *nwords, char **orig_line ) {
     /* save pointer to beginning of word */
     if ( num_words >= max_words ) {
       max_words += 10;
-      words     = (char **) realloc( words, sizeof( char     *) * max_words );
+      words      = (char **) realloc( words, sizeof( char      *) * max_words );
     }
     words[num_words++] = ptr;
 

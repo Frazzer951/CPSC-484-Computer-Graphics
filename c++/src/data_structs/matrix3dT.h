@@ -336,9 +336,9 @@ template<typename T> vector3d<T> &matrix3d<T>::operator[]( int i ) {
   check_bounds( i );
   return cols_[i];
 }
-template<typename T> T matrix3d<T>::operator()( int row, int col ) const { return cols_[col][row]; }
+template<typename T> T  matrix3d<T>::operator()( int row, int col ) const { return cols_[col][row]; }
 template<typename T> T &matrix3d<T>::operator()( int row, int col ) { return cols_[col][row]; }
-template<typename T> T              *matrix3d<T>::opengl_memory( int row, int col ) {
+template<typename T> T *matrix3d<T>::opengl_memory( int row, int col ) {
   matrix3d &m      = *this;
   T        *opengl = new T[( row + 1 ) * ( col + 1 )];
 
@@ -394,7 +394,7 @@ template<typename T> matrix3d<T> &matrix3d<T>::operator+=( const matrix3d<T> &b 
 }
 template<typename T> matrix3d<T> &matrix3d<T>::operator-=( const matrix3d<T> &b ) { return operator+=( b * -1 ); }
 //=================================================================================================
-template<typename T> matrix3d<T> matrix3d<T>::operator-() {
+template<typename T> matrix3d<T>  matrix3d<T>::operator-() {
   const matrix3d<T> &a = *this;
   return matrix3d<T>( "-" + name_, 3, { -a[0], -a[1], -a[2] } );
 }

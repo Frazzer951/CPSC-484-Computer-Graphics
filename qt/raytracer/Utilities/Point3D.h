@@ -39,13 +39,13 @@ public:
 // -------------------------------------------------------------- operator-
 // unary minus
 
-inline Point3D Point3D::operator-( void ) const { return ( Point3D( -x, -y, -z ) ); }
+inline Point3D  Point3D::operator-( void ) const { return ( Point3D( -x, -y, -z ) ); }
 // -------------------------------------------------------------- operator-
 // the vector that joins two points
 inline Vector3D Point3D::operator-( const Point3D &p ) const { return ( Vector3D( x - p.x, y - p.y, z - p.z ) ); }
 // -------------------------------------------------------------- operator+
 // addition of a vector to a point that returns a new point
-inline Point3D Point3D::operator+( const Vector3D &v ) const { return ( Point3D( x + v.x, y + v.y, z + v.z ) ); }
+inline Point3D  Point3D::operator+( const Vector3D &v ) const { return ( Point3D( x + v.x, y + v.y, z + v.z ) ); }
 // -------------------------------------------------------------- operator-
 // subtraction of a vector from a point that returns a new point
 

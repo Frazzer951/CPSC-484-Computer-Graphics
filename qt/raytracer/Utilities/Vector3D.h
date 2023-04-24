@@ -58,7 +58,7 @@ public:
 inline Vector3D Vector3D::operator-( void ) const { return ( Vector3D( -x, -y, -z ) ); }
 // ---------------------------------------------------------------------  len_squared
 // the square of the length
-inline double             Vector3D::len_squared( void ) { return ( x * x + y * y + z * z ); }
+inline double   Vector3D::len_squared( void ) { return ( x * x + y * y + z * z ); }
 // ----------------------------------------------------------------------- operator*
 // multiplication by a double on the right
 inline Vector3D Vector3D::operator*( const double a ) const { return ( Vector3D( x * a, y * a, z * a ) ); }
@@ -75,12 +75,12 @@ inline Vector3D Vector3D::operator-( const Vector3D &v ) const { return ( Vector
 // dot product
 //inline double
 //Vector3D::operator* (const Vector3D& v) const {
-inline double             Vector3D::dot( const Vector3D &v ) const { return ( x * v.x + y * v.y + z * v.z ); }
+inline double   Vector3D::dot( const Vector3D &v ) const { return ( x * v.x + y * v.y + z * v.z ); }
 // ----------------------------------------------------------------------- operator^
 // cross product
 //inline Vector3D
 //Vector3D::operator^ (const Vector3D& v) const {
-inline Vector3D           Vector3D::cross( const Vector3D &v ) const {
+inline Vector3D Vector3D::cross( const Vector3D &v ) const {
   return ( Vector3D( y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x ) );
 }
 // ---------------------------------------------------------------------  operator+=

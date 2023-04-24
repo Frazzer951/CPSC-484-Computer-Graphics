@@ -128,14 +128,14 @@ void Grid::setup_cells( void ) {
           index = ix + nx * iy + nx * ny * iz;
 
           if ( counts[index] == 0 ) {
-            cells[index]  = objects[j];
+            cells[index]   = objects[j];
             counts[index] += 1;    // now = 1
           } else {
             if ( counts[index] == 1 ) {
               Compound *compound_ptr = new Compound;       // construct a compound object
               compound_ptr->add_object( cells[index] );    // add object already in cell
               compound_ptr->add_object( objects[j] );      // add the new object
-              cells[index]  = compound_ptr;                // store compound in current cell
+              cells[index]   = compound_ptr;               // store compound in current cell
               counts[index] += 1;                          // now = 2
             } else {                                       // counts[index] > 1
               cells[index]->add_object( objects[j] );      // just add current object

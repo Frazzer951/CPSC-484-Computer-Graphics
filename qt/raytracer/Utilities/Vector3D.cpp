@@ -60,7 +60,7 @@ double Vector3D::length( void ) { return ( sqrt( x * x + y * y + z * z ) ); }
 // ----------------------------------------------------------  normalize
 // converts the vector to a unit vector
 void   Vector3D::normalize( void ) {
-  double length = sqrt( x * x + y * y + z * z );
+  double length  = sqrt( x * x + y * y + z * z );
   x             /= length;
   y             /= length;
   z             /= length;
@@ -68,7 +68,7 @@ void   Vector3D::normalize( void ) {
 // ----------------------------------------------------------  hat
 // converts the vector to a unit vector and returns the vector
 Vector3D &Vector3D::hat( void ) {
-  double length = sqrt( x * x + y * y + z * z );
+  double length  = sqrt( x * x + y * y + z * z );
   x             /= length;
   y             /= length;
   z             /= length;

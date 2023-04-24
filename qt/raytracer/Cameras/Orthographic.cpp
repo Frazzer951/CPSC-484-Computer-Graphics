@@ -49,9 +49,9 @@ void Orthographic::render_scene( const World &w, float, int ) {
 
       for ( int p = 0; p < n; p++ )        // up pixel
         for ( int q = 0; q < n; q++ ) {    // across pixel
-          pp.x  = vp.s * ( c - 0.5 * vp.hres + ( q + 0.5 ) / n );
-          pp.y  = vp.s * ( r - 0.5 * vp.vres + ( p + 0.5 ) / n );
-          ray.o = Point3D( pp.x, pp.y, 0 );
+          pp.x   = vp.s * ( c - 0.5 * vp.hres + ( q + 0.5 ) / n );
+          pp.y   = vp.s * ( r - 0.5 * vp.vres + ( p + 0.5 ) / n );
+          ray.o  = Point3D( pp.x, pp.y, 0 );
           L     += w.tracer_ptr->trace_ray( ray, depth );
         }
 

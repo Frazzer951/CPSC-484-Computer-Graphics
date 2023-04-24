@@ -86,7 +86,7 @@ void MainWidget::mouseReleaseEvent( QMouseEvent *e ) {
   qreal acc = diff.length() / 100.0;
 
   // Calculate new rotation axis as weighted sum
-  rotationAxis = ( rotationAxis * angularSpeed + n * acc ).normalized();
+  rotationAxis  = ( rotationAxis * angularSpeed + n * acc ).normalized();
   angularSpeed += acc;    // Increase angular speed
 }
 
