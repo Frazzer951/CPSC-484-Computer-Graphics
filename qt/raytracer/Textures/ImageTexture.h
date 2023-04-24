@@ -22,10 +22,10 @@ public:
   void set_mapping( Mapping *map_ptr );
 
 private:
-  int      hres;           // horizontal resolution of the image
-  int      vres;           // vertical resolution of the image
-                           //    std::shared_ptr<Image>		image_ptr;		// the image
-                           //    std::shared_ptr<Mapping>	mapping_ptr;	// mapping technique used, if any
+  int      hres;    // horizontal resolution of the image
+  int      vres;    // vertical resolution of the image
+  //  std::shared_ptr<Image>   image_ptr;      // the image
+  //  std::shared_ptr<Mapping> mapping_ptr;    // mapping technique used, if any
   Image   *image_ptr;      // the image
   Mapping *mapping_ptr;    // mapping technique used, if any
 };

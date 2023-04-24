@@ -25,6 +25,8 @@ public:
   Image( const Image &other );
   Image &operator=( const Image &other );
   ~Image( void );
+  Image *clone( void ) const;
+
   void read_ppm_file( const char *file_name );
 
   int get_hres( void );

@@ -128,6 +128,7 @@ SOURCES += \
     Utilities/RandomUtils.cpp \
     Utilities/ShadeRec.cpp \
     Utilities/Vector3D.cpp \
+    Utilities/Image.cpp \
     Utilities/maths.cpp \
     Utilities/ply.cpp \
     World/ViewPlane.cpp \

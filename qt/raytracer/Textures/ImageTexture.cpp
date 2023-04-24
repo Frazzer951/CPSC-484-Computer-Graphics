@@ -1,114 +1,116 @@
-//#include "ImageTexture.h"
+#include "ImageTexture.h"
 
-//#include <cstdlib>
+#include <cstdlib>
 
-//// ---------------------------------------------------------------- default constructor
+// ---------------------------------------------------------------- default constructor
 
-//ImageTexture::ImageTexture(void)
-//  :	Texture(),
-//    hres(100),
-//    vres(100),
-//    image_ptr(NULL),
-//    mapping_ptr(NULL)
-//{ }
+ImageTexture::ImageTexture( void ) : Texture(), hres( 100 ), vres( 100 ), image_ptr( NULL ), mapping_ptr( NULL ) {}
 
-//// ---------------------------------------------------------------- constructor
+// ---------------------------------------------------------------- constructor
 
-//ImageTexture::ImageTexture(Image* _image_ptr)
-//  :	Texture(),
-//    hres(_image_ptr->get_hres()),
-//    vres(_image_ptr->get_vres()),
-//    image_ptr(_image_ptr),
-//    mapping_ptr(NULL)
-//{ }
+ImageTexture::ImageTexture( Image *_image_ptr ) :
+    Texture(), hres( _image_ptr->get_hres() ), vres( _image_ptr->get_vres() ), image_ptr( _image_ptr ), mapping_ptr( NULL ) {}
 
-//// ---------------------------------------------------------------- copy constructor
+// ---------------------------------------------------------------- copy constructor
 
-//ImageTexture::ImageTexture(const ImageTexture& it)
-//  : Texture(it),
-//    hres(it.hres),
-//    vres(it.vres) {
-//    if (image_ptr) { delete image_ptr;  image_ptr = NULL; }
-//    if (it.image_ptr) { image_ptr = it.image_ptr->clone(); }
+ImageTexture::ImageTexture( const ImageTexture &it ) : Texture( it ), hres( it.hres ), vres( it.vres ) {
+  if ( image_ptr ) {
+    delete image_ptr;
+    image_ptr = NULL;
+  }
+  if ( it.image_ptr ) { image_ptr = it.image_ptr->clone(); }
 
-//    if (mapping_ptr) { delete mapping_ptr;  mapping_ptr = NULL; }
-//    if (it.mapping_ptr) { mapping_ptr = it.mapping_ptr->clone(); }
+  if ( mapping_ptr ) {
+    delete mapping_ptr;
+    mapping_ptr = NULL;
+  }
+  if ( it.mapping_ptr ) { mapping_ptr = it.mapping_ptr->clone(); }
 
-//  if (it.image_ptr) {
-//    *image_ptr = *it.image_ptr;
-//  } else { image_ptr.reset(NULL); }
+  if ( it.image_ptr ) {
+    *image_ptr = *it.image_ptr;
+  } else {
+    image_ptr = NULL;
+  }
 
-//  if (it.mapping_ptr) { mapping_ptr.reset(it.mapping_ptr->clone()); }
-//  else { mapping_ptr.reset(NULL); }
-//}
+  if ( it.mapping_ptr ) {
+    mapping_ptr = it.mapping_ptr->clone();
+  } else {
+    mapping_ptr = NULL;
+    ;
+  }
+}
 
-//// ---------------------------------------------------------------- assignment operator
+// ---------------------------------------------------------------- assignment operator
 
-//ImageTexture& ImageTexture::operator= (const ImageTexture& rhs) {
-//  if (this == &rhs) { return (*this); }
+ImageTexture &ImageTexture::operator=( const ImageTexture &it ) {
+  if ( this == &it ) { return ( *this ); }
 
-//  Texture::operator=(rhs);
+  Texture::operator=( it );
 
-//  hres = rhs.hres;
-//  vres = rhs.vres;
+  hres = it.hres;
+  vres = it.vres;
 
-//    if (image_ptr) { delete image_ptr;  image_ptr = NULL; }
-//    if (it.image_ptr) { image_ptr = it.image_ptr->clone(); }
+  if ( image_ptr ) {
+    delete image_ptr;
+    image_ptr = NULL;
+  }
+  if ( it.image_ptr ) { image_ptr = it.image_ptr->clone(); }
 
-//    if (mapping_ptr) { delete mapping_ptr;  mapping_ptr = NULL; }
-//    if (it.mapping_ptr) { mapping_ptr = it.mapping_ptr->clone(); }
+  if ( mapping_ptr ) {
+    delete mapping_ptr;
+    mapping_ptr = NULL;
+  }
+  if ( it.mapping_ptr ) { mapping_ptr = it.mapping_ptr->clone(); }
 
-//  if (image_ptr) { image_ptr.reset(NULL); }
+  if ( image_ptr ) { image_ptr = NULL; }
 
-//  if (rhs.image_ptr) { *image_ptr = *rhs.image_ptr; }
+  if ( it.image_ptr ) { *image_ptr = *it.image_ptr; }
 
-//  if (mapping_ptr) { mapping_ptr.reset(NULL); }
+  if ( mapping_ptr ) { mapping_ptr = NULL; }
 
-//  if (rhs.mapping_ptr) {
-//      mapping_ptr.reset(rhs.mapping_ptr->clone());
-//  }
-//  return (*this);
-//}
+  if ( it.mapping_ptr ) { mapping_ptr = it.mapping_ptr->clone(); }
+  return ( *this );
+}
 
-//// ---------------------------------------------------------------- clone
+// ---------------------------------------------------------------- clone
 
-//ImageTexture* ImageTexture::clone(void) const { return (new ImageTexture (*this)); }
+ImageTexture *ImageTexture::clone( void ) const { return ( new ImageTexture( *this ) ); }
 
-//// ---------------------------------------------------------------- destructor
+// ---------------------------------------------------------------- destructor
 
-//ImageTexture::~ImageTexture (void) {
-//    if (image_ptr) { delete image_ptr; }
-//    if (mapping_ptr) { delete mapping_ptr; }
-//}
+ImageTexture::~ImageTexture( void ) {
+  if ( image_ptr ) { delete image_ptr; }
+  if ( mapping_ptr ) { delete mapping_ptr; }
+}
 
-//// ---------------------------------------------------------------- set_image
-//inline void ImageTexture::set_image(Image* _image_ptr) {
-//	image_ptr = _image_ptr;
-//	hres = image_ptr->get_hres();
-//	vres = image_ptr->get_vres();
-//}
+// ---------------------------------------------------------------- set_image
+void ImageTexture::set_image( Image *_image_ptr ) {
+  image_ptr = _image_ptr;
+  hres      = image_ptr->get_hres();
+  vres      = image_ptr->get_vres();
+}
 
-//// ---------------------------------------------------------------- set_mapping
-//inline void ImageTexture::set_mapping(Mapping* map_ptr) { mapping_ptr->reset(map_ptr); }
+// ---------------------------------------------------------------- set_mapping
+//void               set_mapping(Mapping* map_ptr);
+void ImageTexture::set_mapping( Mapping *map_ptr ) { mapping_ptr = map_ptr; }
 
-//// ---------------------------------------------------------------- get_color
+// ---------------------------------------------------------------- get_color
 
-//// When we ray trace a triangle mesh object with uv mapping, the mapping pointer may be NULL
-//// because we can define uv coordinates on an arbitrary triangle mesh.
-//// In this case we don't use the local hit point because the pixel coordinates are computed
-//// from the uv coordinates stored in the ShadeRec object in the uv triangles' hit functions
-//// See, for example, Listing 29.12.
+// When we ray trace a triangle mesh object with uv mapping, the mapping pointer may be NULL
+// because we can define uv coordinates on an arbitrary triangle mesh.
+// In this case we don't use the local hit point because the pixel coordinates are computed
+// from the uv coordinates stored in the ShadeRec object in the uv triangles' hit functions
+// See, for example, Listing 29.12.
 
-//RGBColor ImageTexture::get_color(const ShadeRec& sr) const {
-//    int row, column;
+RGBColor ImageTexture::get_color( const ShadeRec &sr ) const {
+  int row, column;
 
-//    if (mapping_ptr) {
-//        mapping_ptr->get_texel_coordinates(sr.local_hit_point, hres,
-//            vres, row, column);
-//    } else {
-//        row = (int)(sr.v * (vres - 1));
-//        column = (int)(sr.u * (hres - 1));
-//    }
+  if ( mapping_ptr ) {
+    mapping_ptr->get_texel_coordinates( sr.local_hit_point, hres, vres, row, column );
+  } else {
+    row    = (int) ( sr.v * ( vres - 1 ) );
+    column = (int) ( sr.u * ( hres - 1 ) );
+  }
 
-//    return (image_ptr->get_color(row, column));
-//}
+  return ( image_ptr->get_color( row, column ) );
+}
