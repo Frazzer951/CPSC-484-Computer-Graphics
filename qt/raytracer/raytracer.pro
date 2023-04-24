@@ -76,6 +76,9 @@ SOURCES += \
     Lights/EnvironmentLight.cpp \
     Lights/Light.cpp \
     Lights/PointLight.cpp \
+    Mappings/LightProbeMap.cpp \
+    Mappings/Mapping.cpp \
+    Mappings/SphericalMap.cpp \
     Materials/Dielectric.cpp \
     Materials/Emissive.cpp \
     Materials/GlossyReflector.cpp \
@@ -206,6 +209,11 @@ HEADERS += \
     Lights/EnvironmentLight.h \
     Lights/Light.h \
     Lights/PointLight.h \
+    Mappings/CylindricalMap.h \
+    Mappings/LightProbeMap.h \
+    Mappings/Mapping.h \
+    Mappings/RectangularMap.h \
+    Mappings/SphericalMap.h \
     Materials/Dielectric.h \
     Materials/Emissive.h \
     Materials/GlossyReflector.h \
@@ -276,3 +284,7 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    images/skybox.jpg \
+    images/skybox.ppm

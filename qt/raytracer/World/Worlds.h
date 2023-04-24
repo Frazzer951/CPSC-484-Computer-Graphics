@@ -34,6 +34,7 @@
 
 #include "Lights/Directional.h"
 #include "Lights/PointLight.h"
+#include "Lights/AmbientOccluder.h"
 
 #include "Materials/Matte.h"
 #include "Materials/SV_Matte.h"
@@ -46,6 +47,8 @@
 #include "Samplers/Jittered.h"
 
 #include "Tracers/RayCast.h"
+
+#include "Mappings/SphericalMap.h"
 
 #include "World/Worlds.h"
 

@@ -43,6 +43,9 @@ public:
 
   RGBColor get_color( void );
 
+  void set_shadows( bool make_shadows );
+  bool get_shadows() const;
+
   virtual void set_bounding_box( void );
   virtual BBox get_bounding_box( void );
 
@@ -79,5 +82,11 @@ inline void GeometricObject::set_color( const float r, const float g, const floa
 // --------------------------------------------------------------------  get_color
 
 inline RGBColor GeometricObject::get_color( void ) { return ( color ); }
+
+// --------------------------------------------------------------------  set_shadows
+inline void GeometricObject::set_shadows( bool makes_shadows ) { shadows = makes_shadows; }
+
+// --------------------------------------------------------------------  get_shadows
+inline bool GeometricObject::get_shadows() const { return shadows; }
 
 #endif

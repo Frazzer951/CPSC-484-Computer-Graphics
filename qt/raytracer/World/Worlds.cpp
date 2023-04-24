@@ -224,12 +224,40 @@ void build_practical( World *w ) {
     add_bb_helper( w, green, Point3D( i, 2 * SPACING, 0 ), SIDE, SIDE, 4 * HEIGHT, Vector3D() );
   }
 
-  add_checkerboard( w, lightGrey, white, 2 );
+  int num_samples = 1;
+
+  AmbientOccluder *ambient_occluder = new AmbientOccluder;
+  ambient_occluder->set_sampler( new MultiJittered( num_samples ) );
+  ambient_occluder->set_min_amount( 0.5 );
+  w->set_ambient_light( ambient_occluder );
+
+  Image *image = new Image;
+  image->read_ppm_file( "C:/dev/school/CPSC_484-Computer-Graphics/qt/raytracer/images/skybox.ppm" );
+
+  SphericalMap *spherical_map = new SphericalMap;
+
+  ImageTexture *image_texture = new ImageTexture( image );
+  image_texture->set_mapping( spherical_map );
+
+  std::shared_ptr<SV_Matte> sv_matte = std::make_shared<SV_Matte>();
+  sv_matte->set_ka( 1.0 );
+  sv_matte->set_kd( 0.85 );
+  sv_matte->set_cd( image_texture );
+
+  Instance *sphere = new Instance( new Sphere() );
+  sphere->scale( 1000000 );
+  sphere->set_material( sv_matte );
+  sphere->set_shadows( false );
+  sphere->rotate_x( 90 );
+  w->add_object( sphere );
+
+  add_checkerboard( w, lightGrey, grey, 2 );
 }
+
 void build_practical_world( World *w, double distance ) {
   //    Pinhole* camera = new Pinhole;
   Fisheye *camera = new Fisheye;
-  camera->set_fov( 270 );
+  camera->set_fov( distance );
   camera->set_rectangular( true );
 
   //    camera->set_eye(-6, -5, 2 * HEIGHT);

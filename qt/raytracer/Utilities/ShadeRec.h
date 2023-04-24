@@ -34,9 +34,13 @@ struct ShadeRec {
   Normal normal;    // Normal at hit point
   Ray    ray;       // Required for specular highlights and area lights
 
-  int      depth;    // recursion depth
-  float    t;        // ray parameter
-  World   &w;        // World reference
+  int   depth;    // recursion depth
+  float t;        // ray parameter
+
+  float u;
+  float v;
+
+  World   &w;    // World reference
   RGBColor color;
 };
 
