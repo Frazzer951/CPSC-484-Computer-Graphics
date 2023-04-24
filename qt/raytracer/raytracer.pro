@@ -286,5 +286,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    images/skybox.jpg \
-    images/skybox.ppm
+    images/alien.jpg \
+    images/alien.ppm \
+    images/grass.jpg \
+    images/grass.ppm \
+    images/moon.jpg \
+    images/moon.ppm \
+    images/sky.jpg \
+    images/sky.ppm
