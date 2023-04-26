@@ -330,7 +330,7 @@ void build_practical( World *w ) {
   w->set_ambient_light( ambient_occluder );
 
   Image *image = new Image;
-  image->read_ppm_file( "C:/dev/school/CPSC_484-Computer-Graphics/qt/raytracer/images/sky.ppm" );
+  image->read_ppm_file( "C:/dev/school/CPSC_484-Computer-Graphics/qt/raytracer/TextureFiles/ppm/CloudsHighResWithBlack.ppm" );
 
   SphericalMap *spherical_map = new SphericalMap;
 
