@@ -8,7 +8,7 @@
 #include "Materials/Reflective.h"
 #include "Materials/Transparent.h"
 
-#include "Cameras/Fisheye.h"
+#include "Cameras/Spherical.h"
 #include "Cameras/Pinhole.h"
 #include "Cameras/StereoCamera.h"
 #include "Cameras/ThinLens.h"
@@ -32,9 +32,11 @@
 #include "GeometricObjects/Primitives/Plane.h"
 #include "GeometricObjects/Primitives/Torus.h"
 
+#include "Lights/AmbientOccluder.h"
 #include "Lights/Directional.h"
 #include "Lights/PointLight.h"
-#include "Lights/AmbientOccluder.h"
+
+#include "Mappings/SphericalMap.h"
 
 #include "Materials/Matte.h"
 #include "Materials/SV_Matte.h"
@@ -47,24 +49,22 @@
 #include "Samplers/Jittered.h"
 
 #include "Tracers/RayCast.h"
+#include "Utilities/RandomUtils.h"
 
-#include "Mappings/SphericalMap.h"
-
-#include "World/Worlds.h"
+//#include "World/Worlds.h"
 
 enum CHOICE { A, B, C, D, E, F };
 
 void build_cone_helper( World *w, const Point3D &posn, const RGBColor &color, double h, double r );
-void build_cylinder_helper( World *w, const Point3D &posn, const RGBColor &color, double b, double t, double r,
-                            Vector3D rotation = { 90, 0, 0 } );
+void build_cylinder_helper( World *w, const Point3D &posn, const RGBColor &color, double b, double t, double r );
 
-//void build_spheres( World *w );
+//void build_spheres(World* w);
 void build_sphere_world( World *w );
 
-//void build_city( World *w );
+//void build_city(World* w);
 void build_city_world( World *w, double distance = 800.0 );
 
-void build_practical( World *w );
+//void build_practical(World *w);
 void build_practical_world( World *w, double distance = 130.0 );
 
 //void build_sphere_triangle_box(World* w);
@@ -79,12 +79,25 @@ void build_figure_10_10( World *w, CHOICE choice );
 //void build_fisheye(World* w, CHOICE choice);
 void build_figure_11_7( World *w, CHOICE choice );
 
+void build_stereo( World *w, CHOICE choice );
+
 //void build_stereographic(World* w, double focal_distance);
 //void build_figure_12_12(World* w, CHOICE choice);
+//void build_figure_12_13(World* w, CHOICE choice);
+//void build_figure_12_14(World* w, CHOICE choice);
 
 //void build_mcdonalds(World* w);
 void build_mcdonalds_world( World *w );
 //void build_mcdonalds_alberto(World* w);
+
+//void build_stonehenge(World* w);
+void build_stonehenge_world( World *w );
+
+void build_figure_12_12_world( World *w, CHOICE choice );
+void build_figure_12_13_world( World *w, CHOICE choice );
+void build_figure_12_14_world( World *w, CHOICE choice );
+void build_figure_12_16_world( World *w, CHOICE choice );
+void build_figure_12_17_world( World *w, CHOICE choice );
 
 //void build_sundial(World* w, double radius);
 //void build_sundial_world(World* w, double radius);
@@ -100,14 +113,5 @@ void build_mcdonalds_world( World *w );
 //void build_five_reflective_transparent_spheres(World* w);
 
 //void build_sundial(World* w, double radius);
-
-//void build_discussion( World *w );
-void build_discussion_world( World *w );
-
-//void build_stonehenge( World *w );
-void build_stonehenge_world( World *w );
-
-//void build_figure_12( World *w, int number );
-void build_figure_12_world( World *w, int number );
 
 #endif    // WORLDS_H
