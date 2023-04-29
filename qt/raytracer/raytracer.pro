@@ -87,6 +87,7 @@ SOURCES += \
     Materials/Phong.cpp \
     Materials/Plastic.cpp \
     Materials/Reflective.cpp \
+    Materials/SV_Emissive.cpp \
     Materials/SV_Matte.cpp \
     Materials/Transparent.cpp \
     Samplers/Hammersley.cpp \
@@ -222,6 +223,7 @@ HEADERS += \
     Materials/Phong.h \
     Materials/Plastic.h \
     Materials/Reflective.h \
+    Materials/SV_Emissive.h \
     Materials/SV_Matte.h \
     Materials/Transparent.h \
     Samplers/Hammersley.h \
