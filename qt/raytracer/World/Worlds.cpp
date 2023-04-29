@@ -1177,3 +1177,100 @@ void build_figure_12_17_world( World *w, CHOICE choice ) {
 
   build_stereo( w, 17, choice );
 }
+
+void build_figure_29_9_world( World *w, CHOICE choice ) {
+  // Viewport
+  int num_samples = 25;
+  w->vp.set_hres( 500 );
+  w->vp.set_vres( 500 );
+  w->vp.set_samples( num_samples );
+  w->background_color = black;
+  w->tracer_ptr       = new RayCast( w );
+
+  // Camera
+  Pinhole *camera_ptr = new Pinhole;
+  if ( choice == CHOICE::A ) {
+    camera_ptr->set_eye( 40, 20, 40 );    // for Figure29.9(a)
+  } else if ( choice == CHOICE::B ) {
+    camera_ptr->set_eye( 0, 65, 0 );    // for Figure29.9(b)
+  } else {
+    throw new std::invalid_argument( "invalid choice\n" );
+  }
+  camera_ptr->set_lookat( 0.0 );
+  camera_ptr->set_view_distance( 17000.0 );
+  camera_ptr->compute_uvw();
+  w->set_camera( camera_ptr );
+
+  // Image
+  Image *image_ptr = new Image;
+  image_ptr->read_ppm_file( "C:/dev/school/CPSC_484-Computer-Graphics/qt/raytracer/TextureFiles/ppm/SphereGrid.ppm" );
+
+  // Mapping
+  SphericalMap *map_ptr = new SphericalMap;
+
+  // Image Texture
+  ImageTexture *texture_ptr = new ImageTexture( image_ptr );
+  texture_ptr->set_mapping( map_ptr );
+
+  // Material
+  std::shared_ptr<SV_Emissive> sv_emissive_ptr = std::make_shared<SV_Emissive>();
+  sv_emissive_ptr->scale_radiance( 1.0 );
+  sv_emissive_ptr->set_ce( texture_ptr );
+
+  // Sphere
+  Instance *sphere = new Instance( new Sphere() );
+  sphere->scale( 0.5 );
+  sphere->set_material( sv_emissive_ptr );
+  w->add_object( sphere );
+}
+
+void build_figure_29_12_world( World *w ) {
+  // Viewport
+  int num_samples = 16;
+  w->vp.set_hres( 500 );
+  w->vp.set_vres( 500 );
+  w->vp.set_samples( num_samples );
+  w->background_color = black;
+  w->tracer_ptr       = new RayCast( w );
+
+  // Camera
+  Pinhole *camera_ptr = new Pinhole;
+  camera_ptr->set_eye( 0, 0, 65 );
+  camera_ptr->set_lookat( 0.0 );
+  camera_ptr->set_view_distance( 21000.0 );
+  camera_ptr->compute_uvw();
+  w->set_camera( camera_ptr );
+
+  // Light
+  Directional *light_ptr = new Directional;
+  light_ptr->set_direction( -0.25, 0.4, 1 );
+  light_ptr->scale_radiance( 2.5 );
+  w->add_light( light_ptr );
+
+  // Image
+  Image *image_ptr = new Image;
+  image_ptr->read_ppm_file( "C:/dev/school/CPSC_484-Computer-Graphics/qt/raytracer/TextureFiles/ppm/EarthHighRes.ppm" );
+
+  // Mapping
+  SphericalMap *map_ptr = new SphericalMap;
+
+  // Image Texture
+  ImageTexture *texture_ptr = new ImageTexture( image_ptr );
+  texture_ptr->set_mapping( map_ptr );
+
+  // Material
+  std::shared_ptr<SV_Matte> sv_matte_ptr = std::make_shared<SV_Matte>();
+  sv_matte_ptr->set_ka( 0.2 );
+  sv_matte_ptr->set_kd( 0.8 );
+  sv_matte_ptr->set_cd( texture_ptr );
+
+  // Sphere
+  Instance *earth_ptr = new Instance( new Sphere() );
+  earth_ptr->scale( 0.75 );
+  //  earth_ptr->rotate_y( 270 );    // North America
+  //  earth_ptr->rotate_x( 30 );
+  earth_ptr->rotate_y( 40 );    // Australia
+  earth_ptr->rotate_x( -30 );
+  earth_ptr->set_material( sv_matte_ptr );
+  w->add_object( earth_ptr );
+}

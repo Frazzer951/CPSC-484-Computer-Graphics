@@ -303,7 +303,7 @@ void World::init_ambient_light( double radiance ) {
 void World::build() {
   //  build_sphere_world( this );
   //  build_city_world( this );
-  build_practical_world( this, 130 );
+  //  build_practical_world( this, 130 );
 
   //  build_sphere_triangle_box_world( this, A );
   //  build_olympic_rings_world( this );    // TODO:  fill in code in Worlds.cpp, , adjust lights and cameras, and run
@@ -321,6 +321,9 @@ void World::build() {
 
   //  build_figure_12_16_world( this, A );
   //  build_figure_12_17_world( this, A );
+
+  //  build_figure_29_9_world( this, A );
+  build_figure_29_12_world( this );
 
   check();    // checks for valid camera, viewplane, lights, plane...
 }

@@ -5,6 +5,7 @@
 
 #include "World/World.h"
 #include "World_builder.h"
+#include "Materials/SV_Emissive.h"
 #include "Materials/Reflective.h"
 #include "Materials/Transparent.h"
 
@@ -113,5 +114,8 @@ void build_figure_12_17_world( World *w, CHOICE choice );
 //void build_five_reflective_transparent_spheres(World* w);
 
 //void build_sundial(World* w, double radius);
+
+void build_figure_29_9_world( World *w, CHOICE choice );
+void build_figure_29_12_world( World *w );
 
 #endif    // WORLDS_H
