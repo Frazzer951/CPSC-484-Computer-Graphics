@@ -5,3 +5,4 @@ build/
 __MACOSX/
 .DS_Store
 RTFGU_Chapter_Code*
+*.blend1
