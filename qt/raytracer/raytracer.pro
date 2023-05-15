@@ -68,6 +68,7 @@ SOURCES += \
     GeometricObjects/Triangles/MeshTriangle.cpp \
     GeometricObjects/Triangles/SmoothMeshTriangle.cpp \
     GeometricObjects/Triangles/SmoothTriangle.cpp \
+    GeometricObjects/Triangles/SmoothUVMeshTriangle.cpp \
     GeometricObjects/Triangles/Triangle.cpp \
     Lights/Ambient.cpp \
     Lights/AmbientOccluder.cpp \
@@ -76,6 +77,7 @@ SOURCES += \
     Lights/EnvironmentLight.cpp \
     Lights/Light.cpp \
     Lights/PointLight.cpp \
+    Mappings/HemisphericalMap.cpp \
     Mappings/LightProbeMap.cpp \
     Mappings/Mapping.cpp \
     Mappings/SphericalMap.cpp \
@@ -90,6 +92,9 @@ SOURCES += \
     Materials/SV_Emissive.cpp \
     Materials/SV_Matte.cpp \
     Materials/Transparent.cpp \
+    Noises/CubicNoise.cpp \
+    Noises/LatticeNoise.cpp \
+    Noises/LinearNoise.cpp \
     Samplers/Hammersley.cpp \
     Samplers/Jittered.cpp \
     Samplers/MultiJittered.cpp \
@@ -123,6 +128,7 @@ SOURCES += \
     UserInterface/oglwidget.cpp \
     UserInterface/qtraytracer.cpp \
     Utilities/BBox.cpp \
+    Utilities/Image.cpp \
     Utilities/Matrix.cpp \
     Utilities/Mesh.cpp \
     Utilities/Normal.cpp \
@@ -132,7 +138,6 @@ SOURCES += \
     Utilities/RandomUtils.cpp \
     Utilities/ShadeRec.cpp \
     Utilities/Vector3D.cpp \
-    Utilities/Image.cpp \
     Utilities/maths.cpp \
     Utilities/ply.cpp \
     World/ViewPlane.cpp \
@@ -202,6 +207,7 @@ HEADERS += \
     GeometricObjects/Triangles/MeshTriangle.h \
     GeometricObjects/Triangles/SmoothMeshTriangle.h \
     GeometricObjects/Triangles/SmoothTriangle.h \
+    GeometricObjects/Triangles/SmoothUVMeshTriangle.h \
     GeometricObjects/Triangles/Triangle.h \
     Lights/Ambient.h \
     Lights/AmbientOccluder.h \
@@ -211,6 +217,7 @@ HEADERS += \
     Lights/Light.h \
     Lights/PointLight.h \
     Mappings/CylindricalMap.h \
+    Mappings/HemisphericalMap.h \
     Mappings/LightProbeMap.h \
     Mappings/Mapping.h \
     Mappings/RectangularMap.h \
@@ -226,6 +233,9 @@ HEADERS += \
     Materials/SV_Emissive.h \
     Materials/SV_Matte.h \
     Materials/Transparent.h \
+    Noises/CubicNoise.h \
+    Noises/LatticeNoise.h \
+    Noises/LinearNoise.h \
     Samplers/Hammersley.h \
     Samplers/Jittered.h \
     Samplers/MultiJittered.h \
@@ -286,3 +296,49 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    ppm_images/BilliardBall.ppm \
+    ppm_images/BlueAndBuffRamp.ppm \
+    ppm_images/BlueGlass.ppm \
+    ppm_images/BlueMarbleRamp.ppm \
+    ppm_images/BrownRamp.ppm \
+    ppm_images/CloudsHighRes.ppm \
+    ppm_images/CloudsHighResWithBlack.ppm \
+    ppm_images/CloudsLowRes.ppm \
+    ppm_images/CloudsLowResWithBlack.ppm \
+    ppm_images/CountryScene.ppm \
+    ppm_images/CyanToYellow.ppm \
+    ppm_images/EarthHighRes.ppm \
+    ppm_images/EarthLowRes.ppm \
+    ppm_images/EarthMap.ppm \
+    ppm_images/EarthWithClouds.ppm \
+    ppm_images/EveningSky.ppm \
+    ppm_images/GrayMarbleRamp.ppm \
+    ppm_images/GreenAndYellow.ppm \
+    ppm_images/Lightlace.ppm \
+    ppm_images/Mercator.ppm \
+    ppm_images/MorningSky.ppm \
+    ppm_images/Sarah.ppm \
+    ppm_images/SphereGrid.ppm \
+    ppm_images/TurquoiseAndBrownRamp.ppm \
+    ppm_images/alien.ppm \
+    ppm_images/blue_sky_2.ppm \
+    ppm_images/blue_sky_dense.ppm \
+    ppm_images/blue_sky_pano.ppm \
+    ppm_images/bluesky3.ppm \
+    ppm_images/clouds_and_sky.ppm \
+    ppm_images/grass.ppm \
+    ppm_images/label.ppm \
+    ppm_images/moon.ppm \
+    ppm_images/penguin_body.ppm \
+    ppm_images/penguin_eye.ppm \
+    ppm_images/sandstone_ramp1.ppm \
+    ppm_images/sandstone_ramp2.ppm \
+    ppm_images/sandstone_ramp3.ppm \
+    ppm_images/sandstone_ramp4.ppm \
+    ppm_images/sky.ppm \
+    ppm_images/true_lies.ppm \
+    ppm_images/turquoise_ramp.ppm \
+    ppm_images/uffizi_probe_large.ppm \
+    ppm_images/uffizi_probe_small.ppm

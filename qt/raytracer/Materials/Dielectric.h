@@ -2,8 +2,8 @@
 #  define __DIELECTRIC__
 
 #  include "Phong.h"
-#  include "FresnelReflector.h"
-#  include "FresnelTransmitter.h"
+#  include "BRDFs/FresnelReflector.h"
+#  include "BTDFs/FresnelTransmitter.h"
 
 class Dielectric : public Phong {
 public:

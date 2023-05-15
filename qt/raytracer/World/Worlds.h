@@ -5,7 +5,6 @@
 
 #include "World/World.h"
 #include "World_builder.h"
-#include "Materials/SV_Emissive.h"
 #include "Materials/Reflective.h"
 #include "Materials/Transparent.h"
 
@@ -34,14 +33,18 @@
 #include "GeometricObjects/Primitives/Torus.h"
 
 #include "Lights/AmbientOccluder.h"
+#include "Lights/AreaLight.h"
 #include "Lights/Directional.h"
+#include "Lights/EnvironmentLight.h"
 #include "Lights/PointLight.h"
 
 #include "Mappings/SphericalMap.h"
+#include "Mappings/HemisphericalMap.h"
 
+#include "Materials/SV_Emissive.h"
 #include "Materials/Matte.h"
 #include "Materials/SV_Matte.h"
-#include "Materials/Reflective.h".
+#include "Materials/Reflective.h"
 
 #include "Textures/Checker3D.h"
 #include "Textures/ImageTexture.h"
@@ -100,11 +103,11 @@ void build_figure_12_14_world( World *w, CHOICE choice );
 void build_figure_12_16_world( World *w, CHOICE choice );
 void build_figure_12_17_world( World *w, CHOICE choice );
 
-//void build_sundial(World* w, double radius);
-//void build_sundial_world(World* w, double radius);
+void build_29_09_world( World *w, CHOICE choice );    // glowing grid with lat/longitude
+void build_29_12_world( World *w, CHOICE choice );    // Earth using textures
+void build_29_27_world( World *w, CHOICE choice );    // complex scene with reflections, hemishericalMaps, multiple lights
 
-//void build_sundial(World* w, double height=6.0, double radius=20.0, double lat=30.0);
-//void build_sundial_world(World* w, double height=6.0, double radius=20.0, double lat=30.0);
+void build_sundial_world( World *w, double height = 30.0, double radius = 20.0, double lat = 30.0 );
 
 //void build_voyager(World* w);
 //void build_voyager_world(World* w);
@@ -114,8 +117,5 @@ void build_figure_12_17_world( World *w, CHOICE choice );
 //void build_five_reflective_transparent_spheres(World* w);
 
 //void build_sundial(World* w, double radius);
-
-void build_figure_29_9_world( World *w, CHOICE choice );
-void build_figure_29_12_world( World *w );
 
 #endif    // WORLDS_H

@@ -12,11 +12,12 @@ EnvironmentLight &EnvironmentLight::operator=( const EnvironmentLight &other ) {
 void EnvironmentLight::copy( const EnvironmentLight &other ) {
   Light::operator=( other );
 
-  Sampler  *psamp = other.sampler_ptr;
-  Material *pmat  = other.material_ptr;
+  Sampler *psamp = other.sampler_ptr;
+  //    Material* pmat = other.material_ptr;
 
   sampler_ptr  = psamp ? psamp->clone() : NULL;
-  material_ptr = pmat ? pmat->clone() : NULL;
+  //    material_ptr = pmat ? pmat->clone() : NULL;
+  material_ptr = other.material_ptr;
 
   set_shadows( other.cast_shadows() );
 }
@@ -36,6 +37,8 @@ Vector3D EnvironmentLight::get_direction( ShadeRec &sr ) {
   wi         = sp.x * u + sp.y * v + sp.z * w;
   return wi;    // TODO: check
 }
+
+void EnvironmentLight::set_material( std::shared_ptr<Material> material ) { material_ptr = material; }
 
 // TODO: check against text
 bool EnvironmentLight::in_shadow( const Ray &ray, const ShadeRec &sr ) const {

@@ -46,7 +46,7 @@ Vector3D Fisheye::ray_direction( const Point2D &pp, const int hres, const int vr
 }
 
 //void Fisheye::render_scene(const World& w) {
-void Fisheye::render_scene( const World &w, float, int ) {
+void Fisheye::render_scene( const World &w, float x, int offset ) {
   RGBColor  L;
   ViewPlane vp( w.vp );
   int       hres = vp.hres;
@@ -64,28 +64,6 @@ void Fisheye::render_scene( const World &w, float, int ) {
 
   qDebug( "BUILDING RAYTRACED SCENE -- scene will appear pixel by pixel, randomly over entire image...\n" );
 
-  //  for (int r = 0; r < vres; r++) {    // up
-  //    for (int c = 0; c < hres; c++) {  // accross
-  //      L = black;
-
-  //      for (int j = 0; j < vp.num_samples; j++) {
-  //        sp = vp.sampler_ptr->sample_unit_square();
-  //        pp.x = s * (c - 0.5 * hres + sp.x);
-  //        pp.y = s * (r - 0.5 * vres + sp.y);
-  //        ray.d = ray_direction(pp, hres, vres, s, r_squared);
-
-  //        if ((r_squared <= 1.0 && !rectangular) || rectangular)
-  //          L += w.tracer_ptr->trace_ray(ray, depth);
-  //      }
-
-  //      L /= vp.num_samples;
-  //      L *= exposure_time;
-  //      //      w.display_pixel(r, c, L);
-  //        row_col_pixels.push_back(RowColPixel(r, c, L));
-  //      }
-  //      if (r % 50 == 0) { qDebug("rows traced: %d/%d", r, vp.hres); }
-  //    }
-
   for ( int r = 0; r < vp.vres; r++ ) {      // up
     for ( int c = 0; c < vp.hres; c++ ) {    // across
       pixels.push_back( Point2D( r, c ) );
@@ -102,7 +80,7 @@ void Fisheye::render_scene( const World &w, float, int ) {
 
     for ( int j = 0; j < vp.num_samples; j++ ) {
       sp    = vp.sampler_ptr->sample_unit_square();
-      pp.x  = s * ( c - 0.5 * hres + sp.x );
+      pp.x  = s * ( c - 0.5 * hres + sp.x ) + x;    // for stereo
       pp.y  = s * ( r - 0.5 * vres + sp.y );
       ray.d = ray_direction( pp, hres, vres, s, r_squared );
 
@@ -111,7 +89,7 @@ void Fisheye::render_scene( const World &w, float, int ) {
 
     L /= vp.num_samples;
     L *= exposure_time;
-    w.display_pixel( r, c, L );
+    w.display_pixel( r, c + offset, L );    // for stereo
 
     if ( ++rendered % ( 100 * vp.vres ) == 0 ) {
       qDebug( "points traced (50,000's): %d/%d", rendered / ( 10 * vp.vres ), vp.vres / 10 );

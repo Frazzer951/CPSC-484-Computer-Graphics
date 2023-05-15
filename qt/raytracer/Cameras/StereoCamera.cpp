@@ -47,8 +47,8 @@ void StereoCamera::setup_cameras() {
 }
 
 //void StereoCamera::render_scene(const World& w) {
-void StereoCamera::render_scene( const World &w, float, int ) {
-  qDebug( "entering stereocamera_renderscene()\n" );
+void StereoCamera::render_scene( const World &w, float y, int offset ) {
+  //  qDebug("entering stereocamera_renderscene()\n");
 
   ViewPlane vp   = w.vp;
   int       hres = vp.hres;
@@ -59,18 +59,18 @@ void StereoCamera::render_scene( const World &w, float, int ) {
   double x = r * std::tan( 0.5 * beta * PI_ON_180 );
 
   if ( viewing == parallel ) {
-    qDebug( "render parallel\n" );
-    qDebug( "rendering left camera\n" );
+    //    qDebug("render parallel\n");
+    //    qDebug("rendering left camera\n");
     left_camera_ptr->render_stereo( w, x, 0 );
-    qDebug( "rendering right camera\n" );
+    //    qDebug("rendering right camera\n");
     right_camera_ptr->render_stereo( w, -x, hres + pixel_gap );
   }
 
   if ( viewing == transverse ) {
-    qDebug( "render transverse\n" );
-    qDebug( "rendering right camera %.2f: \n", -x );
+    //    qDebug("render transverse\n");
+    //    qDebug("rendering right camera %.2f: \n", -x);
     right_camera_ptr->render_stereo( w, -x, 0 );
-    qDebug( "rendering left camera %.2f, %d\n", x, hres + pixel_gap );
+    //    qDebug("rendering left camera %.2f, %d\n", x, hres + pixel_gap);
     left_camera_ptr->render_stereo( w, x, hres + pixel_gap );
   }
 }

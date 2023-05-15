@@ -1,4 +1,4 @@
-#include "World/Worlds.h"
+﻿#include "World/Worlds.h"
 #include "Cameras/Fisheye.h"
 #include <QtMath>
 
@@ -330,7 +330,7 @@ void build_practical( World *w ) {
   w->set_ambient_light( ambient_occluder );
 
   Image *image = new Image;
-  image->read_ppm_file( "C:/dev/school/CPSC_484-Computer-Graphics/qt/raytracer/TextureFiles/ppm/CloudsHighResWithBlack.ppm" );
+  image->read_ppm_file( "C:/dev/school/CPSC_484-Computer-Graphics/qt/raytracer/ppm_images/CloudsHighResWithBlack.ppm" );
 
   SphericalMap *spherical_map = new SphericalMap;
 
@@ -896,6 +896,7 @@ void build_stereo( World *w, int figure, CHOICE choice ) {
     stereo->set_eye( -150, 1000, -500 );
     stereo->set_lookat( -160, 300, -550 );
     //        stereo->set_up_vector(Vector3D(1, 0, 0));
+  } else if ( figure == 17 ) {
   }
 
   stereo->compute_uvw();
@@ -1032,28 +1033,129 @@ void build_figure_12_16_world( World *w, CHOICE choice ) {
   build_stereo( w, 16, choice );
 }
 
+void build_sundial( World *w, double height, double radius, double lat ) {
+  double  post_side = 3.0;
+  Point3D origin( 0, 0, 0 );
+  double  pi = 3.141592;
+  radius     = 15;
+
+  Plane *plane = new Plane( Point3D( -30, -30, -height ), Normal( 0, 0, 1 ) );
+  build_checkerboard( plane, orange, white, 8 );
+  w->add_object( plane );
+
+  Compound *sundial = new Compound();
+
+  Box      *post   = new Box( Point3D( -post_side / 2.0, -post_side / 2.0, 0 ), Point3D( post_side, post_side, height ) );
+  Instance *ispost = new Instance( post );
+  w->set_material( ispost, darkBlue );
+  sundial->add_object( ispost );
+
+  Compound  *face = new Compound();
+  ThickRing *ring = new ThickRing( 0.0, 0.2, 1, radius );
+  build_checkerboard( ring, darkBlue, white, 1 );
+  face->add_object( ring );
+
+  ThickRing *outerRing = new ThickRing( 0.0, 0.5, radius - 0.1, radius );
+  w->set_material( outerRing, yellow );
+  face->add_object( outerRing );
+
+  SolidCone *cone = new SolidCone( 8, 2 );
+  build_checkerboard( cone, red, white, 0.5 );
+  face->add_object( cone );
+
+  double phi = 0.0;
+  double r   = 1;
+  while ( phi < 2 * pi ) {
+    Sphere *sphere = new Sphere( Point3D( radius * cos( phi ), radius * sin( phi ), 0 ), r );
+    w->set_material( sphere, red );
+    Instance *issphere = new Instance( sphere );
+    issphere->rotate_x( -lat );
+    issphere->translate( 0, 0, height );
+    sundial->add_object( issphere );
+    phi += pi / 12.0;
+  }
+
+  double    thinside = 0.5;
+  Instance *isarm    = new Instance( new Box( Point3D( 0, 0, 0 ), Point3D( thinside, thinside, radius ) ) );
+  w->set_material( isarm, green );
+  face->add_object( isarm );
+
+  Instance *isface = new Instance( face );
+  isface->rotate_x( 90 - lat );
+  isface->translate( 0, 0, height );
+  sundial->add_object( isface );
+
+  w->add_object( sundial );
+}
+
+void build_sundial_world( World *w, double height, double radius, double lat ) {
+  Pinhole *ptr = new Pinhole;
+  //    ptr->set_eye(-35, 30, 80);
+  ptr->set_eye( -45, 40, 1.4 * height );
+  ptr->set_lookat( 0, 0, height );
+  ptr->set_view_distance( 250 );
+  ptr->set_up_vector( 0, 0, 1 );
+  ptr->compute_uvw();
+  w->set_camera( ptr );
+  w->init_viewplane();
+
+  w->init_ambient_light( 0.4 );
+
+  Directional *lt = new Directional;
+  lt->set_shadows( true );
+  lt->set_direction( 200, 120, 30 );
+  //    lt->set_direction(20, 120, 30);
+  //    lt->set_direction(0, 120, 30);
+  //    lt->set_direction(20, 20, 5);
+  lt->scale_radiance( 11.0 );
+
+  w->add_light( lt );
+
+  w->tracer_ptr = new RayCast( w );
+
+  w->init_plane();
+
+  build_sundial( w, height, radius, lat );
+}
+
 void build_figure_12_17_world( World *w, CHOICE choice ) {
   int num_samples = 1;
+
+  w->vp.set_hres( 200 );
+  w->vp.set_vres( 200 );
+  w->vp.set_samples( num_samples );
   w->vp.set_pixel_size( 1.0 );
+
+  w->tracer_ptr = new RayCast( w );
 
   AmbientOccluder *ambient_occluder = new AmbientOccluder;
   ambient_occluder->set_sampler( new MultiJittered( num_samples ) );
   ambient_occluder->set_min_amount( 0.5 );
   w->set_ambient_light( ambient_occluder );
 
-  Fisheye *left_camera = new Fisheye;
-  left_camera->set_fov( 180 );
-  //    left_camera->set_vertical_fov(180);
+  Spherical *left_camera = new Spherical;
+  left_camera->set_horizontal_fov( 180 );
+  left_camera->set_vertical_fov( 180 );
 
-  Fisheye *right_camera = new Fisheye;
-  right_camera->set_fov( 180 );
-  //    right_camera->set_vertical_fov(180);
+  Spherical *right_camera = new Spherical;
+  right_camera->set_horizontal_fov( 180 );
+  right_camera->set_vertical_fov( 180 );
 
   StereoCamera *stereo = new StereoCamera;
-  //    stereo->set_eye(10, 15, 53);
+  stereo->set_left_camera( left_camera );
+  stereo->set_right_camera( right_camera );
+  stereo->use_parallel_viewing();
+  //	stereo->use_transverse_viewing();
+  stereo->set_pixel_gap( 5 );
   stereo->set_eye( 10, 15, 13 );
+  ;
   stereo->set_lookat( 34, 15, 0 );
+  stereo->compute_uvw();
+  stereo->set_stereo_angle( 5.0 );
+  stereo->setup_cameras();
+  w->set_camera( stereo );
 
+  //viewplane
   PointLight *light = new PointLight;
   light->set_location( 150, 500, 300 );
   light->scale_radiance( 3.75 );
@@ -1107,16 +1209,16 @@ void build_figure_12_17_world( World *w, CHOICE choice ) {
         std::shared_ptr<Matte> matte = std::make_shared<Matte>();
         matte->set_ka( 0.4 );
         matte->set_kd( 0.6 );
-        matte->set_cd( min_color + rand_float() * ( max_color - min_color ),
-                       min_color + rand_float() * ( max_color - min_color ),
-                       min_color + rand_float() * ( max_color - min_color ) );
+        matte->set_cd( min_color + rand_float( 1 ) * ( max_color - min_color ),
+                       min_color + rand_float( 1 ) * ( max_color - min_color ),
+                       min_color + rand_float( 1 ) * ( max_color - min_color ) );
 
         // block center coordinates
         float xc = a * ( r - num_rows / 2.0 + 0.5 );
         float zc = b * ( c - num_columns / 2.0 + 0.5 );
 
-        width  = min_size + rand_float() * ( a - 2 * offset - min_size );
-        length = min_size + rand_float() * ( b - 2 * offset - min_size );
+        width  = min_size + rand_float( 1 ) * ( a - 2 * offset - min_size );
+        length = min_size + rand_float( 1 ) * ( b - 2 * offset - min_size );
 
         // minimum building coordinates
         float xmin = xc - width / 2.0;
@@ -1124,7 +1226,7 @@ void build_figure_12_17_world( World *w, CHOICE choice ) {
         float zmin = zc - length / 2.0;
 
         // maximum building coordinates
-        height = min_height + rand_float() * ( max_height - min_height );
+        height = min_height + rand_float( 1 ) * ( max_height - min_height );
 
         // The following is a hack to make the middle row and column of buildings higher
         // on average than the other buildings.
@@ -1135,6 +1237,7 @@ void build_figure_12_17_world( World *w, CHOICE choice ) {
         float ymax = height;
         float zmax = zc + length / 2.0;
 
+        qDebug() << xmin << ymin << zmin << xmax << ymax << zmax;
         Box *building = new Box( Point3D( xmin, ymin, zmin ), Point3D( xmax, ymax, zmax ) );
         building->set_material( matte );
         grid->add_object( building );
@@ -1150,7 +1253,7 @@ void build_figure_12_17_world( World *w, CHOICE choice ) {
   build_checkerboard( park, RGBColor( 0.35, 0.75, 0.35 ), RGBColor( 0.3, 0.5, 0.3 ), 5 );
   w->add_object( park );
 
-  // ground plane with checker:
+  //    // ground plane with checker:
   Plane *plane = new Plane( Point3D( 0, 0.01, 0 ), Normal( 0, 1, 0 ) );
   build_checkerboard( plane, RGBColor( 0.7 ), RGBColor( 0.3, 0.5, 0.3 ), 50 );
   w->add_object( plane );
@@ -1173,104 +1276,215 @@ void build_figure_12_17_world( World *w, CHOICE choice ) {
   sphere->scale( 1000000 );
   sphere->set_material( sv_matte );
   sphere->set_shadows( false );    // reguired for ambient occlusion to work
+  sphere->rotate_x( 270 );
   w->add_object( sphere );
 
   build_stereo( w, 17, choice );
 }
 
-void build_figure_29_9_world( World *w, CHOICE choice ) {
-  // Viewport
+void build_29_09_world( World *w, CHOICE choice ) {
   int num_samples = 25;
-  w->vp.set_hres( 500 );
-  w->vp.set_vres( 500 );
+
+  w->vp.set_hres( 700 );
+  w->vp.set_vres( 700 );
   w->vp.set_samples( num_samples );
+
   w->background_color = black;
-  w->tracer_ptr       = new RayCast( w );
 
-  // Camera
-  Pinhole *camera_ptr = new Pinhole;
-  if ( choice == CHOICE::A ) {
-    camera_ptr->set_eye( 40, 20, 40 );    // for Figure29.9(a)
-  } else if ( choice == CHOICE::B ) {
-    camera_ptr->set_eye( 0, 65, 0 );    // for Figure29.9(b)
-  } else {
-    throw new std::invalid_argument( "invalid choice\n" );
-  }
-  camera_ptr->set_lookat( 0.0 );
-  camera_ptr->set_view_distance( 17000.0 );
-  camera_ptr->compute_uvw();
-  w->set_camera( camera_ptr );
+  w->tracer_ptr = new RayCast( w );
 
-  // Image
-  Image *image_ptr = new Image;
-  image_ptr->read_ppm_file( "C:/dev/school/CPSC_484-Computer-Graphics/qt/raytracer/TextureFiles/ppm/SphereGrid.ppm" );
+  Pinhole *camera = new Pinhole;
+  camera->set_eye( choice == A ? Point3D( 40, 20, 40 ) : Point3D( 0, 65, 0 ) );    // for Figure29.9(a, b)
+  camera->set_lookat( 0, 0, 0 );
+  camera->set_view_distance( 17000.0 );
+  //    camera->set_view_distance(6000.0);
+  camera->compute_uvw();
+  w->set_camera( camera );
 
-  // Mapping
-  SphericalMap *map_ptr = new SphericalMap;
+  // image:
+  Image *image = new Image;
+  image->read_ppm_file( "/Users/williammccarthy/Downloads/__484/qt/RT_sparkle_shadows/ppm_images/SphereGrid.ppm" );
 
-  // Image Texture
-  ImageTexture *texture_ptr = new ImageTexture( image_ptr );
-  texture_ptr->set_mapping( map_ptr );
+  // mapping:
+  SphericalMap *map = new SphericalMap;
 
-  // Material
-  std::shared_ptr<SV_Emissive> sv_emissive_ptr = std::make_shared<SV_Emissive>();
-  sv_emissive_ptr->scale_radiance( 1.0 );
-  sv_emissive_ptr->set_ce( texture_ptr );
+  // image based texture:
+  ImageTexture *texture = new ImageTexture;
+  texture->set_image( image );
+  texture->set_mapping( map );
 
-  // Sphere
-  Instance *sphere = new Instance( new Sphere() );
-  sphere->scale( 0.5 );
-  sphere->set_material( sv_emissive_ptr );
-  w->add_object( sphere );
+  // textured material:
+  std::shared_ptr<SV_Emissive> sv_emissive = std::make_shared<SV_Emissive>();
+  sv_emissive->scale_radiance( 1.0 );
+  sv_emissive->set_ce( texture );
+
+  // generic sphere:
+  Instance *iss = new Instance( new Sphere( Point3D( 0, 0.5, 0 ), 0.5 ) );
+  iss->set_material( sv_emissive );
+  if ( choice == B ) { iss->translate( Point3D( 0.5, -0.5, 0 ) ); }
+  w->add_object( iss );
 }
 
-void build_figure_29_12_world( World *w ) {
-  // Viewport
+void build_29_12_world( World *w, CHOICE choice ) {
   int num_samples = 16;
-  w->vp.set_hres( 500 );
-  w->vp.set_vres( 500 );
+
+  w->vp.set_hres( 700 );
+  w->vp.set_vres( 700 );
   w->vp.set_samples( num_samples );
+
   w->background_color = black;
   w->tracer_ptr       = new RayCast( w );
 
-  // Camera
-  Pinhole *camera_ptr = new Pinhole;
-  camera_ptr->set_eye( 0, 0, 65 );
-  camera_ptr->set_lookat( 0.0 );
-  camera_ptr->set_view_distance( 21000.0 );
-  camera_ptr->compute_uvw();
-  w->set_camera( camera_ptr );
+  Pinhole *camera = new Pinhole;
+  camera->set_eye( choice == A ? Point3D( 0, 0, 65 ) : Point3D( 0, 65, 0 ) );
+  camera->set_lookat( 0.0 );
+  camera->set_view_distance( 14500.0 );
+  //    camera->set_view_distance(14000.0);
+  camera->compute_uvw();
+  w->set_camera( camera );
 
-  // Light
-  Directional *light_ptr = new Directional;
-  light_ptr->set_direction( -0.25, 0.4, 1 );
-  light_ptr->scale_radiance( 2.5 );
-  w->add_light( light_ptr );
+  Directional *light = new Directional;
+  light->set_direction( choice == A ? Point3D( -0.25, 0.4, 1 ) : Point3D( 0, 1, 0 ) );
+  light->scale_radiance( 2.5 );
+  w->add_light( light );
 
-  // Image
-  Image *image_ptr = new Image;
-  image_ptr->read_ppm_file( "C:/dev/school/CPSC_484-Computer-Graphics/qt/raytracer/TextureFiles/ppm/EarthHighRes.ppm" );
+  Image *image = new Image;
+  image->read_ppm_file( "/Users/williammccarthy/Downloads/__484/qt/RT_sparkle_shadows/ppm_images/Mercator.ppm" );
 
-  // Mapping
-  SphericalMap *map_ptr = new SphericalMap;
+  SphericalMap *map = new SphericalMap;
 
-  // Image Texture
-  ImageTexture *texture_ptr = new ImageTexture( image_ptr );
-  texture_ptr->set_mapping( map_ptr );
+  ImageTexture *text = new ImageTexture;
+  text->set_image( image );
+  text->set_mapping( map );
 
-  // Material
-  std::shared_ptr<SV_Matte> sv_matte_ptr = std::make_shared<SV_Matte>();
-  sv_matte_ptr->set_ka( 0.2 );
-  sv_matte_ptr->set_kd( 0.8 );
-  sv_matte_ptr->set_cd( texture_ptr );
+  std::shared_ptr<SV_Matte> sv_matte = std::make_shared<SV_Matte>();
+  sv_matte->set_ka( 0.2 );
+  sv_matte->set_kd( 0.8 );
+  sv_matte->set_cd( text );
 
-  // Sphere
-  Instance *earth_ptr = new Instance( new Sphere() );
-  earth_ptr->scale( 0.75 );
-  //  earth_ptr->rotate_y( 270 );    // North America
-  //  earth_ptr->rotate_x( 30 );
-  earth_ptr->rotate_y( 40 );    // Australia
-  earth_ptr->rotate_x( -30 );
-  earth_ptr->set_material( sv_matte_ptr );
-  w->add_object( earth_ptr );
+  Sphere *sphere = new Sphere;
+  sphere->set_material( sv_matte );
+
+  // rotated sphere
+  Instance *earth = new Instance( sphere );
+  earth->rotate_y( 60 );
+  earth->translate( choice == A ? Point3D( 0, 0.5, 0 ) : Point3D( 0.5, 0, 0 ) );
+  w->add_object( earth );
 }
+
+//void build_29_27_world(World* w, CHOICE choice) {
+//    int num_samples = 100;
+
+//    w->vp.set_hres(600);
+//    w->vp.set_vres(400);
+//    w->vp.set_samples(num_samples);
+//    w->vp.set_max_depth(5);
+
+//    w->tracer_ptr = new AreaLight(w);
+
+//    AmbientOccluder* ambient_occluder = new AmbientOccluder;
+//    ambient_occluder->set_sampler(new MultiJittered(num_samples));
+//    ambient_occluder->set_min_amount(0.5);
+//    w->set_ambient_light(ambient_occluder);
+
+//    Pinhole* pinhole = new Pinhole;
+//    pinhole->set_eye(100, 45, 100);
+//    pinhole->set_lookat(-10, 40, 0);
+//    pinhole->set_view_distance(400);
+//    pinhole->compute_uvw();
+//    w->set_camera(pinhole);
+
+//    PointLight* point = new PointLight;
+//    point->set_location(150, 250, -150);
+//    point->scale_radiance(1.5);
+//    point->set_shadows(true);
+//    w->add_light(point);
+
+//            // image
+//    Image* image = new Image;
+//    image->read_ppm_file(choice == A ? "EveningSky.ppm" : "MorningSky.ppm");
+
+//            // image texture
+//    HemisphericalMap* map = new HemisphericalMap;
+//    ImageTexture* texture = new ImageTexture;
+//    texture->set_image(image);
+//    texture->set_mapping(map);
+
+//            // spatially varying material
+//    std::shared_ptr<SV_Emissive> sv_emissive = std::make_shared<SV_Emissive>();
+//    sv_emissive->set_ce(texture);
+//    sv_emissive->scale_radiance(1.0);
+
+//    EnvironmentLight* environment_light = new EnvironmentLight;
+//    environment_light->set_material(sv_emissive);
+//    environment_light->set_sampler(new MultiJittered(num_samples));
+//    environment_light->set_shadows(true);
+//    w->add_light(environment_light);
+
+//            // large concave hemisphere for direct rendering of the skies
+//    ConcaveHemisphere* unit_hemisphere = new ConcaveHemisphere;
+//    Instance* hemisphere = new Instance(unit_hemisphere);
+//    hemisphere->set_shadows(false);
+//    hemisphere->scale(1000000.0);
+//    hemisphere->rotate_y(-30);
+//    hemisphere->set_material(sv_emissive);
+//    w->add_object(hemisphere);
+
+//            // the other objects
+
+//            // large sphere - reflective
+//    std::shared_ptr<Reflective> reflective1 = std::make_shared<Reflective>();
+//    reflective1->set_kr(0.9);
+//    reflective1->set_cr(1.0, 0.75, 0.5);       // pink
+
+//    Sphere* sphere_ptr1 = new Sphere(Point3D(38, 20, -24), 20);
+//    sphere_ptr1->set_material(reflective1);
+//    w->add_object(sphere_ptr1);
+
+//            // small sphere - non reflective
+//    std::shared_ptr<Matte> sv_matte1 = std::make_shared<Matte>();
+//    sv_matte1->set_ka(0.2);
+//    sv_matte1->set_kd(0.5);
+//    sv_matte1->set_cd(0.85);
+
+//    Sphere* sphere_ptr2 = new Sphere(Point3D(34, 12, 13), 12);
+//    sphere_ptr2->set_material(sv_matte1);
+//    w->add_object(sphere_ptr2);
+
+//            // medium sphere - reflective
+//    Sphere* sphere_ptr3 = new Sphere(Point3D(-7, 15, 42), 16);
+//    sphere_ptr3->set_material(reflective1);
+//    w->add_object(sphere_ptr3);
+
+//            // cylinder - reflective
+//    std::shared_ptr<Reflective> reflective2 = std::make_shared<Reflective>();
+//    reflective2->set_kr(0.9);
+//    reflective2->set_cr(1.0, 1.0, 0.5);   // lemon
+
+//    double bottom 	= 0.0;
+//    double top 		= 85.0;
+//    double radius	= 22.0;
+//    SolidCylinder* cylinder_ptr = new SolidCylinder(bottom, top, radius);
+//    cylinder_ptr->set_material(reflective2);
+//    w->add_object(cylinder_ptr);
+
+//            // box - non reflective
+//    std::shared_ptr<Matte> sv_matte2 = std::make_shared<Matte>();
+//    sv_matte2->set_ka(0.2);
+//    sv_matte2->set_kd(0.5);
+//    sv_matte2->set_cd(0.95);
+
+//    Box* box_ptr = new Box(Point3D(-35, 0, -110), Point3D(-25, 60, 65));
+//    box_ptr->set_material(sv_matte2);
+//    w->add_object(box_ptr);
+
+//            // ground plane:
+//    std::shared_ptr<Matte> sv_matte3 = std::make_shared<Matte>();
+//    sv_matte3->set_ka(0.15);
+//    sv_matte3->set_kd(0.5);
+//    sv_matte3->set_cd(0.7);
+
+//    Plane* plane_ptr = new Plane(Point3D(0, 0.01, 0), Normal(0, 1, 0));
+//    plane_ptr->set_material(sv_matte3);
+//    w->add_object(plane_ptr);
+//}

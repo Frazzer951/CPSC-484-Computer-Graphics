@@ -298,6 +298,7 @@ void World::init_ambient_light( double radiance ) {
   ambient->scale_radiance( radiance );
   set_ambient_light( ambient );
   background_color = RGBColor( 0.2, 0.2, 1 );
+  ;
 }
 
 void World::build() {
@@ -322,8 +323,12 @@ void World::build() {
   //  build_figure_12_16_world( this, A );
   //  build_figure_12_17_world( this, A );
 
-  //  build_figure_29_9_world( this, A );
-  build_figure_29_12_world( this );
+  //  build_29_09_world( this, B );
+  //  build_29_12_world( this, B );
+
+  build_sundial_world( this, 30, 20, 30 );
+
+  //  build_29_27_world( this, A );
 
   check();    // checks for valid camera, viewplane, lights, plane...
 }

@@ -24,12 +24,14 @@ public:
 
   virtual float pdf( const ShadeRec &sr ) const;
 
+  void set_material( std::shared_ptr<Material> material );
+
 private:
   void copy( const EnvironmentLight &other );
 
-  Sampler  *sampler_ptr;
-  Material *material_ptr;
-  //    std::shared_ptr<Material> material_ptr;
-  Vector3D  u, v, w;
-  Vector3D  wi;
+  Sampler                  *sampler_ptr;
+  //    Material* material_ptr;
+  std::shared_ptr<Material> material_ptr;
+  Vector3D                  u, v, w;
+  Vector3D                  wi;
 };

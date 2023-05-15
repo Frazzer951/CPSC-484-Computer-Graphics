@@ -3,6 +3,7 @@
 #include "Utilities/RGBColor.h"
 #include "World/World.h"
 #include <cmath>
+#include <random>
 
 Spherical::Spherical() : Camera(), psi_max( 180 ), lambda_max( 180 ) {}
 
@@ -50,7 +51,7 @@ Vector3D Spherical::ray_direction( const Point2D &pp, const int hres, const int 
 }
 
 //void Spherical::render_scene(const World& w) {
-void Spherical::render_scene( const World &w, float, int ) {
+void Spherical::render_scene( const World &w, float x, int offset ) {
   RGBColor  L;
   ViewPlane vp( w.vp );
   int       hres = vp.hres;
@@ -63,13 +64,23 @@ void Spherical::render_scene( const World &w, float, int ) {
 
   ray.o = eye;
 
+  std::vector<Point2D> pixels;
+
+  for ( int r = 0; r < vp.vres; r++ ) {      // up
+    for ( int c = 0; c < vp.hres; c++ ) {    // across
+      pixels.push_back( Point2D( r, c ) );
+    }
+  }
+  std::mt19937_64 mersenne_generator;    // 64-bit mersenne random generator
+  std::shuffle( pixels.begin(), pixels.end(), mersenne_generator );
+
   for ( int r = 0; r < vres; r++ ) {      // up
     for ( int c = 0; c < hres; c++ ) {    // accross
       L = black;
 
       for ( int j = 0; j < vp.num_samples; j++ ) {
         sp    = vp.sampler_ptr->sample_unit_square();
-        pp.x  = s * ( c - 0.5 * hres + sp.x );
+        pp.x  = s * ( c - 0.5 * hres + sp.x ) + x;
         pp.y  = s * ( r - 0.5 * vres + sp.y );
         ray.d = ray_direction( pp, hres, vres, s );
 
@@ -78,7 +89,7 @@ void Spherical::render_scene( const World &w, float, int ) {
 
       L /= vp.num_samples;
       L *= exposure_time;
-      w.display_pixel( r, c, L );
+      w.display_pixel( r, c + offset, L );
     }
   }
 }
